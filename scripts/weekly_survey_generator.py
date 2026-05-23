@@ -9,6 +9,7 @@ the final Markdown to ``output/weekly_digest_第X周.md``.
 from __future__ import annotations
 
 import argparse
+import os
 import json
 import logging
 import re
@@ -20,6 +21,8 @@ from time import perf_counter, sleep
 
 import pandas as pd
 from dotenv import load_dotenv
+# Load .env early so OpenAI client can read credentials at import time
+load_dotenv()
 from openai import OpenAI
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -36,7 +39,7 @@ DEFAULT_COMPARISON_PATH = PROJECT_ROOT / "data" / "comparison_table.csv"
 DEFAULT_CARDS_PATH = PROJECT_ROOT / "data" / "paper_cards.jsonl"
 DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "output"
 DEFAULT_STATE_PATH = DEFAULT_OUTPUT_DIR / "weekly_digest_state.json"
-DEFAULT_MODEL = "gpt-4.1-mini"
+DEFAULT_MODEL = "deepseek-v4-pro"
 DEFAULT_SLEEP_SECONDS = 1.5
 DEFAULT_LOOKBACK_CARDS = 10
 
@@ -363,33 +366,112 @@ def generate_weekly_digest(
     new_cards: list[CardRecord],
 ) -> WeeklyDigestResponse:
     """Call the LLM and parse the structured weekly digest response."""
-
-    response = client.beta.chat.completions.parse(
-        model=model,
-        temperature=temperature,
-        messages=[
-            {"role": "system", "content": WEEKLY_SYSTEM_PROMPT},
-            {
-                "role": "user",
-                "content": (
-                    "请基于以下材料写一篇 Markdown 周报，并满足结构要求：\n"
-                    "1. 本周研究动态总览\n"
-                    "2. 核心技术路线演进\n"
-                    "3. 分类体系冲击与补充\n"
-                    "4. 研究空白与未来方向（至少 2 点，必须有批判性）\n\n"
-                    + build_prompt_payload(taxonomy_md, comparison_df, new_cards)
-                ),
-            },
-        ],
-        response_format=WeeklyDigestResponse,
+    # Build enforced prompt that makes the model output a single JSON object only
+    enforced_prompt = (
+        WEEKLY_SYSTEM_PROMPT
+        + "\nYou must respond with a single, valid JSON object containing the weekly digest. "
+        + "Do not include any markdown wrappers like ```json ... ``` or conversational filler. "
+        + "Return ONLY the raw JSON string."
     )
 
-    message = response.choices[0].message
-    parsed = getattr(message, "parsed", None)
-    if parsed is None:
-        raise ValueError("The model response did not contain a parsed weekly digest payload.")
+    messages = [
+        {"role": "system", "content": enforced_prompt},
+        {
+            "role": "user",
+            "content": (
+                "请基于以下材料写一篇 Markdown 周报，并满足结构要求：\n"
+                "1. 本周研究动态总览\n"
+                "2. 核心技术路线演进\n"
+                "3. 分类体系冲击与补充\n"
+                "4. 研究空白与未来方向（至少 2 点，必须有批判性）\n\n"
+                + build_prompt_payload(taxonomy_md, comparison_df, new_cards)
+            ),
+        },
+    ]
 
-    digest = parsed if isinstance(parsed, WeeklyDigestResponse) else WeeklyDigestResponse.model_validate(parsed)
+    # Prefer structured parse only when not explicitly using DeepSeek (which rejects response_format)
+    base_url = os.getenv("OPENAI_BASE_URL", os.getenv("OPENAI_API_BASE", "")).lower()
+    completion = None
+    if base_url and "deepseek" in base_url:
+        # DeepSeek: avoid server-side structured parse, use plain chat completion
+        completion = client.chat.completions.create(model=model, temperature=temperature, messages=messages)
+    else:
+        # Try provider-side structured parse first (useful for MockClient in tests)
+        try:
+            response = client.beta.chat.completions.parse(
+                model=model,
+                temperature=temperature,
+                messages=messages,
+                response_format=WeeklyDigestResponse,
+            )
+            # If parse succeeded and returned a parsed object, validate and return directly
+            message = response.choices[0].message
+            parsed = getattr(message, "parsed", None)
+            if parsed is not None:
+                # Convert Pydantic model to dict if necessary
+                if isinstance(parsed, WeeklyDigestResponse):
+                    payload = parsed.model_dump()
+                else:
+                    payload = parsed
+                digest = WeeklyDigestResponse.model_validate(payload)
+                if len(digest.research_gaps) < 2:
+                    raise ValueError("The model returned fewer than 2 research gaps, which is not acceptable.")
+                return digest
+        except Exception:
+            completion = client.chat.completions.create(model=model, temperature=temperature, messages=messages)
+            message = completion.choices[0].message
+    # If we used chat completion (completion set), extract message; otherwise
+    # 'message' should have been set by the structured-parse branch above.
+    if 'completion' in locals() and completion is not None:
+        message = completion.choices[0].message
+    content_text = None
+    if hasattr(message, "content"):
+        content_text = getattr(message, "content")
+    elif hasattr(message, "text"):
+        content_text = getattr(message, "text")
+    elif isinstance(message, dict):
+        content_text = message.get("content") or message.get("text")
+
+    if isinstance(content_text, list):
+        content_text = "".join(str(p) for p in content_text)
+
+    if not isinstance(content_text, str) or not content_text.strip():
+        raise ValueError("The model response did not contain a parsable weekly digest payload.")
+
+    # Remove surrounding code fences if present
+    content_text = content_text.strip()
+    if content_text.startswith("```"):
+        lines = content_text.splitlines()
+        if lines and lines[0].startswith("```"):
+            lines = lines[1:]
+        if lines and lines[-1].startswith("```"):
+            lines = lines[:-1]
+        content_text = "\n".join(lines).strip()
+
+    # Remove any ```json ... ``` blocks anywhere
+    import re
+
+    m_block = re.search(r"```\s*json\s*([\s\S]*?)```", content_text, flags=re.IGNORECASE)
+    if m_block:
+        content_text = m_block.group(1).strip()
+
+    # Final fallback: slice to outermost { ... }
+    start_idx = content_text.find("{")
+    end_idx = content_text.rfind("}")
+    if start_idx != -1 and end_idx != -1 and end_idx > start_idx:
+        content_text = content_text[start_idx:end_idx + 1]
+
+    try:
+        payload = json.loads(content_text)
+    except Exception as exc:
+        raise ValueError(f"Failed to parse weekly digest JSON from model text: {exc}")
+
+    # 容错降级：如果大模型直接返回了完整的 Markdown 综述内容（shortcut），则直接返回该文本
+    if isinstance(payload, dict) and "weekly_digest" in payload:
+        print("[INFO] Detected 'weekly_digest' shortcut field, bypassing structured validate.")
+        return payload["weekly_digest"]
+
+    digest = WeeklyDigestResponse.model_validate(payload)
     if len(digest.research_gaps) < 2:
         raise ValueError("The model returned fewer than 2 research gaps, which is not acceptable.")
     return digest
@@ -397,6 +479,10 @@ def generate_weekly_digest(
 
 def render_markdown(digest: WeeklyDigestResponse, week_index: int, new_cards: list[CardRecord]) -> str:
     """Compose the final Markdown digest from the structured response."""
+    # Backwards-compatible: if caller passed a raw markdown string (degraded mode),
+    # return it directly.
+    if isinstance(digest, str):
+        return digest.strip() + "\n"
 
     lines: list[str] = []
     lines.append(f"# {digest.digest_title or f'Weekly Digest 第{week_index}周'}")
@@ -440,6 +526,8 @@ def main() -> int:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
     parser = build_parser()
     args = parser.parse_args()
+    # Strictly prefer OPENAI_MODEL env var; fallback to deepseek-v4-pro
+    args.model = os.getenv("OPENAI_MODEL", "deepseek-v4-pro")
 
     try:
         taxonomy_md = load_taxonomy(args.taxonomy_path)

@@ -8,6 +8,7 @@ to ``data/paper_cards.jsonl`` immediately after it is produced.
 from __future__ import annotations
 
 import argparse
+import os
 import json
 import logging
 import sys
@@ -16,7 +17,10 @@ from pathlib import Path
 from time import perf_counter, sleep
 
 from dotenv import load_dotenv
+# Load .env early so OpenAI client can read credentials at import time
+load_dotenv()
 from openai import OpenAI
+import re
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -90,7 +94,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--model",
         type=str,
-        default="gpt-4.1-mini",
+        default="deepseek-v4-pro",
         help="OpenAI-compatible model name.",
     )
     parser.add_argument(
@@ -208,24 +212,66 @@ def create_client() -> OpenAI:
 
 def parse_card(client: OpenAI, model: str, temperature: float, paper: RawPaper) -> PaperCard:
     """Call the LLM with structured output parsing into PaperCard."""
+    messages = [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "user", "content": build_user_prompt(paper)},
+    ]
 
-    completion = client.beta.chat.completions.parse(
-        model=model,
-        temperature=temperature,
-        messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": build_user_prompt(paper)},
-        ],
-        response_format=PaperCard,
-    )
+    # First try provider-side structured parse (fast if supported)
+    try:
+        completion = client.beta.chat.completions.parse(
+            model=model,
+            temperature=temperature,
+            messages=messages,
+            response_format=PaperCard,
+        )
+        message = completion.choices[0].message
+        parsed = getattr(message, "parsed", None)
+        if parsed is not None:
+            if not isinstance(parsed, PaperCard):
+                parsed = PaperCard.model_validate(parsed)
+            return parsed
+    except Exception as exc:  # fall back to text parsing for providers that don't support response_format
+        LOGGER.debug("Structured parse failed, falling back to text parse: %s", exc)
 
+    # Fallback: call standard chat completion and extract JSON from text
+    completion = client.chat.completions.create(model=model, temperature=temperature, messages=messages)
+    # content can be in several forms depending on SDK/provider
     message = completion.choices[0].message
-    parsed = getattr(message, "parsed", None)
-    if parsed is None:
-        raise ValueError("The model response did not contain a parsed PaperCard payload.")
-    if not isinstance(parsed, PaperCard):
-        parsed = PaperCard.model_validate(parsed)
-    return parsed
+    content_text = None
+    if hasattr(message, "content"):
+        content_text = getattr(message, "content")
+    elif hasattr(message, "text"):
+        content_text = getattr(message, "text")
+    elif isinstance(message, dict):
+        content_text = message.get("content") or message.get("text")
+
+    if isinstance(content_text, list):
+        content_text = "".join(str(p) for p in content_text)
+
+    if not isinstance(content_text, str) or not content_text.strip():
+        raise ValueError("The model response did not contain any text to parse into PaperCard.")
+
+    # Try direct JSON parse, else extract first {...} block
+    try:
+        payload = json.loads(content_text)
+    except Exception:
+        m = re.search(r"(\{[\s\S]*\})", content_text)
+        if not m:
+            raise ValueError("Failed to locate JSON object in model text response.")
+        try:
+            payload = json.loads(m.group(1))
+        except Exception as exc:
+            raise ValueError(f"Failed to parse JSON object from model text: {exc}")
+
+    if not isinstance(payload, dict):
+        raise ValueError("Parsed JSON payload is not an object/dict for PaperCard.")
+
+    # Defensive: ensure title exists in payload; fall back to original paper title
+    if isinstance(payload, dict) and "title" not in payload:
+        payload["title"] = getattr(paper, "title", "Unknown Title")
+
+    return PaperCard.model_validate(payload)
 
 
 def append_jsonl(output_path: Path, card: PaperCard) -> None:
@@ -253,6 +299,8 @@ def main() -> int:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
     parser = build_parser()
     args = parser.parse_args()
+    # Strictly prefer OPENAI_MODEL env var; fallback to deepseek-v4-pro
+    args.model = os.getenv("OPENAI_MODEL", "deepseek-v4-pro")
 
     try:
         raw_papers = load_raw_payload(args.raw_path)

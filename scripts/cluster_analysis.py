@@ -8,16 +8,20 @@ for each paper and saves the cleaned output to ``data/comparison_table.csv``.
 from __future__ import annotations
 
 import argparse
+import os
 import json
 import logging
 import sys
 from collections import Counter, defaultdict
+import re
 from dataclasses import dataclass
 from pathlib import Path
 from time import perf_counter, sleep
 
 import pandas as pd
 from dotenv import load_dotenv
+# Load .env early so OpenAI client can read credentials at import time
+load_dotenv()
 from openai import OpenAI
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -31,7 +35,7 @@ LOGGER = logging.getLogger(__name__)
 DEFAULT_CARDS_PATH = PROJECT_ROOT / "data" / "paper_cards.jsonl"
 DEFAULT_TAXONOMY_PATH = PROJECT_ROOT / "data" / "taxonomy.md"
 DEFAULT_COMPARISON_PATH = PROJECT_ROOT / "data" / "comparison_table.csv"
-DEFAULT_MODEL = "gpt-4.1-mini"
+DEFAULT_MODEL = "deepseek-v4-pro"
 DEFAULT_SLEEP_SECONDS = 1.5
 DEFAULT_BATCH_SIZE = 10
 
@@ -57,6 +61,7 @@ COMPARISON_SYSTEM_PROMPT = """你是一位严格的学术综述助手，负责�
 3. 优先使用简洁、可比较、适合表格展示的短语。
 4. 你必须为每篇论文输出一行结构化数据。
 5. 输出不得包含解释性文本或额外字段。
+You must respond with a valid JSON array of objects. Do not include any introductory or concluding text. Markdown formatting codeblocks like ```json ... ``` are strictly forbidden. Output ONLY the raw JSON string.
 """
 
 
@@ -108,7 +113,6 @@ class ComparisonBatchResponse(BaseModel):
 
 def build_parser() -> argparse.ArgumentParser:
     """Build the command-line interface for the cluster analysis stage."""
-
     parser = argparse.ArgumentParser(
         description="Generate taxonomy and comparison artifacts from paper cards."
     )
@@ -206,13 +210,6 @@ def load_cards(cards_path: Path) -> list[CardRecord]:
     return cards
 
 
-def create_client() -> OpenAI:
-    """Create an OpenAI-compatible client from environment variables."""
-
-    load_dotenv()
-    return OpenAI()
-
-
 def build_taxonomy_input(cards: list[CardRecord]) -> str:
     """Summarize all cards into a compact prompt payload for taxonomy design."""
 
@@ -237,34 +234,72 @@ def build_taxonomy_input(cards: list[CardRecord]) -> str:
     return "\n".join(lines)
 
 
+def create_client() -> OpenAI:
+    """Create an OpenAI-compatible client from environment variables."""
+
+    load_dotenv()
+    base_url = os.getenv("OPENAI_BASE_URL") or os.getenv("OPENAI_API_BASE")
+    api_key = os.getenv("OPENAI_API_KEY")
+
+    if base_url:
+        os.environ.setdefault("OPENAI_API_BASE", base_url)
+    if api_key:
+        os.environ.setdefault("OPENAI_API_KEY", api_key)
+
+    try:
+        return OpenAI(api_key=api_key, base_url=base_url) if (api_key or base_url) else OpenAI()
+    except TypeError:
+        return OpenAI()
+
+
 def generate_taxonomy(client: OpenAI, model: str, temperature: float, cards: list[CardRecord]) -> str:
     """Ask the LLM to synthesize a markdown taxonomy from all card categories."""
+    messages = [
+        {"role": "system", "content": TAXONOMY_SYSTEM_PROMPT},
+        {
+            "role": "user",
+            "content": (
+                "请基于以下论文卡片统计，输出一份可直接保存为 Markdown 文件的分类树体系。\n\n"
+                + build_taxonomy_input(cards)
+            ),
+        },
+    ]
 
-    response = client.beta.chat.completions.parse(
-        model=model,
-        temperature=temperature,
-        messages=[
-            {"role": "system", "content": TAXONOMY_SYSTEM_PROMPT},
-            {
-                "role": "user",
-                "content": (
-                    "请基于以下论文卡片统计，输出一份可直接保存为 Markdown 文件的分类树体系。\n\n"
-                    + build_taxonomy_input(cards)
-                ),
-            },
-        ],
-        response_format=TaxonomyResponse,
-    )
+    try:
+        response = client.beta.chat.completions.parse(
+            model=model,
+            temperature=temperature,
+            messages=messages,
+            response_format=TaxonomyResponse,
+        )
+        message = response.choices[0].message
+        parsed = getattr(message, "parsed", None)
+        if parsed is None:
+            raise ValueError("The model response did not contain parsed taxonomy output.")
+        if isinstance(parsed, TaxonomyResponse):
+            return parsed.taxonomy_markdown.strip()
+        return TaxonomyResponse.model_validate(parsed).taxonomy_markdown.strip()
+    except Exception as exc:
+        LOGGER.debug("Structured parse unavailable for taxonomy; falling back to text parse: %s", exc)
 
-    message = response.choices[0].message
-    parsed = getattr(message, "parsed", None)
-    if parsed is None:
-        raise ValueError("The model response did not contain parsed taxonomy output.")
+    # Fallback: normal chat completion then extract taxonomy markdown from text
+    completion = client.chat.completions.create(model=model, temperature=temperature, messages=messages)
+    message = completion.choices[0].message
+    content_text = None
+    if hasattr(message, "content"):
+        content_text = getattr(message, "content")
+    elif hasattr(message, "text"):
+        content_text = getattr(message, "text")
+    elif isinstance(message, dict):
+        content_text = message.get("content") or message.get("text")
 
-    if isinstance(parsed, TaxonomyResponse):
-        return parsed.taxonomy_markdown.strip()
+    if isinstance(content_text, list):
+        content_text = "".join(str(p) for p in content_text)
 
-    return TaxonomyResponse.model_validate(parsed).taxonomy_markdown.strip()
+    if not isinstance(content_text, str):
+        raise ValueError("Unable to extract taxonomy markdown from model response.")
+
+    return content_text.strip()
 
 
 def build_comparison_input(batch: list[CardRecord]) -> str:
@@ -298,31 +333,94 @@ def generate_comparison_batch(
     batch: list[CardRecord],
 ) -> list[dict[str, object]]:
     """Ask the LLM to produce structured comparison rows for one batch."""
+    messages = [
+        {"role": "system", "content": COMPARISON_SYSTEM_PROMPT},
+        {
+            "role": "user",
+            "content": (
+                "请把以下论文整理成方法对比表。每篇论文必须输出一行，且字段仅限：\n"
+                "paper_title, method_name, time_space_complexity, application_scenario, pros_cons, data_driven。\n\n"
+                + build_comparison_input(batch)
+            ),
+        },
+    ]
 
-    response = client.beta.chat.completions.parse(
-        model=model,
-        temperature=temperature,
-        messages=[
-            {"role": "system", "content": COMPARISON_SYSTEM_PROMPT},
-            {
-                "role": "user",
-                "content": (
-                    "请把以下论文整理成方法对比表。每篇论文必须输出一行，且字段仅限：\n"
-                    "paper_title, method_name, time_space_complexity, application_scenario, pros_cons, data_driven。\n\n"
-                    + build_comparison_input(batch)
-                ),
-            },
-        ],
-        response_format=ComparisonBatchResponse,
-    )
+    try:
+        response = client.beta.chat.completions.parse(
+            model=model,
+            temperature=temperature,
+            messages=messages,
+            response_format=ComparisonBatchResponse,
+        )
+        message = response.choices[0].message
+        parsed = getattr(message, "parsed", None)
+        if parsed is None:
+            raise ValueError("The model response did not contain parsed comparison output.")
+        batch_response = parsed if isinstance(parsed, ComparisonBatchResponse) else ComparisonBatchResponse.model_validate(parsed)
+        return [row.model_dump() for row in batch_response.rows]
+    except Exception as exc:
+        LOGGER.debug("Structured parse unavailable for comparison batch; falling back to text parse: %s", exc)
 
-    message = response.choices[0].message
-    parsed = getattr(message, "parsed", None)
-    if parsed is None:
-        raise ValueError("The model response did not contain parsed comparison output.")
+    completion = client.chat.completions.create(model=model, temperature=temperature, messages=messages)
+    message = completion.choices[0].message
+    content_text = None
+    if hasattr(message, "content"):
+        content_text = getattr(message, "content")
+    elif hasattr(message, "text"):
+        content_text = getattr(message, "text")
+    elif isinstance(message, dict):
+        content_text = message.get("content") or message.get("text")
 
-    batch_response = parsed if isinstance(parsed, ComparisonBatchResponse) else ComparisonBatchResponse.model_validate(parsed)
-    return [row.model_dump() for row in batch_response.rows]
+    if isinstance(content_text, list):
+        content_text = "".join(str(p) for p in content_text)
+
+    if not isinstance(content_text, str) or not content_text.strip():
+        raise ValueError("The model response did not contain a parsable comparison payload.")
+
+    # Clean Markdown code fences like ```json ... ```
+    m_block = re.search(r"```\s*json\s*([\s\S]*?)```", content_text, flags=re.IGNORECASE)
+    if m_block:
+        content_text = m_block.group(1).strip()
+
+    # Try to extract JSON array or object with 'rows' key
+    try:
+        payload = json.loads(content_text)
+    except Exception:
+        # Fallback 1: try to extract first [...] block (common for arrays)
+        start_idx = content_text.find('[')
+        end_idx = content_text.rfind(']')
+        if start_idx != -1 and end_idx != -1 and end_idx > start_idx:
+            try:
+                payload = json.loads(content_text[start_idx : end_idx + 1])
+            except Exception:
+                payload = None
+        else:
+            payload = None
+
+        # Fallback 2: try to extract first {...} block
+        if payload is None:
+            start_idx = content_text.find('{')
+            end_idx = content_text.rfind('}')
+            if start_idx != -1 and end_idx != -1 and end_idx > start_idx:
+                try:
+                    payload = json.loads(content_text[start_idx : end_idx + 1])
+                except Exception as exc:
+                    raise ValueError(f"Failed to parse JSON from model text for comparison batch: {exc}")
+
+        if payload is None:
+            raise ValueError("Failed to locate JSON array/object in model text response for comparison batch.")
+
+    if isinstance(payload, dict) and "rows" in payload:
+        rows = payload["rows"]
+    elif isinstance(payload, list):
+        rows = payload
+    else:
+        raise ValueError("Parsed comparison payload is not in expected format (rows list or object with 'rows').")
+
+    validated: list[dict[str, object]] = []
+    for row in rows:
+        validated.append(ComparisonRow.model_validate(row).model_dump())
+    return validated
 
 
 def save_taxonomy(taxonomy_md: str, taxonomy_output: Path) -> None:
@@ -370,6 +468,8 @@ def main() -> int:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
     parser = build_parser()
     args = parser.parse_args()
+    # Strictly prefer OPENAI_MODEL env var; fallback to deepseek-v4-pro
+    args.model = os.getenv("OPENAI_MODEL", "deepseek-v4-pro")
 
     try:
         cards = load_cards(args.cards_path)
