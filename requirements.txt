@@ -1,0 +1,7 @@
+arxiv
+pydantic>=2.0
+openai>=1.0.0
+pandas
+python-dotenv
+scikit-learn
+tenacity

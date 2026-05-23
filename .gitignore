@@ -1,0 +1,10 @@
+# 隐私与密钥
+.env
+
+# Python 缓存
+__pycache__/
+*.pyc
+
+# 自动化系统产生的本地临时/生产数据（让 GitHub Actions 运行时自己生成）
+data/
+output/
