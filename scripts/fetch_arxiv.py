@@ -10,17 +10,25 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import os
 from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from time import perf_counter
 
 import arxiv
+from dotenv import load_dotenv
 
 
 LOGGER = logging.getLogger(__name__)
 ROOT_DIR = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT = ROOT_DIR / "data" / "papers_raw.json"
+DEFAULT_FRONTIER_QUERY = (
+    '(agentic OR "multi-agent" OR "llm agent" OR "agent workflow" OR "tool use" OR "reasoning-action") '
+    "AND (cat:cs.AI OR cat:cs.CL OR cat:cs.LG OR cat:cs.RO)"
+)
+DEFAULT_MAX_RESULTS = 20
+DEFAULT_YEARS_BACK = 2
 
 
 @dataclass(slots=True)
@@ -44,19 +52,19 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--query",
         type=str,
-        default="Multi-Agent Collaboration",
+        default=None,
         help="Search keyword or query string, for example: 'Agentic Workflow'.",
     )
     parser.add_argument(
         "--max-results",
         type=int,
-        default=20,
+        default=None,
         help="Maximum number of papers to keep in the output file.",
     )
     parser.add_argument(
         "--years-back",
         type=int,
-        default=2,
+        default=None,
         help="Only keep papers submitted within the last N years.",
     )
     parser.add_argument(
@@ -89,6 +97,33 @@ def build_parser() -> argparse.ArgumentParser:
         help="Merge with existing output and deduplicate by arXiv entry ID.",
     )
     return parser
+
+
+def _read_positive_int(raw_value: str | None, fallback: int) -> int:
+    """Parse positive int from env-like string with a safe fallback."""
+
+    if raw_value is None:
+        return fallback
+    try:
+        value = int(raw_value)
+        return value if value > 0 else fallback
+    except (TypeError, ValueError):
+        return fallback
+
+
+def resolve_fetch_settings(args: argparse.Namespace) -> tuple[str, int, int]:
+    """Resolve query/max_results/years_back from CLI first, then env, then defaults."""
+
+    env_query = (os.getenv("ARXIV_SEARCH_QUERY") or "").strip()
+    query = (args.query or "").strip() or env_query or DEFAULT_FRONTIER_QUERY
+
+    env_max_results = _read_positive_int(os.getenv("ARXIV_MAX_RESULTS"), DEFAULT_MAX_RESULTS)
+    max_results = args.max_results if isinstance(args.max_results, int) and args.max_results > 0 else env_max_results
+
+    env_years_back = _read_positive_int(os.getenv("ARXIV_YEARS_BACK"), DEFAULT_YEARS_BACK)
+    years_back = args.years_back if isinstance(args.years_back, int) and args.years_back > 0 else env_years_back
+
+    return query, max_results, years_back
 
 
 def result_to_record(result: arxiv.Result) -> dict[str, object]:
@@ -196,16 +231,18 @@ def main() -> int:
     """Run the fetch step from the command line."""
 
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
+    load_dotenv()
     parser = build_parser()
     args = parser.parse_args()
+    query, max_results, years_back = resolve_fetch_settings(args)
 
     started_at = perf_counter()
     try:
-        LOGGER.info("Fetching arXiv papers for query: %s", args.query)
+        LOGGER.info("Fetching arXiv papers for query: %s", query)
         fetched_papers = fetch_papers(
-            query=args.query,
-            max_results=args.max_results,
-            years_back=args.years_back,
+            query=query,
+            max_results=max_results,
+            years_back=years_back,
             page_size=args.page_size,
             delay_seconds=args.delay_seconds,
             num_retries=args.num_retries,
@@ -216,10 +253,10 @@ def main() -> int:
             fetched_papers = deduplicate_papers(existing_papers + fetched_papers)
 
         payload = FetchResult(
-            query=args.query,
+            query=query,
             fetched_at=datetime.now(timezone.utc).isoformat(),
-            years_back=args.years_back,
-            max_results=args.max_results,
+            years_back=years_back,
+            max_results=max_results,
             total_papers=len(fetched_papers),
             papers=fetched_papers,
         )
