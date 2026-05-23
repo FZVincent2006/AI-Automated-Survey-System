@@ -624,10 +624,9 @@ def main() -> int:
         output_path.write_text(markdown, encoding="utf-8")
         LOGGER.info("Saved weekly digest to %s", output_path)
 
-        if has_incremental_update:
-            save_state(args.state_path, digest_index, len(cards))
-        elif digest_index == 1 and not args.state_path.exists():
-            save_state(args.state_path, digest_index, len(cards))
+        # Keep the state file aligned with the generated weekly artifact even when
+        # the run is a fallback re-generation with no new cards.
+        save_state(args.state_path, digest_index, len(cards))
 
     except Exception as exc:  # noqa: BLE001 - keep the failure reason visible.
         LOGGER.exception("weekly survey generation failed: %s", exc)

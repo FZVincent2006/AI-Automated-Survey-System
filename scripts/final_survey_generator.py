@@ -38,6 +38,9 @@ DEFAULT_WEEKLY_DIR = PROJECT_ROOT / "output"
 DEFAULT_OUTPUT_PATH = PROJECT_ROOT / "output" / "final_survey.md"
 DEFAULT_DEBUG_DIR = PROJECT_ROOT / "data" / "debug"
 DEFAULT_MODEL = "deepseek-v4-pro"
+DEFAULT_MAX_COMPARISON_ROWS = 60
+DEFAULT_MAX_WEEKLY_DIGESTS = 6
+DEFAULT_MAX_TITLES = 120
 
 
 FINAL_SURVEY_SYSTEM_PROMPT = """You are an academic survey writer.
@@ -47,6 +50,7 @@ Maintain formal academic style.
 Return JSON only.
 JSON keys required: title, abstract, introduction, taxonomy_analysis, comparison_analysis, trend_insights, future_directions, conclusion.
 The list fields must be arrays of strings.
+Keep each field concise. Each list item should be short and non-redundant.
 Do not wrap response in markdown code fences.
 """
 
@@ -139,6 +143,50 @@ def load_weekly_digests(weekly_dir: Path) -> list[str]:
     return [file.read_text(encoding="utf-8") for file in files]
 
 
+def adaptive_sample_count(total: int, floor: int, ceiling: int, ratio: float) -> int:
+    """Choose a representative sample size that grows with corpus size."""
+
+    if total <= 0:
+        return 0
+
+    estimated = max(floor, int(round(total * ratio)))
+    return min(total, max(floor, min(ceiling, estimated)))
+
+
+def sample_evenly_spaced_indices(total: int, sample_size: int) -> list[int]:
+    """Return stable indices spread across the full range."""
+
+    if total <= 0 or sample_size <= 0:
+        return []
+    if sample_size >= total:
+        return list(range(total))
+    if sample_size == 1:
+        return [total // 2]
+
+    last_index = total - 1
+    step = last_index / (sample_size - 1)
+    indices: list[int] = []
+
+    for position in range(sample_size):
+        index = round(position * step)
+        if index not in indices:
+            indices.append(index)
+
+    cursor = 0
+    while len(indices) < sample_size and cursor < total:
+        if cursor not in indices:
+            indices.append(cursor)
+        cursor += 1
+
+    return sorted(indices[:sample_size])
+
+
+def sample_evenly_spaced(items: list[object], sample_size: int) -> list[object]:
+    """Sample items evenly across the corpus for representative context."""
+
+    return [items[index] for index in sample_evenly_spaced_indices(len(items), sample_size)]
+
+
 def build_prompt_payload(
     cards: list[CardRecord],
     taxonomy_md: str,
@@ -146,6 +194,9 @@ def build_prompt_payload(
     weekly_digests: list[str],
 ) -> str:
     category_counter = Counter(card.best_fit_category for card in cards if card.best_fit_category)
+    comparison_sample_size = adaptive_sample_count(len(comparison_df), 20, DEFAULT_MAX_COMPARISON_ROWS, 0.2)
+    digest_sample_size = adaptive_sample_count(len(weekly_digests), 3, DEFAULT_MAX_WEEKLY_DIGESTS, 0.5)
+    title_sample_size = adaptive_sample_count(len(cards), 30, DEFAULT_MAX_TITLES, 0.2)
 
     lines: list[str] = []
     lines.append(f"Total papers: {len(cards)}")
@@ -153,32 +204,43 @@ def build_prompt_payload(
     for category, count in category_counter.most_common(10):
         lines.append(f"- {category}: {count}")
 
+    lines.append("\nRepresentative corpus sampling strategy:")
+    lines.append(f"- comparison table rows sampled: {comparison_sample_size} of {len(comparison_df)}")
+    lines.append(f"- weekly digest snapshots sampled: {digest_sample_size} of {len(weekly_digests)}")
+    lines.append(f"- paper titles sampled: {title_sample_size} of {len(cards)}")
+
     lines.append("\nTaxonomy markdown:\n")
     lines.append(taxonomy_md.strip())
 
-    lines.append("\nComparison table sample (first 20 rows):")
-    for _, row in comparison_df.head(20).iterrows():
-        lines.append(
-            " | ".join(
-                [
-                    f"paper_title={row.get('paper_title', '')}",
-                    f"method_name={row.get('method_name', '')}",
-                    f"time_space_complexity={row.get('time_space_complexity', '')}",
-                    f"application_scenario={row.get('application_scenario', '')}",
-                    f"pros_cons={row.get('pros_cons', '')}",
-                    f"data_driven={row.get('data_driven', '')}",
-                ]
+    lines.append(f"\nComparison table sample ({comparison_sample_size} representative rows):")
+    if comparison_sample_size > 0 and not comparison_df.empty:
+        comparison_indices = sample_evenly_spaced_indices(len(comparison_df), comparison_sample_size)
+        comparison_subset = comparison_df.iloc[comparison_indices]
+        for _, row in comparison_subset.iterrows():
+            lines.append(
+                " | ".join(
+                    [
+                        f"paper_title={row.get('paper_title', '')}",
+                        f"method_name={row.get('method_name', '')}",
+                        f"time_space_complexity={row.get('time_space_complexity', '')}",
+                        f"application_scenario={row.get('application_scenario', '')}",
+                        f"pros_cons={row.get('pros_cons', '')}",
+                        f"data_driven={row.get('data_driven', '')}",
+                    ]
+                )
             )
-        )
+    else:
+        lines.append("- no comparison rows available")
 
     if weekly_digests:
         lines.append("\nWeekly digest snapshots:")
-        for idx, digest in enumerate(weekly_digests[-3:], start=1):
+        digest_char_limit = max(800, min(2400, 12000 // max(digest_sample_size, 1)))
+        for idx, digest in enumerate(weekly_digests[-digest_sample_size:], start=1):
             lines.append(f"--- Weekly Snapshot {idx} ---")
-            lines.append(digest[:1800])
+            lines.append(digest[:digest_char_limit])
 
     lines.append("\nPaper title list:")
-    for idx, card in enumerate(cards[:80], start=1):
+    for idx, card in enumerate(sample_evenly_spaced(cards, title_sample_size), start=1):
         lines.append(f"{idx}. {card.title}")
 
     return "\n".join(lines)
