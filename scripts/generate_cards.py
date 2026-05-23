@@ -11,6 +11,7 @@ import argparse
 import os
 import json
 import logging
+from datetime import datetime
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -21,6 +22,7 @@ from dotenv import load_dotenv
 load_dotenv()
 from openai import OpenAI
 import re
+from tenacity import Retrying, retry_if_exception_type, stop_after_attempt, wait_exponential
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -34,6 +36,7 @@ from literature_review_system.schema import PaperCard
 LOGGER = logging.getLogger(__name__)
 DEFAULT_RAW_PATH = PROJECT_ROOT / "data" / "papers_raw.json"
 DEFAULT_OUTPUT_PATH = PROJECT_ROOT / "data" / "paper_cards.jsonl"
+DEFAULT_DEBUG_DIR = PROJECT_ROOT / "data" / "debug"
 DEFAULT_SLEEP_SECONDS = 2.0
 
 
@@ -210,6 +213,42 @@ def create_client() -> OpenAI:
     return OpenAI()
 
 
+def call_with_retry(func, *args, **kwargs):
+    """Run external API call with bounded retry/backoff."""
+
+    for attempt in Retrying(
+        stop=stop_after_attempt(3),
+        wait=wait_exponential(multiplier=1, min=1, max=8),
+        retry=retry_if_exception_type(Exception),
+        reraise=True,
+    ):
+        with attempt:
+            return func(*args, **kwargs)
+
+
+def dump_failure_payload(stage: str, content_text: str, paper: RawPaper) -> Path:
+    """Persist the failing payload for later debugging."""
+
+    DEFAULT_DEBUG_DIR.mkdir(parents=True, exist_ok=True)
+    timestamp = datetime.utcnow().strftime("%Y%m%dT%H%M%S%fZ")
+    output_path = DEFAULT_DEBUG_DIR / f"{stage}_{timestamp}.json"
+    output_path.write_text(
+        json.dumps(
+            {
+                "stage": stage,
+                "title": paper.title,
+                "entry_id": paper.entry_id,
+                "arxiv_url": paper.arxiv_url,
+                "response_text": content_text,
+            },
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+    return output_path
+
+
 def parse_card(client: OpenAI, model: str, temperature: float, paper: RawPaper) -> PaperCard:
     """Call the LLM with structured output parsing into PaperCard."""
     messages = [
@@ -219,7 +258,8 @@ def parse_card(client: OpenAI, model: str, temperature: float, paper: RawPaper) 
 
     # First try provider-side structured parse (fast if supported)
     try:
-        completion = client.beta.chat.completions.parse(
+        completion = call_with_retry(
+            client.beta.chat.completions.parse,
             model=model,
             temperature=temperature,
             messages=messages,
@@ -235,7 +275,12 @@ def parse_card(client: OpenAI, model: str, temperature: float, paper: RawPaper) 
         LOGGER.debug("Structured parse failed, falling back to text parse: %s", exc)
 
     # Fallback: call standard chat completion and extract JSON from text
-    completion = client.chat.completions.create(model=model, temperature=temperature, messages=messages)
+    completion = call_with_retry(
+        client.chat.completions.create,
+        model=model,
+        temperature=temperature,
+        messages=messages,
+    )
     # content can be in several forms depending on SDK/provider
     message = completion.choices[0].message
     content_text = None
@@ -258,10 +303,14 @@ def parse_card(client: OpenAI, model: str, temperature: float, paper: RawPaper) 
     except Exception:
         m = re.search(r"(\{[\s\S]*\})", content_text)
         if not m:
+            debug_path = dump_failure_payload("generate_cards_parse", content_text, paper)
+            LOGGER.error("Saved failing generate_cards payload to %s", debug_path)
             raise ValueError("Failed to locate JSON object in model text response.")
         try:
             payload = json.loads(m.group(1))
         except Exception as exc:
+            debug_path = dump_failure_payload("generate_cards_parse", content_text, paper)
+            LOGGER.error("Saved failing generate_cards payload to %s", debug_path)
             raise ValueError(f"Failed to parse JSON object from model text: {exc}")
 
     if not isinstance(payload, dict):

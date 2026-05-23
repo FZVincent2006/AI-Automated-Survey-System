@@ -13,6 +13,7 @@ import json
 import logging
 import sys
 from collections import Counter, defaultdict
+from datetime import datetime
 import re
 from dataclasses import dataclass
 from pathlib import Path
@@ -24,6 +25,7 @@ from dotenv import load_dotenv
 load_dotenv()
 from openai import OpenAI
 from pydantic import BaseModel, ConfigDict, Field
+from tenacity import Retrying, retry_if_exception_type, stop_after_attempt, wait_exponential
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -35,6 +37,7 @@ LOGGER = logging.getLogger(__name__)
 DEFAULT_CARDS_PATH = PROJECT_ROOT / "data" / "paper_cards.jsonl"
 DEFAULT_TAXONOMY_PATH = PROJECT_ROOT / "data" / "taxonomy.md"
 DEFAULT_COMPARISON_PATH = PROJECT_ROOT / "data" / "comparison_table.csv"
+DEFAULT_DEBUG_DIR = PROJECT_ROOT / "data" / "debug"
 DEFAULT_MODEL = "deepseek-v4-pro"
 DEFAULT_SLEEP_SECONDS = 1.5
 DEFAULT_BATCH_SIZE = 10
@@ -109,6 +112,32 @@ class ComparisonBatchResponse(BaseModel):
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
 
     rows: list[ComparisonRow]
+
+
+def call_with_retry(func, *args, **kwargs):
+    """Run external API call with bounded retry/backoff."""
+
+    for attempt in Retrying(
+        stop=stop_after_attempt(3),
+        wait=wait_exponential(multiplier=1, min=1, max=8),
+        retry=retry_if_exception_type(Exception),
+        reraise=True,
+    ):
+        with attempt:
+            return func(*args, **kwargs)
+
+
+def dump_failure_payload(stage: str, content_text: str, extra: dict[str, object] | None = None) -> Path:
+    """Persist failing model payload for parser debugging."""
+
+    DEFAULT_DEBUG_DIR.mkdir(parents=True, exist_ok=True)
+    timestamp = datetime.utcnow().strftime("%Y%m%dT%H%M%S%fZ")
+    output_path = DEFAULT_DEBUG_DIR / f"{stage}_{timestamp}.json"
+    payload = {"stage": stage, "response_text": content_text}
+    if extra:
+        payload["meta"] = extra
+    output_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    return output_path
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -266,7 +295,8 @@ def generate_taxonomy(client: OpenAI, model: str, temperature: float, cards: lis
     ]
 
     try:
-        response = client.beta.chat.completions.parse(
+        response = call_with_retry(
+            client.beta.chat.completions.parse,
             model=model,
             temperature=temperature,
             messages=messages,
@@ -283,7 +313,12 @@ def generate_taxonomy(client: OpenAI, model: str, temperature: float, cards: lis
         LOGGER.debug("Structured parse unavailable for taxonomy; falling back to text parse: %s", exc)
 
     # Fallback: normal chat completion then extract taxonomy markdown from text
-    completion = client.chat.completions.create(model=model, temperature=temperature, messages=messages)
+    completion = call_with_retry(
+        client.chat.completions.create,
+        model=model,
+        temperature=temperature,
+        messages=messages,
+    )
     message = completion.choices[0].message
     content_text = None
     if hasattr(message, "content"):
@@ -346,7 +381,8 @@ def generate_comparison_batch(
     ]
 
     try:
-        response = client.beta.chat.completions.parse(
+        response = call_with_retry(
+            client.beta.chat.completions.parse,
             model=model,
             temperature=temperature,
             messages=messages,
@@ -361,7 +397,12 @@ def generate_comparison_batch(
     except Exception as exc:
         LOGGER.debug("Structured parse unavailable for comparison batch; falling back to text parse: %s", exc)
 
-    completion = client.chat.completions.create(model=model, temperature=temperature, messages=messages)
+    completion = call_with_retry(
+        client.chat.completions.create,
+        model=model,
+        temperature=temperature,
+        messages=messages,
+    )
     message = completion.choices[0].message
     content_text = None
     if hasattr(message, "content"):
@@ -408,6 +449,12 @@ def generate_comparison_batch(
                     raise ValueError(f"Failed to parse JSON from model text for comparison batch: {exc}")
 
         if payload is None:
+            debug_path = dump_failure_payload(
+                "cluster_comparison_parse",
+                content_text,
+                {"batch_size": len(batch), "titles": [card.title for card in batch]},
+            )
+            LOGGER.error("Saved failing comparison payload to %s", debug_path)
             raise ValueError("Failed to locate JSON array/object in model text response for comparison batch.")
 
     if isinstance(payload, dict) and "rows" in payload:

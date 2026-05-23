@@ -15,6 +15,7 @@ import logging
 import re
 import sys
 from collections import Counter
+from datetime import datetime
 from dataclasses import dataclass
 from pathlib import Path
 from time import perf_counter, sleep
@@ -25,6 +26,7 @@ from dotenv import load_dotenv
 load_dotenv()
 from openai import OpenAI
 from pydantic import BaseModel, ConfigDict, Field
+from tenacity import Retrying, retry_if_exception_type, stop_after_attempt, wait_exponential
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -39,6 +41,7 @@ DEFAULT_COMPARISON_PATH = PROJECT_ROOT / "data" / "comparison_table.csv"
 DEFAULT_CARDS_PATH = PROJECT_ROOT / "data" / "paper_cards.jsonl"
 DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "output"
 DEFAULT_STATE_PATH = DEFAULT_OUTPUT_DIR / "weekly_digest_state.json"
+DEFAULT_DEBUG_DIR = PROJECT_ROOT / "data" / "debug"
 DEFAULT_MODEL = "deepseek-v4-pro"
 DEFAULT_SLEEP_SECONDS = 1.5
 DEFAULT_LOOKBACK_CARDS = 10
@@ -95,6 +98,32 @@ class WeeklyDigestResponse(BaseModel):
         min_length=2,
     )
     closing_sentence: str = Field(description="收束性总结句")
+
+
+def call_with_retry(func, *args, **kwargs):
+    """Run external API call with bounded retry/backoff."""
+
+    for attempt in Retrying(
+        stop=stop_after_attempt(3),
+        wait=wait_exponential(multiplier=1, min=1, max=8),
+        retry=retry_if_exception_type(Exception),
+        reraise=True,
+    ):
+        with attempt:
+            return func(*args, **kwargs)
+
+
+def dump_failure_payload(stage: str, content_text: str, extra: dict[str, object] | None = None) -> Path:
+    """Persist failing model payload for parser debugging."""
+
+    DEFAULT_DEBUG_DIR.mkdir(parents=True, exist_ok=True)
+    timestamp = datetime.utcnow().strftime("%Y%m%dT%H%M%S%fZ")
+    output_path = DEFAULT_DEBUG_DIR / f"{stage}_{timestamp}.json"
+    payload = {"stage": stage, "response_text": content_text}
+    if extra:
+        payload["meta"] = extra
+    output_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    return output_path
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -394,11 +423,17 @@ def generate_weekly_digest(
     completion = None
     if base_url and "deepseek" in base_url:
         # DeepSeek: avoid server-side structured parse, use plain chat completion
-        completion = client.chat.completions.create(model=model, temperature=temperature, messages=messages)
+        completion = call_with_retry(
+            client.chat.completions.create,
+            model=model,
+            temperature=temperature,
+            messages=messages,
+        )
     else:
         # Try provider-side structured parse first (useful for MockClient in tests)
         try:
-            response = client.beta.chat.completions.parse(
+            response = call_with_retry(
+                client.beta.chat.completions.parse,
                 model=model,
                 temperature=temperature,
                 messages=messages,
@@ -418,7 +453,12 @@ def generate_weekly_digest(
                     raise ValueError("The model returned fewer than 2 research gaps, which is not acceptable.")
                 return digest
         except Exception:
-            completion = client.chat.completions.create(model=model, temperature=temperature, messages=messages)
+            completion = call_with_retry(
+                client.chat.completions.create,
+                model=model,
+                temperature=temperature,
+                messages=messages,
+            )
             message = completion.choices[0].message
     # If we used chat completion (completion set), extract message; otherwise
     # 'message' should have been set by the structured-parse branch above.
@@ -464,6 +504,12 @@ def generate_weekly_digest(
     try:
         payload = json.loads(content_text)
     except Exception as exc:
+        debug_path = dump_failure_payload(
+            "weekly_digest_parse",
+            content_text,
+            {"new_cards_count": len(new_cards), "new_titles": [card.title for card in new_cards[:20]]},
+        )
+        LOGGER.error("Saved failing weekly digest payload to %s", debug_path)
         raise ValueError(f"Failed to parse weekly digest JSON from model text: {exc}")
 
     # 容错降级：如果大模型直接返回了完整的 Markdown 综述内容（shortcut），则直接返回该文本
