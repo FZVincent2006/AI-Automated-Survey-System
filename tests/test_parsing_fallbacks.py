@@ -110,6 +110,30 @@ class ParsingFallbackTests(unittest.TestCase):
         self.assertEqual(len(rows), 1)
         self.assertEqual(rows[0]["paper_title"], "Paper A")
 
+    def test_cluster_rejects_low_comparison_coverage(self) -> None:
+        cards = [
+            cluster_analysis.CardRecord(
+                title=f"Paper {index}",
+                problem="p",
+                key_idea="k",
+                method="m",
+                dataset_or_scenario="d",
+                metrics="metric",
+                results_summary="r",
+                innovation_type="i",
+                limitations="l",
+                best_fit_category="c",
+                confidence_level=5,
+            )
+            for index in range(2)
+        ]
+        with self.assertRaisesRegex(ValueError, "coverage"):
+            cluster_analysis.validate_comparison_coverage(
+                rows=[{"paper_title": "Paper 0"}],
+                cards=cards,
+                minimum_coverage=0.9,
+            )
+
     def test_weekly_digest_shortcut_field_returns_markdown(self) -> None:
         original_base_url = os.environ.get("OPENAI_BASE_URL")
         os.environ["OPENAI_BASE_URL"] = "https://api.deepseek.com/v1"

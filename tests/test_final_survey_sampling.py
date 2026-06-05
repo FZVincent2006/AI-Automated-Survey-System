@@ -26,6 +26,40 @@ class FinalSurveySamplingTests(unittest.TestCase):
         self.assertEqual(final_survey_generator.adaptive_sample_count(10, 3, 8, 0.5), 5)
         self.assertEqual(final_survey_generator.adaptive_sample_count(500, 20, 60, 0.2), 60)
 
+    def test_validation_rejects_incomplete_submission(self) -> None:
+        cards = [
+            final_survey_generator.CardRecord(
+                title="Paper",
+                key_idea="Idea",
+                method="Method",
+                best_fit_category="Category",
+            )
+        ]
+        with self.assertRaisesRegex(ValueError, "at least 50"):
+            final_survey_generator.validate_final_artifacts(
+                markdown=(
+                    "# Survey\n## Abstract\nA\n## Introduction\nB\n"
+                    "## Taxonomy Analysis\nC\n## Comparative Analysis\nD\n"
+                    "## Trend Insights\nE\n## Future Directions\nF\n## Conclusion\nG"
+                ),
+                cards=cards,
+                weekly_digests=[],
+                min_papers=50,
+                min_weekly_digests=3,
+                min_chars=1,
+                max_chars=0,
+                allow_incomplete=False,
+            )
+
+    def test_main_report_length_excludes_appendix(self) -> None:
+        markdown = "# Survey\n正文\n## Appendix: Included Paper Titles\n" + ("Paper\n" * 100)
+        self.assertLess(
+            final_survey_generator.count_content_characters(
+                final_survey_generator.main_report_markdown(markdown)
+            ),
+            20,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

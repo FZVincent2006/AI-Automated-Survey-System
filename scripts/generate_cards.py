@@ -118,6 +118,12 @@ def build_parser() -> argparse.ArgumentParser:
         default=0.2,
         help="LLM temperature used for structured extraction.",
     )
+    parser.add_argument(
+        "--min-success-rate",
+        type=float,
+        default=0.8,
+        help="Fail the stage when fewer than this fraction of attempted papers succeed.",
+    )
     return parser
 
 
@@ -270,7 +276,7 @@ def parse_card(client: OpenAI, model: str, temperature: float, paper: RawPaper) 
         if parsed is not None:
             if not isinstance(parsed, PaperCard):
                 parsed = PaperCard.model_validate(parsed)
-            return parsed
+            return parsed.model_copy(update={"title": paper.title})
     except Exception as exc:  # fall back to text parsing for providers that don't support response_format
         LOGGER.debug("Structured parse failed, falling back to text parse: %s", exc)
 
@@ -320,7 +326,8 @@ def parse_card(client: OpenAI, model: str, temperature: float, paper: RawPaper) 
     if isinstance(payload, dict) and "title" not in payload:
         payload["title"] = getattr(paper, "title", "Unknown Title")
 
-    return PaperCard.model_validate(payload)
+    card = PaperCard.model_validate(payload)
+    return card.model_copy(update={"title": paper.title})
 
 
 def append_jsonl(output_path: Path, card: PaperCard) -> None:
@@ -363,6 +370,7 @@ def main() -> int:
     started_at = perf_counter()
     new_count = 0
     skipped_count = 0
+    failed_count = 0
 
     LOGGER.info("Loaded %d raw papers from %s", len(raw_papers), args.raw_path)
     LOGGER.info("Already processed signatures: %d", len(processed_signatures))
@@ -394,19 +402,30 @@ def main() -> int:
             LOGGER.info("成功解析第 %d 篇论文：%s", index, paper.title)
 
         except Exception as exc:  # noqa: BLE001 - keep the per-paper failure visible.
+            failed_count += 1
             LOGGER.exception("大模型解析失败：%s | 原因：%s", paper.title, exc)
 
         sleep(max(0.0, args.sleep_seconds))
 
     elapsed_seconds = perf_counter() - started_at
     LOGGER.info(
-        "Finished generate_cards: new=%d skipped=%d total_raw=%d elapsed=%.2fs output=%s",
+        "Finished generate_cards: new=%d failed=%d skipped=%d total_raw=%d elapsed=%.2fs output=%s",
         new_count,
+        failed_count,
         skipped_count,
         len(raw_papers),
         elapsed_seconds,
         args.output,
     )
+    attempted_count = new_count + failed_count
+    success_rate = new_count / attempted_count if attempted_count else 1.0
+    if success_rate < max(0.0, min(1.0, args.min_success_rate)):
+        LOGGER.error(
+            "Card generation success rate %.1f%% is below the required %.1f%%.",
+            success_rate * 100,
+            args.min_success_rate * 100,
+        )
+        return 1
     return 0
 
 

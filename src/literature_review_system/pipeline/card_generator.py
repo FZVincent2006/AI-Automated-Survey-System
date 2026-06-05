@@ -1,5 +1,6 @@
-"""Generate structured cards from raw papers."""
+"""Package entry point for structured paper-card generation."""
+
+from scripts.generate_cards import main
 
 
-def main() -> None:
-    pass
+__all__ = ["main"]

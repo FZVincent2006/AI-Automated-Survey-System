@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import os
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -96,6 +97,42 @@ class RunPipelineFetchArgTests(unittest.TestCase):
             result,
             ["--query", "cli query", "--max-results", "10", "--years-back", "2"],
         )
+
+    def test_build_fetch_args_adds_append_flag(self) -> None:
+        os.environ.pop("ARXIV_SEARCH_QUERY", None)
+        os.environ.pop("ARXIV_MAX_RESULTS", None)
+        os.environ.pop("ARXIV_YEARS_BACK", None)
+        args = argparse.Namespace(
+            query=None,
+            max_results=None,
+            years_back=None,
+            append_fetch=True,
+        )
+
+        self.assertEqual(run_pipeline.build_fetch_args(args), ["--append"])
+
+    def test_final_submission_ready_counts_cards_and_digests(self) -> None:
+        original_cards_path = run_pipeline.CARDS_PATH
+        original_output_dir = run_pipeline.OUTPUT_DIR
+        try:
+            with tempfile.TemporaryDirectory() as temp_dir:
+                root = Path(temp_dir)
+                cards_path = root / "paper_cards.jsonl"
+                output_dir = root / "output"
+                output_dir.mkdir()
+                cards_path.write_text("\n".join("{}" for _ in range(50)), encoding="utf-8")
+                for index in range(1, 4):
+                    (output_dir / f"weekly_digest_第{index}周.md").write_text(
+                        "# digest",
+                        encoding="utf-8",
+                    )
+                run_pipeline.CARDS_PATH = cards_path
+                run_pipeline.OUTPUT_DIR = output_dir
+
+                self.assertEqual(run_pipeline.final_submission_ready(), (True, 50, 3))
+        finally:
+            run_pipeline.CARDS_PATH = original_cards_path
+            run_pipeline.OUTPUT_DIR = original_output_dir
 
 
 if __name__ == "__main__":

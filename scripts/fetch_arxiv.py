@@ -27,7 +27,7 @@ DEFAULT_FRONTIER_QUERY = (
     '(agentic OR "multi-agent" OR "llm agent" OR "agent workflow" OR "tool use" OR "reasoning-action") '
     "AND (cat:cs.AI OR cat:cs.CL OR cat:cs.LG OR cat:cs.RO)"
 )
-DEFAULT_MAX_RESULTS = 20
+DEFAULT_MAX_RESULTS = 60
 DEFAULT_YEARS_BACK = 2
 
 

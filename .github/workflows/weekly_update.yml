@@ -8,9 +8,14 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: weekly-literature-review
+  cancel-in-progress: false
+
 jobs:
   run-pipeline:
     runs-on: ubuntu-latest
+    timeout-minutes: 120
 
     steps:
       - name: Checkout repository
@@ -19,10 +24,10 @@ jobs:
           fetch-depth: 0
           ref: main
 
-      - name: Set up Python 3.10
+      - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.12'
 
       - name: Install dependencies
         run: |
@@ -35,23 +40,43 @@ jobs:
           OPENAI_BASE_URL: https://api.deepseek.com/v1
           OPENAI_MODEL: deepseek-v4-pro
           ARXIV_SEARCH_QUERY: "(agentic OR \"multi-agent\" OR \"llm agent\" OR \"agent workflow\" OR \"tool use\" OR \"reasoning-action\") AND (cat:cs.AI OR cat:cs.CL OR cat:cs.LG OR cat:cs.RO)"
-          ARXIV_MAX_RESULTS: 20
+          ARXIV_MAX_RESULTS: 60
           ARXIV_YEARS_BACK: 2
         run: |
-          cd scripts
-          python fetch_arxiv.py
-          python generate_cards.py
-          python cluster_analysis.py
-          python weekly_survey_generator.py
+          python scripts/run_pipeline.py --append-fetch --no-final-survey
+
+      - name: Generate final survey when submission thresholds are met
+        id: final-survey
+        continue-on-error: true
+        run: |
+          card_count=$(wc -l < data/paper_cards.jsonl)
+          digest_count=$(find output -maxdepth 1 -name 'weekly_digest_第*周.md' | wc -l)
+          if [ "$card_count" -ge 50 ] && [ "$digest_count" -ge 3 ]; then
+            python scripts/final_survey_generator.py
+          else
+            echo "Final survey deferred: cards=$card_count digests=$digest_count"
+          fi
+
+      - name: Export dashboard data
+        if: always()
+        run: |
+          python scripts/export_dashboard_data.py
 
       - name: Commit and push updates
+        if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data output
+          git add -A -- data output web/data/dashboard-data.json
           if git diff --cached --quiet; then
             echo "No changes to commit."
             exit 0
           fi
           git commit -m "chore: update weekly literature review outputs"
           git push origin HEAD:main
+
+      - name: Report final survey failure
+        if: steps.final-survey.outcome == 'failure'
+        run: |
+          echo "Weekly artifacts were committed, but the final survey failed quality validation."
+          exit 1

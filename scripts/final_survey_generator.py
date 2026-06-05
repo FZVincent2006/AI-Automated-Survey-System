@@ -32,6 +32,7 @@ load_dotenv()
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CARDS_PATH = PROJECT_ROOT / "data" / "paper_cards.jsonl"
+DEFAULT_RAW_PATH = PROJECT_ROOT / "data" / "papers_raw.json"
 DEFAULT_TAXONOMY_PATH = PROJECT_ROOT / "data" / "taxonomy.md"
 DEFAULT_COMPARISON_PATH = PROJECT_ROOT / "data" / "comparison_table.csv"
 DEFAULT_WEEKLY_DIR = PROJECT_ROOT / "output"
@@ -41,16 +42,24 @@ DEFAULT_MODEL = "deepseek-v4-pro"
 DEFAULT_MAX_COMPARISON_ROWS = 60
 DEFAULT_MAX_WEEKLY_DIGESTS = 6
 DEFAULT_MAX_TITLES = 120
+DEFAULT_MIN_PAPERS = 50
+DEFAULT_MIN_WEEKLY_DIGESTS = 3
+DEFAULT_MIN_CONTENT_CHARS = 5000
+DEFAULT_MAX_CONTENT_CHARS = 14000
 
 
 FINAL_SURVEY_SYSTEM_PROMPT = """You are an academic survey writer.
-You must produce a rigorous, concise final survey draft based ONLY on user-provided materials.
+You must produce a rigorous final survey draft based ONLY on user-provided materials.
 No external facts.
 Maintain formal academic style.
+Write the main report in Chinese; preserve original English paper titles.
 Return JSON only.
 JSON keys required: title, abstract, introduction, taxonomy_analysis, comparison_analysis, trend_insights, future_directions, conclusion.
 The list fields must be arrays of strings.
-Keep each field concise. Each list item should be short and non-redundant.
+Target 6000-10000 Chinese characters so the rendered report is approximately 6-10 pages.
+The introduction and conclusion must be substantial paragraphs.
+Each list field must contain at least 4 detailed, evidence-linked analytical paragraphs.
+Future directions must contain original critical reasoning grounded in the supplied limitations and comparisons.
 Do not wrap response in markdown code fences.
 """
 
@@ -63,16 +72,24 @@ class CardRecord:
     best_fit_category: str
 
 
+@dataclass(slots=True)
+class PaperReference:
+    title: str
+    authors: list[str]
+    published: str
+    arxiv_url: str
+
+
 class FinalSurveyResponse(BaseModel):
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
 
     title: str
     abstract: str
     introduction: str
-    taxonomy_analysis: list[str] = Field(min_length=2)
-    comparison_analysis: list[str] = Field(min_length=2)
-    trend_insights: list[str] = Field(min_length=2)
-    future_directions: list[str] = Field(min_length=2)
+    taxonomy_analysis: list[str] = Field(min_length=4)
+    comparison_analysis: list[str] = Field(min_length=4)
+    trend_insights: list[str] = Field(min_length=4)
+    future_directions: list[str] = Field(min_length=4)
     conclusion: str
 
 
@@ -105,12 +122,33 @@ def dump_failure_payload(stage: str, content_text: str, extra: dict[str, object]
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Generate final survey markdown report.")
     parser.add_argument("--cards-path", type=Path, default=DEFAULT_CARDS_PATH)
+    parser.add_argument("--raw-path", type=Path, default=DEFAULT_RAW_PATH)
     parser.add_argument("--taxonomy-path", type=Path, default=DEFAULT_TAXONOMY_PATH)
     parser.add_argument("--comparison-path", type=Path, default=DEFAULT_COMPARISON_PATH)
     parser.add_argument("--weekly-dir", type=Path, default=DEFAULT_WEEKLY_DIR)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT_PATH)
     parser.add_argument("--model", type=str, default=DEFAULT_MODEL)
     parser.add_argument("--temperature", type=float, default=0.2)
+    parser.add_argument("--min-papers", type=int, default=DEFAULT_MIN_PAPERS)
+    parser.add_argument("--min-weekly-digests", type=int, default=DEFAULT_MIN_WEEKLY_DIGESTS)
+    parser.add_argument("--min-content-chars", type=int, default=DEFAULT_MIN_CONTENT_CHARS)
+    parser.add_argument("--max-content-chars", type=int, default=DEFAULT_MAX_CONTENT_CHARS)
+    parser.add_argument(
+        "--generation-attempts",
+        type=int,
+        default=2,
+        help="Maximum generation attempts when the report fails quality validation.",
+    )
+    parser.add_argument(
+        "--allow-incomplete",
+        action="store_true",
+        help="Generate a draft before the final paper/digest thresholds are reached.",
+    )
+    parser.add_argument(
+        "--allow-fallback",
+        action="store_true",
+        help="Write a reduced fallback report if the model call fails.",
+    )
     return parser
 
 
@@ -141,6 +179,33 @@ def load_weekly_digests(weekly_dir: Path) -> list[str]:
         return []
     files = sorted(weekly_dir.glob("weekly_digest_第*周.md"))
     return [file.read_text(encoding="utf-8") for file in files]
+
+
+def load_references(raw_path: Path) -> list[PaperReference]:
+    """Load source metadata for a traceable reference appendix."""
+
+    if not raw_path.exists():
+        return []
+
+    payload = json.loads(raw_path.read_text(encoding="utf-8"))
+    raw_papers = payload.get("papers", []) if isinstance(payload, dict) else []
+    references: list[PaperReference] = []
+    for paper in raw_papers:
+        if not isinstance(paper, dict):
+            continue
+        title = str(paper.get("title") or "").strip()
+        if not title:
+            continue
+        authors = paper.get("authors", [])
+        references.append(
+            PaperReference(
+                title=title,
+                authors=[str(author).strip() for author in authors] if isinstance(authors, list) else [],
+                published=str(paper.get("published") or "").strip(),
+                arxiv_url=str(paper.get("arxiv_url") or paper.get("entry_id") or "").strip(),
+            )
+        )
+    return references
 
 
 def adaptive_sample_count(total: int, floor: int, ceiling: int, ratio: float) -> int:
@@ -331,7 +396,11 @@ def generate_final_survey(
     return FinalSurveyResponse.model_validate(payload)
 
 
-def render_markdown(report: FinalSurveyResponse | str, cards: list[CardRecord]) -> str:
+def render_markdown(
+    report: FinalSurveyResponse | str,
+    cards: list[CardRecord],
+    references: list[PaperReference] | None = None,
+) -> str:
     if isinstance(report, str):
         return report.strip() + "\n"
 
@@ -375,7 +444,98 @@ def render_markdown(report: FinalSurveyResponse | str, cards: list[CardRecord]) 
         lines.append(f"- {card.title}")
     lines.append("")
 
+    if references:
+        included_titles = {card.title for card in cards}
+        lines.append("## References")
+        for index, reference in enumerate(
+            (item for item in references if item.title in included_titles),
+            start=1,
+        ):
+            author_text = ", ".join(reference.authors) or "Unknown authors"
+            year = reference.published[:4] if reference.published else "n.d."
+            source = f" [{reference.arxiv_url}]({reference.arxiv_url})" if reference.arxiv_url else ""
+            lines.append(f"{index}. {author_text}. ({year}). *{reference.title}*. arXiv.{source}")
+        lines.append("")
+
     return "\n".join(lines).strip() + "\n"
+
+
+def count_content_characters(markdown: str) -> int:
+    plain_text = re.sub(r"[#>*_`\-\[\]()]", "", markdown)
+    return len(re.sub(r"\s+", "", plain_text))
+
+
+def main_report_markdown(markdown: str) -> str:
+    """Exclude appendices and references from the 6-10 page body-length check."""
+
+    boundaries = [
+        position
+        for marker in ("\n## Appendix:", "\n## References")
+        if (position := markdown.find(marker)) >= 0
+    ]
+    return markdown[: min(boundaries)] if boundaries else markdown
+
+
+def validate_final_artifacts(
+    markdown: str,
+    cards: list[CardRecord],
+    weekly_digests: list[str],
+    min_papers: int,
+    min_weekly_digests: int,
+    min_chars: int,
+    max_chars: int,
+    allow_incomplete: bool,
+) -> None:
+    """Enforce the course submission thresholds before reporting success."""
+
+    if not allow_incomplete and len(cards) < min_papers:
+        raise ValueError(f"Only {len(cards)} paper cards found; at least {min_papers} are required.")
+    if not allow_incomplete and len(weekly_digests) < min_weekly_digests:
+        raise ValueError(
+            f"Only {len(weekly_digests)} weekly digests found; at least {min_weekly_digests} are required."
+        )
+
+    required_sections = [
+        "Abstract",
+        "Introduction",
+        "Taxonomy Analysis",
+        "Comparative Analysis",
+        "Trend Insights",
+        "Future Directions",
+        "Conclusion",
+    ]
+    missing = [section for section in required_sections if section not in markdown]
+    if missing:
+        raise ValueError(f"Final survey is missing required sections: {', '.join(missing)}")
+
+    content_chars = count_content_characters(main_report_markdown(markdown))
+    if content_chars < max(1, min_chars):
+        raise ValueError(
+            f"Final survey is too short: {content_chars} characters; minimum is {min_chars}."
+        )
+    if max_chars > 0 and content_chars > max_chars:
+        raise ValueError(
+            f"Final survey is too long: {content_chars} characters; maximum is {max_chars}."
+        )
+
+
+def validate_submission_counts(
+    cards: list[CardRecord],
+    weekly_digests: list[str],
+    min_papers: int,
+    min_weekly_digests: int,
+    allow_incomplete: bool,
+) -> None:
+    """Fail before an API call when the required source corpus is incomplete."""
+
+    if allow_incomplete:
+        return
+    if len(cards) < min_papers:
+        raise ValueError(f"Only {len(cards)} paper cards found; at least {min_papers} are required.")
+    if len(weekly_digests) < min_weekly_digests:
+        raise ValueError(
+            f"Only {len(weekly_digests)} weekly digests found; at least {min_weekly_digests} are required."
+        )
 
 
 def build_fallback_report(cards: list[CardRecord], taxonomy_md: str, comparison_df: pd.DataFrame) -> str:
@@ -409,24 +569,75 @@ def main() -> int:
     model = os.getenv("OPENAI_MODEL", args.model)
 
     cards = load_cards(args.cards_path)
+    references = load_references(args.raw_path)
     taxonomy_md = args.taxonomy_path.read_text(encoding="utf-8")
     comparison_df = pd.read_csv(args.comparison_path)
     weekly_digests = load_weekly_digests(args.weekly_dir)
 
     try:
-        client = create_client()
-        report = generate_final_survey(
-            client=client,
-            model=model,
-            temperature=args.temperature,
+        validate_submission_counts(
             cards=cards,
-            taxonomy_md=taxonomy_md,
-            comparison_df=comparison_df,
             weekly_digests=weekly_digests,
+            min_papers=args.min_papers,
+            min_weekly_digests=args.min_weekly_digests,
+            allow_incomplete=args.allow_incomplete,
         )
-        markdown = render_markdown(report, cards)
-    except Exception:
+    except ValueError as exc:
+        print(f"[ERROR] Final survey generation deferred: {exc}")
+        return 1
+
+    client = create_client()
+    markdown = ""
+    last_error: Exception | None = None
+    attempts = max(1, args.generation_attempts)
+    for attempt_index in range(1, attempts + 1):
+        try:
+            report = generate_final_survey(
+                client=client,
+                model=model,
+                temperature=args.temperature,
+                cards=cards,
+                taxonomy_md=taxonomy_md,
+                comparison_df=comparison_df,
+                weekly_digests=weekly_digests,
+            )
+            markdown = render_markdown(report, cards, references)
+            validate_final_artifacts(
+                markdown=markdown,
+                cards=cards,
+                weekly_digests=weekly_digests,
+                min_papers=args.min_papers,
+                min_weekly_digests=args.min_weekly_digests,
+                min_chars=args.min_content_chars,
+                max_chars=args.max_content_chars,
+                allow_incomplete=args.allow_incomplete,
+            )
+            break
+        except Exception as exc:  # noqa: BLE001 - retry malformed or undersized model output.
+            last_error = exc
+            print(
+                f"[WARN] Final survey attempt {attempt_index}/{attempts} failed validation: {exc}"
+            )
+    else:
+        if not args.allow_fallback:
+            print(f"[ERROR] Final survey generation failed: {last_error}")
+            return 1
         markdown = build_fallback_report(cards, taxonomy_md, comparison_df)
+
+    try:
+        validate_final_artifacts(
+            markdown=markdown,
+            cards=cards,
+            weekly_digests=weekly_digests,
+            min_papers=args.min_papers,
+            min_weekly_digests=args.min_weekly_digests,
+            min_chars=args.min_content_chars,
+            max_chars=args.max_content_chars,
+            allow_incomplete=args.allow_incomplete,
+        )
+    except ValueError as exc:
+        print(f"[ERROR] Final survey validation failed: {exc}")
+        return 1
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(markdown, encoding="utf-8")

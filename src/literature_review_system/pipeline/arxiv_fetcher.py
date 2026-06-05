@@ -1,5 +1,6 @@
-"""Fetch papers from arXiv."""
+"""Package entry point for the arXiv fetch stage."""
+
+from scripts.fetch_arxiv import main
 
 
-def main() -> None:
-    pass
+__all__ = ["main"]

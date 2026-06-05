@@ -1,5 +1,6 @@
-"""Cluster cards and build taxonomy artifacts."""
+"""Package entry point for taxonomy and comparison generation."""
+
+from scripts.cluster_analysis import main
 
 
-def main() -> None:
-    pass
+__all__ = ["main"]

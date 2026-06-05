@@ -1,0 +1,492 @@
+{
+  "meta": {
+    "projectName": "SurveyMind",
+    "topic": "LLM Agent 与多智能体系统",
+    "lastUpdated": "2026-06-05T08:30:00+08:00",
+    "dataMode": "demo",
+    "members": ["方正", "普布", "肖辉", "罗宇翔", "杨翰钦"]
+  },
+  "metrics": {
+    "rawPapers": 60,
+    "validCards": 58,
+    "categories": 7,
+    "weeklyDigests": 3,
+    "comparisonCoverage": 96.7
+  },
+  "pipeline": [
+    {"name": "arXiv 抓取", "detail": "60 篇", "icon": "⌕", "status": "done"},
+    {"name": "去重清洗", "detail": "100%", "icon": "◇", "status": "done"},
+    {"name": "结构化解析", "detail": "58 张卡片", "icon": "▦", "status": "done"},
+    {"name": "分类与对比", "detail": "7 个方向", "icon": "⌘", "status": "done"},
+    {"name": "综述生成", "detail": "3 期周报", "icon": "✦", "status": "done"}
+  ],
+  "categories": [
+    {"name": "多智能体协作", "count": 17, "color": "#6e7cff"},
+    {"name": "工具增强工作流", "count": 13, "color": "#42b7e8"},
+    {"name": "规划与推理", "count": 11, "color": "#a56be8"},
+    {"name": "自我纠错与验证", "count": 10, "color": "#4ed1a2"},
+    {"name": "记忆与检索增强", "count": 9, "color": "#e6a85b"}
+  ],
+  "monthlyTrend": [
+    {"label": "Jul", "value": 3}, {"label": "Aug", "value": 5},
+    {"label": "Sep", "value": 4}, {"label": "Oct", "value": 7},
+    {"label": "Nov", "value": 6}, {"label": "Dec", "value": 8},
+    {"label": "Jan", "value": 9}, {"label": "Feb", "value": 12},
+    {"label": "Mar", "value": 15}, {"label": "Apr", "value": 18},
+    {"label": "May", "value": 24}, {"label": "Jun", "value": 21}
+  ],
+  "featuredInsight": {
+    "text": "研究重心正在从“单智能体能力增强”转向“可验证的多智能体协同”。新工作不再只追求任务成功率，而是同时关注协调开销、错误传播与执行后验证。",
+    "tags": ["Multi-Agent", "Verification", "Workflow", "Robustness"]
+  },
+  "papers": [
+    {
+      "id": "p01",
+      "title": "Multi-Agent Debate for Long-Horizon Planning",
+      "authors": ["A. Chen", "M. Rivera", "S. Patel"],
+      "year": 2026,
+      "published": "2026-05-18",
+      "category": "多智能体协作",
+      "confidence": 5,
+      "problem": "长程任务中，单智能体计划容易因稀疏反馈和早期错误而持续偏离目标。",
+      "keyIdea": "通过提案、质疑与修正三个阶段，让多个智能体围绕候选计划开展结构化辩论。",
+      "method": "构建多角色辩论协议，并在每轮结束后由聚合器选择或融合候选计划。",
+      "scenario": "长程规划与推理密集型基准任务",
+      "metrics": "任务成功率、规划稳定性、平均交互轮数",
+      "results": "相较单智能体基线提升了长程任务稳定性，并减少不可恢复的早期决策错误。",
+      "innovation": "协同推理机制",
+      "limitations": "智能体数量增加后协调成本显著上升，且结论仍依赖角色提示设计。",
+      "complexity": "高：多轮并行推理与聚合",
+      "prosCons": "优：规划稳健、可暴露隐性错误；缺：token 与协调开销较高",
+      "dataDriven": "部分",
+      "scores": [92, 75, 88, 83, 79],
+      "url": "https://arxiv.org/"
+    },
+    {
+      "id": "p02",
+      "title": "Tool-Augmented Workflow Planning with Persistent Memory",
+      "authors": ["L. Wang", "K. Ito"],
+      "year": 2026,
+      "published": "2026-04-29",
+      "category": "工具增强工作流",
+      "confidence": 5,
+      "problem": "复杂任务需要跨步骤调用异构工具，但中间状态和历史决策难以保持一致。",
+      "keyIdea": "把工具检索、工作流规划与持久记忆统一到可恢复的执行状态机中。",
+      "method": "规划器先生成工具调用图，执行器记录中间轨迹，并依据失败信号局部重规划。",
+      "scenario": "网页操作、数据分析和跨工具自动化任务",
+      "metrics": "完成率、工具选择准确率、恢复成本",
+      "results": "在长链工具任务中显著降低重复调用，并提升失败后的恢复能力。",
+      "innovation": "工作流编排与记忆融合",
+      "limitations": "工具描述质量会直接影响规划效果，动态工具环境下仍存在接口漂移问题。",
+      "complexity": "中高：图规划与状态维护",
+      "prosCons": "优：可恢复、状态一致；缺：依赖工具元数据质量",
+      "dataDriven": "是",
+      "scores": [85, 91, 80, 88, 86],
+      "url": "https://arxiv.org/"
+    },
+    {
+      "id": "p03",
+      "title": "Self-Correcting Multi-Agent Execution Graphs",
+      "authors": ["R. Smith", "Y. Zhao", "N. Gupta"],
+      "year": 2026,
+      "published": "2026-04-11",
+      "category": "自我纠错与验证",
+      "confidence": 5,
+      "problem": "多智能体系统中的局部错误会沿执行链传播，最终形成难以定位的整体失败。",
+      "keyIdea": "在执行图中加入交叉检查节点，由智能体互相审查并在冲突出现时触发纠错回路。",
+      "method": "将任务表示为带验证边的执行图，通过一致性判别器动态回退到最近可信节点。",
+      "scenario": "多步骤协调、代码生成与合成协作任务",
+      "metrics": "错误恢复率、一致性、额外推理开销",
+      "results": "增强了协作任务中的鲁棒性，尤其能抑制早期错误的级联传播。",
+      "innovation": "执行后验证机制",
+      "limitations": "对提示模板敏感，复杂图上的重复验证可能造成较高延迟。",
+      "complexity": "高：执行图与循环验证",
+      "prosCons": "优：可追踪、抗错误传播；缺：验证延迟与提示敏感",
+      "dataDriven": "否",
+      "scores": [88, 72, 95, 90, 84],
+      "url": "https://arxiv.org/"
+    },
+    {
+      "id": "p04",
+      "title": "Retrieval-Grounded Agentic Scheduling under Dynamic Constraints",
+      "authors": ["D. Lee", "F. Rossi"],
+      "year": 2026,
+      "published": "2026-03-23",
+      "category": "记忆与检索增强",
+      "confidence": 4,
+      "problem": "动态调度任务的约束持续变化，固定策略难以及时吸收历史案例和外部上下文。",
+      "keyIdea": "利用检索到的历史调度轨迹为智能体的下一步动作提供情境化依据。",
+      "method": "将任务队列分解为子目标，检索相似状态并通过约束评分选择后续动作。",
+      "scenario": "动态任务调度、资源分配与队列优化",
+      "metrics": "调度成功率、约束违反率、平均响应时间",
+      "results": "在噪声输入和动态约束下保持了更稳定的任务完成率。",
+      "innovation": "检索增强规划",
+      "limitations": "检索库覆盖不足时收益下降，过期案例可能引入错误偏置。",
+      "complexity": "中：检索与约束排序",
+      "prosCons": "优：适应动态环境；缺：依赖案例库覆盖",
+      "dataDriven": "是",
+      "scores": [78, 86, 82, 76, 91],
+      "url": "https://arxiv.org/"
+    },
+    {
+      "id": "p05",
+      "title": "Hierarchical Reasoning Policies for Autonomous LLM Agents",
+      "authors": ["J. Kim", "T. Brown"],
+      "year": 2026,
+      "published": "2026-03-08",
+      "category": "规划与推理",
+      "confidence": 4,
+      "problem": "扁平的逐步推理在长任务中容易丢失全局目标，且难以管理不同时间尺度的决策。",
+      "keyIdea": "将策略划分为目标层、计划层与动作层，使全局意图和局部执行解耦。",
+      "method": "高层策略负责子目标分解，低层策略根据环境反馈选择工具和动作。",
+      "scenario": "自主导航、软件任务和长程决策",
+      "metrics": "成功率、步骤效率、目标保持率",
+      "results": "层级策略降低了无效步骤，并改善了长程任务中的目标一致性。",
+      "innovation": "层级决策架构",
+      "limitations": "层级边界依赖人工设计，错误的子目标分解仍难以自动修复。",
+      "complexity": "中：分层规划",
+      "prosCons": "优：全局一致、步骤清晰；缺：层级设计成本",
+      "dataDriven": "部分",
+      "scores": [84, 82, 76, 85, 74],
+      "url": "https://arxiv.org/"
+    },
+    {
+      "id": "p06",
+      "title": "Learning Communication Protocols for Cooperative Language Agents",
+      "authors": ["P. Singh", "E. Martin"],
+      "year": 2026,
+      "published": "2026-02-21",
+      "category": "多智能体协作",
+      "confidence": 4,
+      "problem": "自然语言自由交流虽然灵活，但容易产生冗余、歧义与不可控的协调开销。",
+      "keyIdea": "从协作轨迹中学习紧凑的消息协议，限制智能体只传递任务相关信息。",
+      "method": "通过奖励反馈优化消息模板和通信时机，并对无效通信施加成本惩罚。",
+      "scenario": "合作博弈、分布式规划与信息不完全任务",
+      "metrics": "团队收益、通信长度、协调效率",
+      "results": "在保持任务性能的同时压缩了通信量，降低了协作成本。",
+      "innovation": "可学习通信协议",
+      "limitations": "协议的跨任务迁移能力仍有限，训练奖励设计较敏感。",
+      "complexity": "中高：策略学习与协作训练",
+      "prosCons": "优：通信高效；缺：迁移性与训练成本",
+      "dataDriven": "是",
+      "scores": [90, 84, 73, 81, 89],
+      "url": "https://arxiv.org/"
+    },
+    {
+      "id": "p07",
+      "title": "Benchmarking Reliability in Tool-Using Language Model Agents",
+      "authors": ["H. Zhang", "C. Miller"],
+      "year": 2025,
+      "published": "2025-12-17",
+      "category": "评估与可靠性",
+      "confidence": 5,
+      "problem": "现有工具智能体评估过度依赖单一成功率，难以区分规划、调用和恢复环节的故障。",
+      "keyIdea": "建立按错误阶段拆分的可靠性评估框架，并引入扰动测试。",
+      "method": "设计工具选择、参数生成、状态恢复和安全边界四类评估协议。",
+      "scenario": "工具调用智能体与自动化工作流",
+      "metrics": "阶段成功率、恢复率、鲁棒性、安全违规率",
+      "results": "揭示多个高成功率系统在轻微工具扰动下存在显著可靠性下降。",
+      "innovation": "多维评估框架",
+      "limitations": "基准工具集覆盖仍有限，真实生产环境中的长期风险尚未纳入。",
+      "complexity": "中：多场景基准评估",
+      "prosCons": "优：诊断细粒度；缺：现实覆盖有限",
+      "dataDriven": "是",
+      "scores": [74, 79, 96, 92, 83],
+      "url": "https://arxiv.org/"
+    },
+    {
+      "id": "p08",
+      "title": "Episodic Memory Compression for Long-Horizon Agents",
+      "authors": ["M. Silva", "A. Johnson"],
+      "year": 2025,
+      "published": "2025-11-04",
+      "category": "记忆与检索增强",
+      "confidence": 4,
+      "problem": "长程智能体积累的轨迹快速膨胀，直接检索全部历史会造成上下文与延迟压力。",
+      "keyIdea": "把细粒度轨迹压缩成可检索的情节单元，同时保留关键决策与失败信号。",
+      "method": "使用事件边界检测切分轨迹，并根据未来任务效用进行层级摘要。",
+      "scenario": "持续交互、个人助理与长期任务执行",
+      "metrics": "记忆压缩率、检索命中率、长期任务成功率",
+      "results": "在明显减少上下文占用的同时保持了关键历史信息的可用性。",
+      "innovation": "层级情节记忆",
+      "limitations": "压缩过程可能丢失低频但关键的异常事件。",
+      "complexity": "中：事件切分与摘要",
+      "prosCons": "优：节省上下文；缺：存在信息损失",
+      "dataDriven": "是",
+      "scores": [76, 91, 80, 78, 94],
+      "url": "https://arxiv.org/"
+    },
+    {
+      "id": "p09",
+      "title": "Adaptive Tool Routing with Uncertainty-Aware Planning",
+      "authors": ["Q. Liu", "V. Novak"],
+      "year": 2025,
+      "published": "2025-10-16",
+      "category": "工具增强工作流",
+      "confidence": 4,
+      "problem": "智能体在多个相似工具间选择时缺乏不确定性估计，容易做出高代价错误调用。",
+      "keyIdea": "显式估计工具选择置信度，在低置信场景先请求信息或执行低成本探测。",
+      "method": "路由器输出工具概率分布，并通过风险阈值决定调用、澄清或回退。",
+      "scenario": "企业 API、数据查询和混合工具环境",
+      "metrics": "路由准确率、调用成本、风险调整成功率",
+      "results": "降低了错误工具调用比例，并改善高风险任务中的稳定性。",
+      "innovation": "不确定性感知工具路由",
+      "limitations": "概率校准依赖训练分布，对新工具的冷启动支持不足。",
+      "complexity": "中：概率路由与风险判断",
+      "prosCons": "优：风险可控；缺：校准与冷启动问题",
+      "dataDriven": "是",
+      "scores": [81, 90, 87, 89, 88],
+      "url": "https://arxiv.org/"
+    },
+    {
+      "id": "p10",
+      "title": "Reflective Planning for Language Agents with Sparse Feedback",
+      "authors": ["S. Ahmed", "B. Green"],
+      "year": 2025,
+      "published": "2025-09-09",
+      "category": "规划与推理",
+      "confidence": 4,
+      "problem": "稀疏反馈环境中，智能体难以及时判断失败原因并调整后续计划。",
+      "keyIdea": "在关键里程碑进行结构化反思，将失败归因转化为下一轮计划约束。",
+      "method": "结合里程碑检测、失败归因和约束重写形成反思式规划循环。",
+      "scenario": "稀疏奖励推理任务与长链交互",
+      "metrics": "成功率、重试次数、反思有效率",
+      "results": "减少了重复错误，并提高低反馈任务中的计划修正效率。",
+      "innovation": "反思式规划",
+      "limitations": "错误归因本身可能不准确，频繁反思会增加上下文成本。",
+      "complexity": "中高：周期反思与重规划",
+      "prosCons": "优：可从失败修正；缺：归因误差与上下文开销",
+      "dataDriven": "否",
+      "scores": [80, 77, 85, 87, 70],
+      "url": "https://arxiv.org/"
+    },
+    {
+      "id": "p11",
+      "title": "Guarded Agent Workflows for High-Stakes Automation",
+      "authors": ["T. Nguyen", "I. Cohen"],
+      "year": 2025,
+      "published": "2025-08-28",
+      "category": "安全与治理",
+      "confidence": 5,
+      "problem": "高风险自动化任务需要限制智能体的权限与行动范围，同时保留足够任务能力。",
+      "keyIdea": "将安全策略编译为工作流守卫，在每个工具调用前后执行权限与结果检查。",
+      "method": "采用声明式策略、风险分级和人工升级通道约束智能体执行。",
+      "scenario": "金融、医疗与企业自动化",
+      "metrics": "违规率、任务完成率、人工介入次数",
+      "results": "在轻微降低自动完成率的情况下显著减少越权和高风险操作。",
+      "innovation": "策略驱动安全工作流",
+      "limitations": "策略维护成本高，过于保守的规则会降低系统可用性。",
+      "complexity": "中：策略检查与人工升级",
+      "prosCons": "优：安全可审计；缺：规则维护和性能折损",
+      "dataDriven": "部分",
+      "scores": [72, 68, 98, 94, 66],
+      "url": "https://arxiv.org/"
+    },
+    {
+      "id": "p12",
+      "title": "Graph-of-Agents: Composable Roles for Complex Task Solving",
+      "authors": ["X. Zhou", "R. Evans"],
+      "year": 2025,
+      "published": "2025-07-13",
+      "category": "多智能体协作",
+      "confidence": 4,
+      "problem": "固定多智能体团队难以适应任务结构变化，角色复用与组合能力不足。",
+      "keyIdea": "把角色能力表示为可组合节点，根据任务动态构建智能体协作图。",
+      "method": "任务分析器选择角色节点与通信边，执行期间可根据反馈调整拓扑。",
+      "scenario": "复杂问答、软件工程与开放式任务",
+      "metrics": "成功率、角色复用率、拓扑调整次数",
+      "results": "动态角色图在多类型任务上表现出更好的适应性和模块复用能力。",
+      "innovation": "可组合智能体拓扑",
+      "limitations": "图搜索空间较大，角色描述不一致会影响组合质量。",
+      "complexity": "高：动态图搜索",
+      "prosCons": "优：模块化、适应性强；缺：搜索与协调成本",
+      "dataDriven": "部分",
+      "scores": [94, 78, 76, 82, 81],
+      "url": "https://arxiv.org/"
+    }
+  ],
+  "taxonomy": {
+    "name": "LLM Agent Systems",
+    "description": "面向自主任务执行的大语言模型智能体技术体系",
+    "children": [
+      {
+        "name": "多智能体协作",
+        "description": "通过角色分工、通信与集体决策提升复杂任务能力。",
+        "count": 17,
+        "children": [
+          {"name": "辩论与共识", "count": 6},
+          {"name": "角色与拓扑", "count": 6},
+          {"name": "通信协议", "count": 5}
+        ]
+      },
+      {
+        "name": "工具增强工作流",
+        "description": "围绕工具选择、调用编排与失败恢复构建执行流程。",
+        "count": 13,
+        "children": [
+          {"name": "工具路由", "count": 5},
+          {"name": "工作流编排", "count": 5},
+          {"name": "状态恢复", "count": 3}
+        ]
+      },
+      {
+        "name": "规划与推理",
+        "description": "关注长程目标分解、层级决策与反馈驱动的计划修正。",
+        "count": 11,
+        "children": [
+          {"name": "层级规划", "count": 4},
+          {"name": "反思推理", "count": 4},
+          {"name": "动态调度", "count": 3}
+        ]
+      },
+      {
+        "name": "可靠性与治理",
+        "description": "覆盖执行验证、安全约束、评估基准与错误恢复。",
+        "count": 10,
+        "children": [
+          {"name": "自我纠错", "count": 4},
+          {"name": "安全守卫", "count": 3},
+          {"name": "可靠性评估", "count": 3}
+        ]
+      },
+      {
+        "name": "记忆与检索",
+        "description": "利用长期记忆与外部案例增强跨步骤决策。",
+        "count": 9,
+        "children": [
+          {"name": "情节记忆", "count": 4},
+          {"name": "检索增强", "count": 3},
+          {"name": "轨迹压缩", "count": 2}
+        ]
+      }
+    ]
+  },
+  "insights": [
+    {
+      "type": "核心趋势",
+      "title": "从能力堆叠走向系统可靠性",
+      "text": "近期研究开始把可靠性视为系统级目标：不仅比较任务成功率，还拆分工具路由、计划执行、错误恢复与安全边界。评估对象正从“模型能力”转向“完整工作流”。",
+      "evidence": "来自 18 篇可靠性与验证相关论文",
+      "color": "#6e7cff",
+      "icon": "⌁"
+    },
+    {
+      "type": "研究空白",
+      "title": "协调收益缺少统一成本模型",
+      "text": "多智能体方法普遍报告性能提升，但很少同时量化 token、延迟、通信轮次与错误传播。缺少统一成本模型使不同协作架构难以公平比较。",
+      "evidence": "11 篇论文未完整报告协调成本",
+      "color": "#ffb65a",
+      "icon": "△"
+    },
+    {
+      "type": "未来方向",
+      "title": "可验证的自适应工作流",
+      "text": "下一阶段值得探索能够根据风险与不确定性动态调整拓扑的工作流：低风险任务快速执行，高风险节点自动增加交叉验证、人工确认与回退机制。",
+      "evidence": "由 Taxonomy 跨类融合推导",
+      "color": "#4de2a8",
+      "icon": "✦"
+    }
+  ],
+  "evolution": [
+    {"period": "2024 H2", "title": "单体推理链", "text": "强调提示设计与逐步思考，系统结构较简单。"},
+    {"period": "2025 H1", "title": "工具增强 Agent", "text": "引入外部工具与环境交互，开始关注状态维护。"},
+    {"period": "2025 H2", "title": "多智能体协同", "text": "通过角色分工与通信提升复杂任务覆盖。"},
+    {"period": "2026 H1", "title": "可验证智能工作流", "text": "融合纠错、风险控制与执行后验证。"}
+  ],
+  "weeklyDigests": [
+    {
+      "index": 3,
+      "date": "2026-06-01",
+      "newPapers": 12,
+      "title": "从多智能体协作走向可验证执行",
+      "overview": "本周新增工作集中于交叉验证、动态拓扑和不确定性感知工具路由。研究关注点从单纯提升协作收益，转向控制协作过程中的错误传播与额外成本。",
+      "technicalEvolution": [
+        "多智能体协作从固定角色配置转向可根据任务和风险动态重构的执行图。",
+        "工具路由开始显式建模不确定性，在低置信场景采用澄清、探测或回退策略。",
+        "验证机制由最终结果检查前移到执行过程，在关键节点插入一致性判断。"
+      ],
+      "taxonomyImpact": [
+        "“多智能体协作”与“可靠性”两个一级类别出现明显融合，需要增加“可验证协同”子类。",
+        "工具增强工作流内部应区分固定编排与风险自适应编排。"
+      ],
+      "gaps": [
+        "动态验证策略仍缺乏统一的成本—风险权衡指标。",
+        "大多数实验集中于合成任务，长期真实运行中的状态漂移仍未充分研究。"
+      ]
+    },
+    {
+      "index": 2,
+      "date": "2026-05-25",
+      "newPapers": 9,
+      "title": "记忆压缩与长程任务稳定性",
+      "overview": "本周论文强化了长期记忆在智能体系统中的基础地位。研究不再只是扩大记忆容量，而是关注何时保存、如何压缩以及哪些失败信号必须保留。",
+      "technicalEvolution": [
+        "记忆组织从扁平向量库转向事件化、层级化的情节结构。",
+        "检索目标从语义相似度扩展到对未来决策效用的估计。"
+      ],
+      "taxonomyImpact": [
+        "记忆与检索类别新增“轨迹压缩”和“失败经验保留”两个子方向。",
+        "记忆机制与规划模块的边界正在弱化。"
+      ],
+      "gaps": [
+        "压缩算法对低频关键事件的保真性缺乏标准评估。",
+        "记忆污染和过期经验造成的长期偏置仍缺少系统解决方案。"
+      ]
+    },
+    {
+      "index": 1,
+      "date": "2026-05-18",
+      "newPapers": 20,
+      "title": "Agent 工作流的结构化演进",
+      "overview": "首期语料显示，Agent 研究已形成规划、工具、协作、记忆与可靠性五条主要技术路线。系统设计开始取代单一提示技巧，成为性能差异的关键来源。",
+      "technicalEvolution": [
+        "工作流从线性 ReAct 循环扩展为支持并行、分支和回退的执行图。",
+        "多智能体方法通过角色分工扩大任务覆盖，但协调成本尚未统一建模。"
+      ],
+      "taxonomyImpact": [
+        "初步形成五类两级 Taxonomy。",
+        "可靠性与安全治理作为独立类别出现。"
+      ],
+      "gaps": [
+        "缺少跨任务、跨工具的统一评估协议。",
+        "复杂工作流的可解释性和故障定位能力不足。"
+      ]
+    }
+  ],
+  "finalSurvey": {
+    "title": "面向复杂任务的大语言模型智能体系统：架构、协作与可靠性综述",
+    "abstract": "本文围绕近两年大语言模型智能体研究，对 60 篇 arXiv 论文进行结构化分析。研究将现有方法归纳为多智能体协作、工具增强工作流、规划与推理、可靠性与治理、记忆与检索五类技术路线，并从复杂度、应用场景、优势与局限等维度进行横向比较。分析表明，领域正在从单模型能力扩展转向可组合、可恢复和可验证的系统设计。",
+    "sections": [
+      {
+        "id": "survey-intro",
+        "title": "1. 研究背景与问题定义",
+        "content": "大语言模型具备通用语言理解与推理能力，但将其转化为能够持续完成复杂任务的智能体，仍需要规划、工具调用、记忆、环境反馈和错误恢复等系统机制。与单轮问答不同，智能体任务通常具有状态持续、反馈稀疏和执行风险累积等特点。因此，研究重点已从提示工程逐渐扩展为完整工作流的设计与验证。"
+      },
+      {
+        "id": "survey-taxonomy",
+        "title": "2. 分类体系分析",
+        "content": "结构化论文卡片显示，多智能体协作是当前样本量最大的方向，其核心问题是如何通过角色分工和通信提高任务覆盖。工具增强工作流关注模型与外部能力的连接；规划与推理研究长程目标保持；记忆与检索负责跨步骤信息延续；可靠性与治理则约束错误传播与高风险行为。五类方向并非彼此独立，近期论文呈现明显的跨类融合。"
+      },
+      {
+        "id": "survey-compare",
+        "title": "3. 方法对比与技术权衡",
+        "content": "多智能体方法通常能提高复杂任务成功率，但引入额外通信和 token 成本。工具工作流具有较强实用性，却依赖接口描述和状态一致性。层级规划有利于保持全局目标，但子目标错误可能向下传播。记忆机制降低历史遗忘，但面临信息污染和检索偏置。可靠性机制提升可控性，同时会牺牲部分执行效率。"
+      },
+      {
+        "id": "survey-trend",
+        "title": "4. 研究趋势",
+        "content": "第一，系统结构正在从线性链式流程演化为支持并行、分支和回退的执行图。第二，多智能体协作从固定角色转向动态拓扑。第三，评估方式逐渐从单一成功率扩展到恢复率、风险、成本和一致性。第四，验证机制从任务结束后的结果检查前移到执行过程中的关键节点。"
+      },
+      {
+        "id": "survey-future",
+        "title": "5. 研究空白与未来方向",
+        "content": "未来研究需要建立协调收益与系统成本的统一度量，使不同智能体架构能够公平比较；需要研究长期运行中的记忆污染、工具漂移和错误累积；还应发展风险自适应工作流，根据任务不确定性动态选择快速执行、交叉验证或人工介入。更进一步，可验证执行图有望成为连接多智能体协作、工具调用与安全治理的统一抽象。"
+      },
+      {
+        "id": "survey-conclusion",
+        "title": "6. 结论",
+        "content": "LLM Agent 研究正在进入系统工程阶段。决定性能的不再只是基础模型规模，而是规划、协作、记忆、工具和验证机制如何组合。面向真实应用，未来系统必须同时具备任务能力、成本意识、故障恢复和行为可审计性。"
+      }
+    ]
+  }
+}

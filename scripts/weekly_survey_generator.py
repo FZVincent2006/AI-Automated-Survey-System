@@ -45,6 +45,8 @@ DEFAULT_DEBUG_DIR = PROJECT_ROOT / "data" / "debug"
 DEFAULT_MODEL = "deepseek-v4-pro"
 DEFAULT_SLEEP_SECONDS = 1.5
 DEFAULT_LOOKBACK_CARDS = 10
+DEFAULT_MIN_CONTENT_CHARS = 900
+DEFAULT_MAX_CONTENT_CHARS = 4000
 
 
 WEEKLY_SYSTEM_PROMPT = """你是一位精通学术论文写作与科研趋势分析的 AI 科学家。
@@ -58,6 +60,7 @@ WEEKLY_SYSTEM_PROMPT = """你是一位精通学术论文写作与科研趋势分
 4. 要明确回应新论文对既有 taxonomy 的冲击或补充，例如新的二级方向、跨类融合、旧类细化等。
 5. 对技术路线演进的讨论必须结合复杂度、应用场景和 data-driven 属性。
 6. 文字要克制、凝练、原创，不要大段复述原始摘要。
+7. 正文控制在约 1000–1800 个中文字符，确保排版后约为 1–2 页。
 """
 
 
@@ -179,6 +182,29 @@ def build_parser() -> argparse.ArgumentParser:
         type=int,
         default=DEFAULT_LOOKBACK_CARDS,
         help="How many latest cards to use when no incremental delta is available.",
+    )
+    parser.add_argument(
+        "--allow-repeat",
+        action="store_true",
+        help="Regenerate the current digest from recent cards when no new cards exist.",
+    )
+    parser.add_argument(
+        "--min-content-chars",
+        type=int,
+        default=DEFAULT_MIN_CONTENT_CHARS,
+        help="Minimum non-whitespace characters required in the rendered digest.",
+    )
+    parser.add_argument(
+        "--max-content-chars",
+        type=int,
+        default=DEFAULT_MAX_CONTENT_CHARS,
+        help="Maximum non-whitespace characters allowed in the rendered digest.",
+    )
+    parser.add_argument(
+        "--generation-attempts",
+        type=int,
+        default=2,
+        help="Maximum generation attempts when the digest fails quality validation.",
     )
     parser.add_argument(
         "--temperature",
@@ -566,6 +592,37 @@ def render_markdown(digest: WeeklyDigestResponse, week_index: int, new_cards: li
     return "\n".join(lines).strip() + "\n"
 
 
+def count_content_characters(markdown: str) -> int:
+    """Approximate report length after removing Markdown syntax and whitespace."""
+
+    plain_text = re.sub(r"[#>*_`\-\[\]()]", "", markdown)
+    return len(re.sub(r"\s+", "", plain_text))
+
+
+def validate_weekly_markdown(markdown: str, min_chars: int, max_chars: int) -> None:
+    """Reject weekly artifacts that do not satisfy the assignment structure."""
+
+    required_sections = [
+        "本周研究动态总览",
+        "核心技术路线演进",
+        "分类体系冲击与补充",
+        "研究空白与未来方向",
+    ]
+    missing = [section for section in required_sections if section not in markdown]
+    if missing:
+        raise ValueError(f"Weekly digest is missing required sections: {', '.join(missing)}")
+
+    content_chars = count_content_characters(markdown)
+    if content_chars < max(1, min_chars):
+        raise ValueError(
+            f"Weekly digest is too short: {content_chars} characters; minimum is {min_chars}."
+        )
+    if max_chars > 0 and content_chars > max_chars:
+        raise ValueError(
+            f"Weekly digest is too long: {content_chars} characters; maximum is {max_chars}."
+        )
+
+
 def main() -> int:
     """Run the weekly digest generator from the command line."""
 
@@ -588,13 +645,17 @@ def main() -> int:
         return 1
 
     state = load_state(args.state_path)
+    has_incremental_update = int(state.get("last_processed_count", 0) or 0) < len(cards)
+    if not has_incremental_update and not args.allow_repeat:
+        LOGGER.info("No new paper cards detected; no weekly digest was generated.")
+        return 0
+
     new_cards = select_new_cards(cards, state, args.lookback_cards)
     if not new_cards:
         LOGGER.error("No usable cards available for weekly digest generation.")
         return 1
 
     digest_index = int(state.get("digest_index", 0) or 0)
-    has_incremental_update = int(state.get("last_processed_count", 0) or 0) < len(cards)
     if has_incremental_update:
         digest_index += 1
     elif digest_index <= 0:
@@ -608,19 +669,40 @@ def main() -> int:
     LOGGER.info("Loaded %d paper cards; selected %d cards for this digest", len(cards), len(new_cards))
 
     try:
-        sleep(max(0.0, args.sleep_seconds))
-        digest = generate_weekly_digest(
-            client=client,
-            model=args.model,
-            temperature=args.temperature,
-            taxonomy_md=taxonomy_md,
-            comparison_df=comparison_df,
-            new_cards=new_cards,
-        )
+        attempts = max(1, args.generation_attempts)
+        markdown = ""
+        last_error: Exception | None = None
+        for attempt_index in range(1, attempts + 1):
+            sleep(max(0.0, args.sleep_seconds))
+            try:
+                digest = generate_weekly_digest(
+                    client=client,
+                    model=args.model,
+                    temperature=args.temperature,
+                    taxonomy_md=taxonomy_md,
+                    comparison_df=comparison_df,
+                    new_cards=new_cards,
+                )
+                markdown = render_markdown(digest, digest_index, new_cards)
+                validate_weekly_markdown(
+                    markdown,
+                    min_chars=args.min_content_chars,
+                    max_chars=args.max_content_chars,
+                )
+                break
+            except Exception as exc:  # noqa: BLE001 - retry quality failures as well as API failures.
+                last_error = exc
+                LOGGER.warning(
+                    "Weekly digest attempt %d/%d failed validation: %s",
+                    attempt_index,
+                    attempts,
+                    exc,
+                )
+        else:
+            raise RuntimeError(f"Weekly digest did not pass validation: {last_error}")
 
         args.output_dir.mkdir(parents=True, exist_ok=True)
         output_path = args.output_dir / f"weekly_digest_第{digest_index}周.md"
-        markdown = render_markdown(digest, digest_index, new_cards)
         output_path.write_text(markdown, encoding="utf-8")
         LOGGER.info("Saved weekly digest to %s", output_path)
 

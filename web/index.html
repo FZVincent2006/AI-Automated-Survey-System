@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="SurveyMind - AI 辅助的自动化文献综述系统"
+    />
+    <title>SurveyMind · AI 文献综述系统</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="#overview" aria-label="SurveyMind 首页">
+          <span class="brand-mark">
+            <svg viewBox="0 0 40 40" aria-hidden="true">
+              <path d="M9 9h13a9 9 0 0 1 9 9v13H18a9 9 0 0 1-9-9V9Z"></path>
+              <path d="M16 16h15v15"></path>
+            </svg>
+          </span>
+          <span>
+            <strong>SurveyMind</strong>
+            <small>Research Intelligence</small>
+          </span>
+        </a>
+
+        <nav class="nav-list" aria-label="主导航">
+          <button class="nav-item active" data-section="overview">
+            <span class="nav-icon">⌂</span><span>总览</span>
+          </button>
+          <button class="nav-item" data-section="papers">
+            <span class="nav-icon">◫</span><span>论文智能解析</span>
+          </button>
+          <button class="nav-item" data-section="taxonomy">
+            <span class="nav-icon">⌘</span><span>研究分类图谱</span>
+          </button>
+          <button class="nav-item" data-section="comparison">
+            <span class="nav-icon">⇄</span><span>方法对比分析</span>
+          </button>
+          <button class="nav-item" data-section="insights">
+            <span class="nav-icon">⌁</span><span>趋势与洞察</span>
+          </button>
+          <button class="nav-item" data-section="weekly">
+            <span class="nav-icon">◷</span><span>Weekly Digest</span>
+          </button>
+          <button class="nav-item" data-section="survey">
+            <span class="nav-icon">▤</span><span>最终综述</span>
+          </button>
+          <button class="nav-item" data-section="live">
+            <span class="nav-icon pulse-dot"></span><span>实时演示</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <div class="automation-card">
+            <div class="automation-head">
+              <span class="status-dot"></span>
+              <span>自动更新运行中</span>
+            </div>
+            <strong>每周一 08:00</strong>
+            <small>GitHub Actions · 最近运行成功</small>
+          </div>
+          <button class="member-button" id="memberButton">
+            <span class="avatar-stack">
+              <i>方</i><i>普</i><i>肖</i>
+            </span>
+            <span><strong>课程项目小组</strong><small>5 位成员</small></span>
+          </button>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <button class="mobile-menu" id="mobileMenu" aria-label="打开菜单">☰</button>
+          <div class="breadcrumb">
+            <span>AI 辅助的自动化文献综述系统</span>
+            <i>/</i>
+            <strong id="pageTitle">智能研究总览</strong>
+          </div>
+          <div class="top-actions">
+            <span class="sync-time" id="syncTime">数据同步中</span>
+            <button class="icon-button" id="themeButton" title="切换视觉模式">◐</button>
+            <button class="primary-button compact" data-goto="live">
+              <span class="button-spark">✦</span> 启动实时解析
+            </button>
+          </div>
+        </header>
+
+        <section class="page-section active" id="overview">
+          <div class="hero">
+            <div>
+              <div class="eyebrow"><span></span> AI-POWERED LITERATURE REVIEW</div>
+              <h1>把前沿论文，转化为<br /><em>可持续更新的研究洞察</em></h1>
+              <p>
+                自动完成 arXiv 检索、结构化解析、分类聚合、方法对比与周期综述，
+                让文献调研从重复劳动变成一条智能流水线。
+              </p>
+              <div class="hero-actions">
+                <button class="primary-button" data-goto="papers">探索论文库 <span>→</span></button>
+                <button class="ghost-button" data-goto="taxonomy">查看研究图谱</button>
+              </div>
+            </div>
+            <div class="hero-orbit" aria-hidden="true">
+              <div class="orbit orbit-a"></div>
+              <div class="orbit orbit-b"></div>
+              <div class="orbit-core">
+                <span>AI</span>
+                <small>RESEARCH<br />ENGINE</small>
+              </div>
+              <div class="orbit-node node-one">PDF</div>
+              <div class="orbit-node node-two">JSON</div>
+              <div class="orbit-node node-three">INSIGHT</div>
+            </div>
+          </div>
+
+          <div class="metrics-grid" id="metricsGrid"></div>
+
+          <div class="dashboard-grid">
+            <article class="panel pipeline-panel">
+              <div class="panel-header">
+                <div>
+                  <span class="panel-kicker">AUTOMATION PIPELINE</span>
+                  <h2>智能处理流水线</h2>
+                </div>
+                <span class="live-badge"><i></i> 运行正常</span>
+              </div>
+              <div class="pipeline" id="pipeline"></div>
+              <div class="pipeline-footer">
+                <div>
+                  <span>本轮处理进度</span>
+                  <strong id="pipelineProgressText">60 / 60</strong>
+                </div>
+                <div class="progress-track"><span id="pipelineProgress"></span></div>
+              </div>
+            </article>
+
+            <article class="panel category-panel">
+              <div class="panel-header">
+                <div>
+                  <span class="panel-kicker">CATEGORY DISTRIBUTION</span>
+                  <h2>研究方向分布</h2>
+                </div>
+                <button class="text-button" data-goto="taxonomy">查看全部 →</button>
+              </div>
+              <div class="donut-layout">
+                <div class="donut" id="categoryDonut">
+                  <div><strong id="donutTotal">60</strong><small>篇论文</small></div>
+                </div>
+                <div class="legend-list" id="categoryLegend"></div>
+              </div>
+            </article>
+
+            <article class="panel trend-panel">
+              <div class="panel-header">
+                <div>
+                  <span class="panel-kicker">PUBLICATION TREND</span>
+                  <h2>论文收录趋势</h2>
+                </div>
+                <div class="segmented"><button class="active">月度</button><button>季度</button></div>
+              </div>
+              <div class="bar-chart" id="trendChart"></div>
+            </article>
+
+            <article class="panel insight-preview">
+              <div class="panel-header">
+                <div>
+                  <span class="panel-kicker">AI RESEARCH SIGNAL</span>
+                  <h2>本周关键洞察</h2>
+                </div>
+                <span class="ai-chip">✦ AI GENERATED</span>
+              </div>
+              <blockquote id="featuredInsight"></blockquote>
+              <div class="insight-tags" id="featuredTags"></div>
+              <button class="text-button insight-more" data-goto="insights">阅读完整趋势分析 →</button>
+            </article>
+          </div>
+        </section>
+
+        <section class="page-section" id="papers">
+          <div class="section-heading">
+            <div>
+              <span class="eyebrow"><span></span> STRUCTURED PAPER CARDS</span>
+              <h1>论文智能解析</h1>
+              <p>每篇论文被转化为统一的结构化卡片，支持检索、筛选与证据追溯。</p>
+            </div>
+            <button class="primary-button" data-goto="live">✦ 解析新论文</button>
+          </div>
+          <div class="filter-bar panel">
+            <label class="search-box">
+              <span>⌕</span>
+              <input id="paperSearch" type="search" placeholder="搜索英文标题、方法或研究方向..." />
+            </label>
+            <select id="categoryFilter"><option value="">全部分类</option></select>
+            <select id="yearFilter"><option value="">全部年份</option></select>
+            <span class="result-count" id="paperResultCount"></span>
+          </div>
+          <div class="paper-grid" id="paperGrid"></div>
+        </section>
+
+        <section class="page-section" id="taxonomy">
+          <div class="section-heading">
+            <div>
+              <span class="eyebrow"><span></span> INTERACTIVE TAXONOMY</span>
+              <h1>研究分类图谱</h1>
+              <p>从论文卡片中自动归纳多层技术路线，点击节点查看代表性论文。</p>
+            </div>
+            <div class="graph-legend"><span><i class="root-color"></i>根主题</span><span><i class="branch-color"></i>研究方向</span><span><i class="leaf-color"></i>技术子类</span></div>
+          </div>
+          <div class="taxonomy-layout">
+            <article class="panel graph-canvas" id="taxonomyGraph"></article>
+            <aside class="panel taxonomy-detail" id="taxonomyDetail"></aside>
+          </div>
+        </section>
+
+        <section class="page-section" id="comparison">
+          <div class="section-heading">
+            <div>
+              <span class="eyebrow"><span></span> METHOD BENCHMARK</span>
+              <h1>方法对比分析</h1>
+              <p>从复杂度、应用场景、优缺点与数据驱动属性等维度横向比较技术方案。</p>
+            </div>
+            <button class="ghost-button" id="clearCompare">清除选择</button>
+          </div>
+          <div class="compare-selector panel" id="compareSelector"></div>
+          <div class="comparison-stage">
+            <article class="panel radar-panel">
+              <div class="panel-header"><div><span class="panel-kicker">CAPABILITY PROFILE</span><h2>能力画像</h2></div></div>
+              <div class="radar-wrap" id="radarChart"></div>
+            </article>
+            <article class="panel table-panel">
+              <div class="comparison-table-wrap">
+                <table>
+                  <thead><tr><th>论文 / 方法</th><th>复杂度</th><th>应用场景</th><th>优缺点</th><th>数据驱动</th></tr></thead>
+                  <tbody id="comparisonBody"></tbody>
+                </table>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="page-section" id="insights">
+          <div class="section-heading">
+            <div>
+              <span class="eyebrow"><span></span> TREND INTELLIGENCE</span>
+              <h1>趋势与研究洞察</h1>
+              <p>综合 Taxonomy、方法对比和周度增量，识别技术演进、研究空白与潜在突破口。</p>
+            </div>
+            <span class="ai-chip large">✦ 基于全部结构化产物生成</span>
+          </div>
+          <div class="insight-grid" id="insightGrid"></div>
+          <article class="panel evolution-panel">
+            <div class="panel-header"><div><span class="panel-kicker">TECHNOLOGY EVOLUTION</span><h2>技术路线演进</h2></div></div>
+            <div class="evolution-track" id="evolutionTrack"></div>
+          </article>
+        </section>
+
+        <section class="page-section" id="weekly">
+          <div class="section-heading">
+            <div>
+              <span class="eyebrow"><span></span> CONTINUOUS REVIEW</span>
+              <h1>Weekly Survey Digest</h1>
+              <p>增量跟踪新论文、技术路线变化与分类体系冲击，形成持续更新的研究记录。</p>
+            </div>
+            <span class="schedule-chip">◷ 每周自动更新</span>
+          </div>
+          <div class="weekly-layout">
+            <div class="weekly-timeline" id="weeklyTimeline"></div>
+            <article class="panel digest-reader" id="digestReader"></article>
+          </div>
+        </section>
+
+        <section class="page-section" id="survey">
+          <div class="section-heading">
+            <div>
+              <span class="eyebrow"><span></span> FINAL SURVEY REPORT</span>
+              <h1>最终综述报告</h1>
+              <p>基于完整语料、分类体系、对比表与历次周报形成的系统性研究综述。</p>
+            </div>
+            <button class="primary-button" id="exportSurvey">导出 Markdown ↓</button>
+          </div>
+          <div class="survey-layout">
+            <aside class="panel survey-toc" id="surveyToc"></aside>
+            <article class="panel survey-reader" id="surveyReader"></article>
+          </div>
+        </section>
+
+        <section class="page-section" id="live">
+          <div class="section-heading">
+            <div>
+              <span class="eyebrow"><span></span> LIVE AI DEMO</span>
+              <h1>实时论文解析</h1>
+              <p>输入论文标题与摘要，现场展示从原始文本到结构化研究卡片的转换过程。</p>
+            </div>
+            <span class="safe-chip">● 安全服务端调用 · 支持缓存降级</span>
+          </div>
+          <div class="live-layout">
+            <article class="panel live-form-panel">
+              <div class="demo-notice">
+                <span>演示建议</span>
+                默认示例可在 10–20 秒内完成；API 不可用时会自动加载缓存分析结果。
+              </div>
+              <label>论文标题 <small>English title</small></label>
+              <input id="liveTitle" value="Self-Correcting Multi-Agent Execution Graphs" />
+              <label>论文摘要 <small>Abstract</small></label>
+              <textarea id="liveAbstract" rows="10">The work proposes an execution graph where multiple agents inspect one another's outputs and trigger correction loops when inconsistency is detected. This design improves robustness on synthetic coordination tasks but remains sensitive to prompt design.</textarea>
+              <button class="primary-button analyze-button" id="analyzeButton">✦ 开始 AI 智能解析</button>
+            </article>
+            <article class="panel live-result-panel">
+              <div class="live-placeholder" id="livePlaceholder">
+                <div class="scanner-icon"><span></span><i></i></div>
+                <h3>等待解析任务</h3>
+                <p>AI 将提取问题、方法、实验指标、创新点与局限性，并生成可信度评分。</p>
+              </div>
+              <div class="analysis-progress hidden" id="analysisProgress"></div>
+              <div class="analysis-result hidden" id="analysisResult"></div>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="modal-backdrop hidden" id="paperModal">
+      <div class="modal">
+        <button class="modal-close" data-close-modal>×</button>
+        <div id="paperModalContent"></div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop hidden" id="memberModal">
+      <div class="modal member-modal">
+        <button class="modal-close" data-close-members>×</button>
+        <span class="eyebrow"><span></span> PROJECT TEAM</span>
+        <h2>课程项目小组</h2>
+        <p>AI 辅助的自动化文献综述系统 · 五人协作开发</p>
+        <div class="member-grid" id="memberGrid"></div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>

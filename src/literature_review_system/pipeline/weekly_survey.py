@@ -1,5 +1,6 @@
-"""Generate weekly survey summaries."""
+"""Package entry point for weekly survey generation."""
+
+from scripts.weekly_survey_generator import main
 
 
-def main() -> None:
-    pass
+__all__ = ["main"]

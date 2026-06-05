@@ -187,6 +187,12 @@ def build_parser() -> argparse.ArgumentParser:
         default=0.2,
         help="LLM temperature used for taxonomy and comparison generation.",
     )
+    parser.add_argument(
+        "--min-comparison-coverage",
+        type=float,
+        default=0.9,
+        help="Minimum fraction of paper cards that must appear in the comparison table.",
+    )
     return parser
 
 
@@ -501,6 +507,29 @@ def save_comparison_table(rows: list[dict[str, object]], comparison_output: Path
     dataframe.to_csv(comparison_output, index=False, encoding="utf-8-sig")
 
 
+def validate_comparison_coverage(
+    rows: list[dict[str, object]],
+    cards: list[CardRecord],
+    minimum_coverage: float,
+) -> None:
+    """Reject partial comparison output instead of silently publishing it."""
+
+    expected_titles = {card.title for card in cards}
+    generated_titles = {
+        str(row.get("paper_title") or "").strip()
+        for row in rows
+        if str(row.get("paper_title") or "").strip()
+    }
+    matched_count = len(expected_titles & generated_titles)
+    coverage = matched_count / len(expected_titles) if expected_titles else 1.0
+    required = max(0.0, min(1.0, minimum_coverage))
+    if coverage < required:
+        raise ValueError(
+            f"Comparison coverage is {coverage:.1%} ({matched_count}/{len(expected_titles)}); "
+            f"minimum required is {required:.1%}."
+        )
+
+
 def chunk_cards(cards: list[CardRecord], batch_size: int) -> list[list[CardRecord]]:
     """Split cards into fixed-size batches."""
 
@@ -540,9 +569,6 @@ def main() -> int:
             temperature=args.temperature,
             cards=cards,
         )
-        save_taxonomy(taxonomy_md, args.taxonomy_output)
-        LOGGER.info("Saved taxonomy markdown to %s", args.taxonomy_output)
-
         comparison_rows: list[dict[str, object]] = []
         batches = chunk_cards(cards, args.batch_size)
         for batch_index, batch in enumerate(batches, start=1):
@@ -564,6 +590,13 @@ def main() -> int:
                 LOGGER.exception("Comparison batch %d failed: %s", batch_index, exc)
             sleep(max(0.0, args.sleep_seconds))
 
+        validate_comparison_coverage(
+            rows=comparison_rows,
+            cards=cards,
+            minimum_coverage=args.min_comparison_coverage,
+        )
+        save_taxonomy(taxonomy_md, args.taxonomy_output)
+        LOGGER.info("Saved taxonomy markdown to %s", args.taxonomy_output)
         save_comparison_table(comparison_rows, args.comparison_output)
         LOGGER.info("Saved comparison table to %s", args.comparison_output)
 

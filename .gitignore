@@ -4,7 +4,14 @@
 # Python 缓存
 __pycache__/
 *.pyc
+.venv*/
 
-# 自动化系统产生的本地临时/生产数据（让 GitHub Actions 运行时自己生成）
-data/
-output/
+# 失败响应可能包含大模型原始输出，仅保留本地调试
+data/debug/
+
+# 测试运行产生的临时文件
+data/test_*
+output/test_*
+
+# macOS
+.DS_Store
