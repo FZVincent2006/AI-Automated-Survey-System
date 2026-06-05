@@ -15,3 +15,4 @@ output/test_*
 
 # macOS
 .DS_Store
+.vercel
