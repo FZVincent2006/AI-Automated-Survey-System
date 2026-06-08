@@ -2,9 +2,15 @@
   "meta": {
     "projectName": "SurveyMind",
     "topic": "LLM Agent 与多智能体系统",
-    "lastUpdated": "2026-06-05T08:30:00+08:00",
+    "lastUpdated": "2026-06-08T04:23:56.506338+00:00",
     "dataMode": "demo",
-    "members": ["方正", "普布", "肖辉", "罗宇翔", "杨翰钦"]
+    "members": [
+      "方正",
+      "普布",
+      "肖辉",
+      "罗宇翔",
+      "杨翰钦"
+    ]
   },
   "metrics": {
     "rawPapers": 60,
@@ -14,36 +20,132 @@
     "comparisonCoverage": 96.7
   },
   "pipeline": [
-    {"name": "arXiv 抓取", "detail": "60 篇", "icon": "⌕", "status": "done"},
-    {"name": "去重清洗", "detail": "100%", "icon": "◇", "status": "done"},
-    {"name": "结构化解析", "detail": "58 张卡片", "icon": "▦", "status": "done"},
-    {"name": "分类与对比", "detail": "7 个方向", "icon": "⌘", "status": "done"},
-    {"name": "综述生成", "detail": "3 期周报", "icon": "✦", "status": "done"}
+    {
+      "name": "arXiv 抓取",
+      "detail": "60 篇",
+      "icon": "⌕",
+      "status": "done"
+    },
+    {
+      "name": "去重清洗",
+      "detail": "100%",
+      "icon": "◇",
+      "status": "done"
+    },
+    {
+      "name": "结构化解析",
+      "detail": "58 张卡片",
+      "icon": "▦",
+      "status": "done"
+    },
+    {
+      "name": "分类与对比",
+      "detail": "7 个方向",
+      "icon": "⌘",
+      "status": "done"
+    },
+    {
+      "name": "综述生成",
+      "detail": "3 期周报",
+      "icon": "✦",
+      "status": "done"
+    }
   ],
   "categories": [
-    {"name": "多智能体协作", "count": 17, "color": "#6e7cff"},
-    {"name": "工具增强工作流", "count": 13, "color": "#42b7e8"},
-    {"name": "规划与推理", "count": 11, "color": "#a56be8"},
-    {"name": "自我纠错与验证", "count": 10, "color": "#4ed1a2"},
-    {"name": "记忆与检索增强", "count": 9, "color": "#e6a85b"}
+    {
+      "name": "多智能体协作",
+      "count": 17,
+      "color": "#6e7cff"
+    },
+    {
+      "name": "工具增强工作流",
+      "count": 13,
+      "color": "#42b7e8"
+    },
+    {
+      "name": "规划与推理",
+      "count": 11,
+      "color": "#a56be8"
+    },
+    {
+      "name": "自我纠错与验证",
+      "count": 10,
+      "color": "#4ed1a2"
+    },
+    {
+      "name": "记忆与检索增强",
+      "count": 9,
+      "color": "#e6a85b"
+    }
   ],
   "monthlyTrend": [
-    {"label": "Jul", "value": 3}, {"label": "Aug", "value": 5},
-    {"label": "Sep", "value": 4}, {"label": "Oct", "value": 7},
-    {"label": "Nov", "value": 6}, {"label": "Dec", "value": 8},
-    {"label": "Jan", "value": 9}, {"label": "Feb", "value": 12},
-    {"label": "Mar", "value": 15}, {"label": "Apr", "value": 18},
-    {"label": "May", "value": 24}, {"label": "Jun", "value": 21}
+    {
+      "label": "Jul",
+      "value": 3
+    },
+    {
+      "label": "Aug",
+      "value": 5
+    },
+    {
+      "label": "Sep",
+      "value": 4
+    },
+    {
+      "label": "Oct",
+      "value": 7
+    },
+    {
+      "label": "Nov",
+      "value": 6
+    },
+    {
+      "label": "Dec",
+      "value": 8
+    },
+    {
+      "label": "Jan",
+      "value": 9
+    },
+    {
+      "label": "Feb",
+      "value": 12
+    },
+    {
+      "label": "Mar",
+      "value": 15
+    },
+    {
+      "label": "Apr",
+      "value": 18
+    },
+    {
+      "label": "May",
+      "value": 24
+    },
+    {
+      "label": "Jun",
+      "value": 21
+    }
   ],
   "featuredInsight": {
     "text": "研究重心正在从“单智能体能力增强”转向“可验证的多智能体协同”。新工作不再只追求任务成功率，而是同时关注协调开销、错误传播与执行后验证。",
-    "tags": ["Multi-Agent", "Verification", "Workflow", "Robustness"]
+    "tags": [
+      "Multi-Agent",
+      "Verification",
+      "Workflow",
+      "Robustness"
+    ]
   },
   "papers": [
     {
       "id": "p01",
       "title": "Multi-Agent Debate for Long-Horizon Planning",
-      "authors": ["A. Chen", "M. Rivera", "S. Patel"],
+      "authors": [
+        "A. Chen",
+        "M. Rivera",
+        "S. Patel"
+      ],
       "year": 2026,
       "published": "2026-05-18",
       "category": "多智能体协作",
@@ -59,13 +161,22 @@
       "complexity": "高：多轮并行推理与聚合",
       "prosCons": "优：规划稳健、可暴露隐性错误；缺：token 与协调开销较高",
       "dataDriven": "部分",
-      "scores": [92, 75, 88, 83, 79],
+      "scores": [
+        92,
+        75,
+        88,
+        83,
+        79
+      ],
       "url": "https://arxiv.org/"
     },
     {
       "id": "p02",
       "title": "Tool-Augmented Workflow Planning with Persistent Memory",
-      "authors": ["L. Wang", "K. Ito"],
+      "authors": [
+        "L. Wang",
+        "K. Ito"
+      ],
       "year": 2026,
       "published": "2026-04-29",
       "category": "工具增强工作流",
@@ -81,13 +192,23 @@
       "complexity": "中高：图规划与状态维护",
       "prosCons": "优：可恢复、状态一致；缺：依赖工具元数据质量",
       "dataDriven": "是",
-      "scores": [85, 91, 80, 88, 86],
+      "scores": [
+        85,
+        91,
+        80,
+        88,
+        86
+      ],
       "url": "https://arxiv.org/"
     },
     {
       "id": "p03",
       "title": "Self-Correcting Multi-Agent Execution Graphs",
-      "authors": ["R. Smith", "Y. Zhao", "N. Gupta"],
+      "authors": [
+        "R. Smith",
+        "Y. Zhao",
+        "N. Gupta"
+      ],
       "year": 2026,
       "published": "2026-04-11",
       "category": "自我纠错与验证",
@@ -103,13 +224,22 @@
       "complexity": "高：执行图与循环验证",
       "prosCons": "优：可追踪、抗错误传播；缺：验证延迟与提示敏感",
       "dataDriven": "否",
-      "scores": [88, 72, 95, 90, 84],
+      "scores": [
+        88,
+        72,
+        95,
+        90,
+        84
+      ],
       "url": "https://arxiv.org/"
     },
     {
       "id": "p04",
       "title": "Retrieval-Grounded Agentic Scheduling under Dynamic Constraints",
-      "authors": ["D. Lee", "F. Rossi"],
+      "authors": [
+        "D. Lee",
+        "F. Rossi"
+      ],
       "year": 2026,
       "published": "2026-03-23",
       "category": "记忆与检索增强",
@@ -125,13 +255,22 @@
       "complexity": "中：检索与约束排序",
       "prosCons": "优：适应动态环境；缺：依赖案例库覆盖",
       "dataDriven": "是",
-      "scores": [78, 86, 82, 76, 91],
+      "scores": [
+        78,
+        86,
+        82,
+        76,
+        91
+      ],
       "url": "https://arxiv.org/"
     },
     {
       "id": "p05",
       "title": "Hierarchical Reasoning Policies for Autonomous LLM Agents",
-      "authors": ["J. Kim", "T. Brown"],
+      "authors": [
+        "J. Kim",
+        "T. Brown"
+      ],
       "year": 2026,
       "published": "2026-03-08",
       "category": "规划与推理",
@@ -147,13 +286,22 @@
       "complexity": "中：分层规划",
       "prosCons": "优：全局一致、步骤清晰；缺：层级设计成本",
       "dataDriven": "部分",
-      "scores": [84, 82, 76, 85, 74],
+      "scores": [
+        84,
+        82,
+        76,
+        85,
+        74
+      ],
       "url": "https://arxiv.org/"
     },
     {
       "id": "p06",
       "title": "Learning Communication Protocols for Cooperative Language Agents",
-      "authors": ["P. Singh", "E. Martin"],
+      "authors": [
+        "P. Singh",
+        "E. Martin"
+      ],
       "year": 2026,
       "published": "2026-02-21",
       "category": "多智能体协作",
@@ -169,13 +317,22 @@
       "complexity": "中高：策略学习与协作训练",
       "prosCons": "优：通信高效；缺：迁移性与训练成本",
       "dataDriven": "是",
-      "scores": [90, 84, 73, 81, 89],
+      "scores": [
+        90,
+        84,
+        73,
+        81,
+        89
+      ],
       "url": "https://arxiv.org/"
     },
     {
       "id": "p07",
       "title": "Benchmarking Reliability in Tool-Using Language Model Agents",
-      "authors": ["H. Zhang", "C. Miller"],
+      "authors": [
+        "H. Zhang",
+        "C. Miller"
+      ],
       "year": 2025,
       "published": "2025-12-17",
       "category": "评估与可靠性",
@@ -191,13 +348,22 @@
       "complexity": "中：多场景基准评估",
       "prosCons": "优：诊断细粒度；缺：现实覆盖有限",
       "dataDriven": "是",
-      "scores": [74, 79, 96, 92, 83],
+      "scores": [
+        74,
+        79,
+        96,
+        92,
+        83
+      ],
       "url": "https://arxiv.org/"
     },
     {
       "id": "p08",
       "title": "Episodic Memory Compression for Long-Horizon Agents",
-      "authors": ["M. Silva", "A. Johnson"],
+      "authors": [
+        "M. Silva",
+        "A. Johnson"
+      ],
       "year": 2025,
       "published": "2025-11-04",
       "category": "记忆与检索增强",
@@ -213,13 +379,22 @@
       "complexity": "中：事件切分与摘要",
       "prosCons": "优：节省上下文；缺：存在信息损失",
       "dataDriven": "是",
-      "scores": [76, 91, 80, 78, 94],
+      "scores": [
+        76,
+        91,
+        80,
+        78,
+        94
+      ],
       "url": "https://arxiv.org/"
     },
     {
       "id": "p09",
       "title": "Adaptive Tool Routing with Uncertainty-Aware Planning",
-      "authors": ["Q. Liu", "V. Novak"],
+      "authors": [
+        "Q. Liu",
+        "V. Novak"
+      ],
       "year": 2025,
       "published": "2025-10-16",
       "category": "工具增强工作流",
@@ -235,13 +410,22 @@
       "complexity": "中：概率路由与风险判断",
       "prosCons": "优：风险可控；缺：校准与冷启动问题",
       "dataDriven": "是",
-      "scores": [81, 90, 87, 89, 88],
+      "scores": [
+        81,
+        90,
+        87,
+        89,
+        88
+      ],
       "url": "https://arxiv.org/"
     },
     {
       "id": "p10",
       "title": "Reflective Planning for Language Agents with Sparse Feedback",
-      "authors": ["S. Ahmed", "B. Green"],
+      "authors": [
+        "S. Ahmed",
+        "B. Green"
+      ],
       "year": 2025,
       "published": "2025-09-09",
       "category": "规划与推理",
@@ -257,13 +441,22 @@
       "complexity": "中高：周期反思与重规划",
       "prosCons": "优：可从失败修正；缺：归因误差与上下文开销",
       "dataDriven": "否",
-      "scores": [80, 77, 85, 87, 70],
+      "scores": [
+        80,
+        77,
+        85,
+        87,
+        70
+      ],
       "url": "https://arxiv.org/"
     },
     {
       "id": "p11",
       "title": "Guarded Agent Workflows for High-Stakes Automation",
-      "authors": ["T. Nguyen", "I. Cohen"],
+      "authors": [
+        "T. Nguyen",
+        "I. Cohen"
+      ],
       "year": 2025,
       "published": "2025-08-28",
       "category": "安全与治理",
@@ -279,13 +472,22 @@
       "complexity": "中：策略检查与人工升级",
       "prosCons": "优：安全可审计；缺：规则维护和性能折损",
       "dataDriven": "部分",
-      "scores": [72, 68, 98, 94, 66],
+      "scores": [
+        72,
+        68,
+        98,
+        94,
+        66
+      ],
       "url": "https://arxiv.org/"
     },
     {
       "id": "p12",
       "title": "Graph-of-Agents: Composable Roles for Complex Task Solving",
-      "authors": ["X. Zhou", "R. Evans"],
+      "authors": [
+        "X. Zhou",
+        "R. Evans"
+      ],
       "year": 2025,
       "published": "2025-07-13",
       "category": "多智能体协作",
@@ -301,7 +503,13 @@
       "complexity": "高：动态图搜索",
       "prosCons": "优：模块化、适应性强；缺：搜索与协调成本",
       "dataDriven": "部分",
-      "scores": [94, 78, 76, 82, 81],
+      "scores": [
+        94,
+        78,
+        76,
+        82,
+        81
+      ],
       "url": "https://arxiv.org/"
     }
   ],
@@ -314,9 +522,18 @@
         "description": "通过角色分工、通信与集体决策提升复杂任务能力。",
         "count": 17,
         "children": [
-          {"name": "辩论与共识", "count": 6},
-          {"name": "角色与拓扑", "count": 6},
-          {"name": "通信协议", "count": 5}
+          {
+            "name": "辩论与共识",
+            "count": 6
+          },
+          {
+            "name": "角色与拓扑",
+            "count": 6
+          },
+          {
+            "name": "通信协议",
+            "count": 5
+          }
         ]
       },
       {
@@ -324,9 +541,18 @@
         "description": "围绕工具选择、调用编排与失败恢复构建执行流程。",
         "count": 13,
         "children": [
-          {"name": "工具路由", "count": 5},
-          {"name": "工作流编排", "count": 5},
-          {"name": "状态恢复", "count": 3}
+          {
+            "name": "工具路由",
+            "count": 5
+          },
+          {
+            "name": "工作流编排",
+            "count": 5
+          },
+          {
+            "name": "状态恢复",
+            "count": 3
+          }
         ]
       },
       {
@@ -334,9 +560,18 @@
         "description": "关注长程目标分解、层级决策与反馈驱动的计划修正。",
         "count": 11,
         "children": [
-          {"name": "层级规划", "count": 4},
-          {"name": "反思推理", "count": 4},
-          {"name": "动态调度", "count": 3}
+          {
+            "name": "层级规划",
+            "count": 4
+          },
+          {
+            "name": "反思推理",
+            "count": 4
+          },
+          {
+            "name": "动态调度",
+            "count": 3
+          }
         ]
       },
       {
@@ -344,9 +579,18 @@
         "description": "覆盖执行验证、安全约束、评估基准与错误恢复。",
         "count": 10,
         "children": [
-          {"name": "自我纠错", "count": 4},
-          {"name": "安全守卫", "count": 3},
-          {"name": "可靠性评估", "count": 3}
+          {
+            "name": "自我纠错",
+            "count": 4
+          },
+          {
+            "name": "安全守卫",
+            "count": 3
+          },
+          {
+            "name": "可靠性评估",
+            "count": 3
+          }
         ]
       },
       {
@@ -354,9 +598,18 @@
         "description": "利用长期记忆与外部案例增强跨步骤决策。",
         "count": 9,
         "children": [
-          {"name": "情节记忆", "count": 4},
-          {"name": "检索增强", "count": 3},
-          {"name": "轨迹压缩", "count": 2}
+          {
+            "name": "情节记忆",
+            "count": 4
+          },
+          {
+            "name": "检索增强",
+            "count": 3
+          },
+          {
+            "name": "轨迹压缩",
+            "count": 2
+          }
         ]
       }
     ]
@@ -388,10 +641,26 @@
     }
   ],
   "evolution": [
-    {"period": "2024 H2", "title": "单体推理链", "text": "强调提示设计与逐步思考，系统结构较简单。"},
-    {"period": "2025 H1", "title": "工具增强 Agent", "text": "引入外部工具与环境交互，开始关注状态维护。"},
-    {"period": "2025 H2", "title": "多智能体协同", "text": "通过角色分工与通信提升复杂任务覆盖。"},
-    {"period": "2026 H1", "title": "可验证智能工作流", "text": "融合纠错、风险控制与执行后验证。"}
+    {
+      "period": "2024 H2",
+      "title": "单体推理链",
+      "text": "强调提示设计与逐步思考，系统结构较简单。"
+    },
+    {
+      "period": "2025 H1",
+      "title": "工具增强 Agent",
+      "text": "引入外部工具与环境交互，开始关注状态维护。"
+    },
+    {
+      "period": "2025 H2",
+      "title": "多智能体协同",
+      "text": "通过角色分工与通信提升复杂任务覆盖。"
+    },
+    {
+      "period": "2026 H1",
+      "title": "可验证智能工作流",
+      "text": "融合纠错、风险控制与执行后验证。"
+    }
   ],
   "weeklyDigests": [
     {
