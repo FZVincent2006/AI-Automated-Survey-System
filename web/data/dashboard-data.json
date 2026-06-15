@@ -2,8 +2,8 @@
   "meta": {
     "projectName": "SurveyMind",
     "topic": "LLM Agent 与多智能体系统",
-    "lastUpdated": "2026-06-08T04:23:56.506338+00:00",
-    "dataMode": "demo",
+    "lastUpdated": "2026-06-15T05:16:56.073252+00:00",
+    "dataMode": "live",
     "members": [
       "方正",
       "普布",
@@ -14,10 +14,10 @@
   },
   "metrics": {
     "rawPapers": 60,
-    "validCards": 58,
-    "categories": 7,
-    "weeklyDigests": 3,
-    "comparisonCoverage": 96.7
+    "validCards": 49,
+    "categories": 49,
+    "weeklyDigests": 1,
+    "comparisonCoverage": 100.0
   },
   "pipeline": [
     {
@@ -53,79 +53,45 @@
   ],
   "categories": [
     {
-      "name": "多智能体协作",
-      "count": 17,
+      "name": "具身智能体的模块化与可组合性",
+      "count": 1,
       "color": "#6e7cff"
     },
     {
-      "name": "工具增强工作流",
-      "count": 13,
+      "name": "潜空间合成与代理工作流优化",
+      "count": 1,
       "color": "#42b7e8"
     },
     {
-      "name": "规划与推理",
-      "count": 11,
+      "name": "氢能多能系统分析与智能控制",
+      "count": 1,
       "color": "#a56be8"
     },
     {
-      "name": "自我纠错与验证",
-      "count": 10,
+      "name": "Social Norm Reasoning in Multi-party Chat",
+      "count": 1,
       "color": "#4ed1a2"
     },
     {
-      "name": "记忆与检索增强",
-      "count": 9,
+      "name": "AI治理与开源政策",
+      "count": 1,
       "color": "#e6a85b"
+    },
+    {
+      "name": "LLM Agent 可靠性分析",
+      "count": 1,
+      "color": "#ff6c8d"
+    },
+    {
+      "name": "LLM规划安全评估与世界模型",
+      "count": 1,
+      "color": "#66c4a3"
     }
   ],
   "monthlyTrend": [
     {
-      "label": "Jul",
-      "value": 3
-    },
-    {
-      "label": "Aug",
-      "value": 5
-    },
-    {
-      "label": "Sep",
-      "value": 4
-    },
-    {
-      "label": "Oct",
-      "value": 7
-    },
-    {
-      "label": "Nov",
-      "value": 6
-    },
-    {
-      "label": "Dec",
-      "value": 8
-    },
-    {
-      "label": "Jan",
-      "value": 9
-    },
-    {
-      "label": "Feb",
-      "value": 12
-    },
-    {
-      "label": "Mar",
-      "value": 15
-    },
-    {
-      "label": "Apr",
-      "value": 18
-    },
-    {
-      "label": "May",
-      "value": 24
-    },
-    {
-      "label": "Jun",
-      "value": 21
+      "label": "2026-06",
+      "value": 49
     }
   ],
   "featuredInsight": {
@@ -139,378 +105,1719 @@
   },
   "papers": [
     {
-      "id": "p01",
-      "title": "Multi-Agent Debate for Long-Horizon Planning",
+      "id": "real-001",
+      "title": "AgentSpec: Understanding Embodied Agent Scaffolds Through Controlled Composition",
       "authors": [
-        "A. Chen",
-        "M. Rivera",
-        "S. Patel"
+        "Jixuan Chen",
+        "Jianzhi Shen",
+        "Haoqiang Kang",
+        "Zhi Hong",
+        "Qingyi Jiang",
+        "Soham Bose",
+        "Yiming Zhang",
+        "Leon Leng",
+        "Amit Vyas",
+        "Lingjun Mao",
+        "Siru Ouyang",
+        "Kun Zhou",
+        "Lianhui Qin"
       ],
       "year": 2026,
-      "published": "2026-05-18",
-      "category": "多智能体协作",
-      "confidence": 5,
-      "problem": "长程任务中，单智能体计划容易因稀疏反馈和早期错误而持续偏离目标。",
-      "keyIdea": "通过提案、质疑与修正三个阶段，让多个智能体围绕候选计划开展结构化辩论。",
-      "method": "构建多角色辩论协议，并在每轮结束后由聚合器选择或融合候选计划。",
-      "scenario": "长程规划与推理密集型基准任务",
-      "metrics": "任务成功率、规划稳定性、平均交互轮数",
-      "results": "相较单智能体基线提升了长程任务稳定性，并减少不可恢复的早期决策错误。",
-      "innovation": "协同推理机制",
-      "limitations": "智能体数量增加后协调成本显著上升，且结论仍依赖角色提示设计。",
-      "complexity": "高：多轮并行推理与聚合",
-      "prosCons": "优：规划稳健、可暴露隐性错误；缺：token 与协调开销较高",
-      "dataDriven": "部分",
+      "published": "2026-06-12",
+      "category": "具身智能体的模块化与可组合性",
+      "confidence": 4,
+      "problem": "在基于LLM的具身智能体系统中，因采用紧耦合流水线而难以分离各组件贡献、比较替代设计并理解模块交互对智能体行为的影响。",
+      "keyIdea": "将具身智能体视为具有标准化接口的可复用策略组件的类型化组合，通过受控组合来研究模块交互与兼容性。",
+      "method": "提出AgentSpec模块化规范框架，对感知、记忆、推理、反思、动作及可选学习等组件定义统一接口，支持组件替换与受控重组，并在多个环境中实例化分析。",
+      "scenario": "DeliveryBench、ALFRED、MiniGrid、RoboTHOR。",
+      "metrics": "摘要未明确说明具体评估指标，仅提及分析性能及交互效应。",
+      "results": "智能体性能主要由脚手架兼容性与模块交互效应决定，而非单一模块强度；结构化多粒度记忆可改善长时状态跟踪；推理与记忆在不同环境下存在非均匀交互；反思在纠正效果与计算成本之间权衡；RL策略在部署时与脚手架结构协同优化时组合效果最佳。",
+      "innovation": "模块化规范框架与受控组合分析方法",
+      "limitations": "摘要未明确说明。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：可分离组件贡献，揭示模块交互效应；缺点：摘要未说明局限性",
+      "dataDriven": "无法确定",
       "scores": [
-        92,
-        75,
         88,
-        83,
+        81,
+        77,
+        84,
         79
       ],
-      "url": "https://arxiv.org/"
+      "url": "http://arxiv.org/abs/2606.14674v1"
     },
     {
-      "id": "p02",
-      "title": "Tool-Augmented Workflow Planning with Persistent Memory",
+      "id": "real-002",
+      "title": "Towards Direct Latent-Space Synthesis for Parallel Branches in LLM-Agent Workflows",
       "authors": [
-        "L. Wang",
-        "K. Ito"
+        "Shikun Liu",
+        "Mufei Li",
+        "Dongqi Fu",
+        "Haoyu Wang",
+        "Yinglong Xia",
+        "Hong Li",
+        "Hong Yan",
+        "Pan Li"
       ],
       "year": 2026,
-      "published": "2026-04-29",
-      "category": "工具增强工作流",
+      "published": "2026-06-12",
+      "category": "潜空间合成与代理工作流优化",
+      "confidence": 4,
+      "problem": "LLM作为代理执行引擎采用顺序文本接口，与需要合并多个并行分支（如子任务探索、证据检索、候选生成）的结构化代理工作流不匹配；现有文本拼接方式丢失并行结构并带来冗余预填充计算。",
+      "keyIdea": "直接在潜在空间（KV缓存）上对并行分支进行合成，绕过文本拼接，实现更原生的高效综合。",
+      "method": "提出即插即用框架Parallel-Synthesis，包含一个校准独立分支缓存的缓存映射器和一个微调的合成器适配器，使合成器能直接从非顺序缓存接口生成；训练时让合成器接触并行缓存上下文，学习跨缓存聚合，并通过蒸馏从文本拼接合成中迁移推理能力。",
+      "scenario": "九个下游数据集，覆盖数学、科学问答、代码生成、GAIA以及多智能体数据库诊断等任务。",
+      "metrics": "与文本拼接合成的性能对比（胜/平/负次数），首token时间加速比（times faster）。",
+      "results": "在七个数据集上匹配或超越文本合成性能，在剩余两个数据集上接近；首token时间降低了2.5倍至11倍，表明直接缓存合成是一种促进并行代理分支更原生高效综合的有前景接口。",
+      "innovation": "潜空间缓存层合成框架",
+      "limitations": "摘要未明确说明方法的局限性；在部分数据集上性能仅接近文本合成方法，可能存在特定场景的性能瓶颈。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：首 token 加速 2.5‑11 倍，多数任务匹配或超越文本合成；缺点：部分数据集性能仅接近文本合成，可能需场景适配",
+      "dataDriven": "是（需下游数据集微调合成器）",
+      "scores": [
+        82,
+        78,
+        84,
+        79,
+        76
+      ],
+      "url": "http://arxiv.org/abs/2606.14672v1"
+    },
+    {
+      "id": "real-003",
+      "title": "A Statistical and Machine Learning Framework for Operational Threshold Detection and Deployable Dispatch Controller Development in Hydrogen Multi-Energy Systems",
+      "authors": [
+        "Shadi Heenatigala",
+        "Hasanika Samarasinghe"
+      ],
+      "year": 2026,
+      "published": "2026-06-12",
+      "category": "氢能多能系统分析与智能控制",
+      "confidence": 4,
+      "problem": "氢基多能系统中，由可再生余电驱动的间歇性制氢行为难以表征、预测与优化调度，传统单一模型难以同时捕捉线性与非线性驱动机制。",
+      "keyIdea": "将统计推断与机器学习互补融合，从运行数据中分层揭示线性驱动因素与隐藏的非线性动态，并分别用于预测与收益优化控制。",
+      "method": "采用全年高分辨率运行数据，通过等级方差分析和多元回归识别线性特征；利用随机森林捕获非线性预测重要性；构建序列模型利用24小时自相关进行运营预测；部署强化学习智能体优化氢气收益调度。",
+      "scenario": "一个整合了太阳能、风能、电力需求与电解制氢的氢基多能系统，基于一年高分辨率运营数据。",
+      "metrics": "等级方差解释度（ε²）、皮尔逊相关系数（r）、自相关系数、预测特征重要性排名、氢气调度经济收益（未量化）。",
+      "results": "太阳能辐照度可解释制氢量45.7%的等级方差，电力需求仅呈弱抑制效应（ε²=0.126）；电解槽功率是主导线性预测因子，且存在风光协同效应；随机森林将风电输出列为最重要预测特征，揭示了线性忽视的非线性动态；序列模型利用强自相关（r=0.845）进行预测；强化学习优化了氢气收益调度。整体证实统计与机器学习方法的互补价值。",
+      "innovation": "提出统计与机器学习互补框架，用于氢能多能系统表征与运营控制",
+      "limitations": "摘要未明确说明",
+      "complexity": "未明确说明",
+      "prosCons": "优点：同时捕捉线性与非线性驱动因素并优化调度收益；缺点：摘要未说明局限性",
+      "dataDriven": "是（基于一年高分辨率运营数据）",
+      "scores": [
+        82,
+        86,
+        80,
+        77,
+        75
+      ],
+      "url": "http://arxiv.org/abs/2606.14601v1"
+    },
+    {
+      "id": "real-004",
+      "title": "LoSoNA: A Benchmark for Local Social Norm Adaptation in Group Conversations",
+      "authors": [
+        "Mateusz Winiarek",
+        "Maksymilian Bilski",
+        "Mateusz Jacniacki"
+      ],
+      "year": 2026,
+      "published": "2026-06-12",
+      "category": "Social Norm Reasoning in Multi-party Chat",
       "confidence": 5,
-      "problem": "复杂任务需要跨步骤调用异构工具，但中间状态和历史决策难以保持一致。",
-      "keyIdea": "把工具检索、工作流规划与持久记忆统一到可恢复的执行状态机中。",
-      "method": "规划器先生成工具调用图，执行器记录中间轨迹，并依据失败信号局部重规划。",
-      "scenario": "网页操作、数据分析和跨工具自动化任务",
-      "metrics": "完成率、工具选择准确率、恢复成本",
-      "results": "在长链工具任务中显著降低重复调用，并提升失败后的恢复能力。",
-      "innovation": "工作流编排与记忆融合",
-      "limitations": "工具描述质量会直接影响规划效果，动态工具环境下仍存在接口漂移问题。",
-      "complexity": "中高：图规划与状态维护",
-      "prosCons": "优：可恢复、状态一致；缺：依赖工具元数据质量",
-      "dataDriven": "是",
+      "problem": "大语言模型在群聊场景中识别并适应本地社会规范的能力缺乏系统评估，现有研究未充分探索模型从对话先例中推断隐式规范并据此调整回复的能力。",
+      "keyIdea": "通过构建包含隐藏本地规范的群聊记录基准，迫使模型从非主题参与者的对话示例中推断规范，并在最终测试轮中检验模型是否遵循该规范以生成恰当的回应。",
+      "method": "设计 LoSoNA 基准，每个场景提供经过整理的群聊转录，非主题参与者展示一种隐式本地规范，随后用引出轮强制模型作答；评估八种前沿与开放权重模型在四种提示条件下的表现，对比朴素提示与显式规范感知提示的效果。",
+      "scenario": "自建的多方群聊基准 LoSoNA，包含多种设定本地规范的对话场景。",
+      "metrics": "规范遵循准确率（符合隐藏规范的响应所占百分比）。",
+      "results": "朴素提示下多数模型表现有限；显式规范感知提示带来不均衡的提升，Gemini 3.1 Pro 达到 84.2%，Claude Fable 5 达到 81.6%，部分模型仅微小增益或出现倒退。",
+      "innovation": "首个面向群聊本地社会规范适应的评估基准（Benchmark）。",
+      "limitations": "摘要未明确说明。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：首个此类基准，揭示规范遵循弱点；缺点：摘要未说明局限性",
+      "dataDriven": "是（基于自建基准数据）",
+      "scores": [
+        94,
+        95,
+        95,
+        87,
+        83
+      ],
+      "url": "http://arxiv.org/abs/2606.14600v1"
+    },
+    {
+      "id": "real-005",
+      "title": "Regulating the Machine Contributor: Governance and Policy Alignment in Open Source",
+      "authors": [
+        "Jassem Manita",
+        "Aziz Amari"
+      ],
+      "year": 2026,
+      "published": "2026-06-12",
+      "category": "AI治理与开源政策",
+      "confidence": 4,
+      "problem": "自主与半自主AI代理参与开源贡献时，打破了传统基于人类责任、可追溯性和社交契约的治理假设，导致操作事故、骚扰性贡献和平台级措施出现，而现有开源政策与新兴AI监管框架之间存在未映射的治理空白。",
+      "keyIdea": "通过对多个开源组织的贡献政策进行系统比较，并将其与主要AI治理框架对齐，建立一个可度量政策成熟度与揭示治理盲区的多维分类体系。",
+      "method": "采用基于指标编码的最相似系统设计和过程追踪法，比较六家开源基金会的政策，推导出分类法、策略成熟度评分，并将已记录的代理事故映射到政策失效维度上。",
+      "scenario": "SymPy、LLVM、matplotlib、OpenInfra、Apache软件基金会、Linux基金会这六个开源组织的贡献政策，以及EU AI Act、NIST AI RMF（含UC Berkeley智能体AI Profile）、ISO/IEC 42001与23894等AI治理框架。",
+      "metrics": "六维分类法（披露、责任、人工监督、许可、执行、维护者负担）、序数型的政策成熟度评分，以及代理事故与政策维度间的映射失效关系。",
+      "results": "研究发现各组织的AI贡献政策碎片化，现有的代理事故暴露了政策无法有效治理的维度；将政策维度与监管框架对齐后，识别出双方均未能弥合的重叠治理空白。",
+      "innovation": "提出六维政策分析分类法和与之对齐的双层治理映射方法论。",
+      "limitations": "摘要未明确说明。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：揭示治理空白，提出六维分类法；缺点：仅覆盖六个组织，通用性受限",
+      "dataDriven": "否（定性政策分析）",
+      "scores": [
+        84,
+        87,
+        89,
+        90,
+        82
+      ],
+      "url": "http://arxiv.org/abs/2606.14594v1"
+    },
+    {
+      "id": "real-006",
+      "title": "When Errors Become Narratives: A Longitudinal Taxonomy of Silent Failures in a Production LLM Agent Runtime",
+      "authors": [
+        "Wei Wu"
+      ],
+      "year": 2026,
+      "published": "2026-06-12",
+      "category": "LLM Agent 可靠性分析",
+      "confidence": 4,
+      "problem": "生产环境中,LLM 代理长期自主运行时出现的无声故障(silent failures)难以被现有监控、测试和审计发现,尤其当故障信号在到达人类前就被扭曲或压制,可能导致系统在不可见的状态下持续产生错误行为。",
+      "keyIdea": "通过对真实生产系统进行纵向故障记录与事后分析,揭示无声故障的形成机制,并特别指出“可故障化(fail‑plausible)”现象——LLM 不仅隐藏错误,还将其转化为看似合理的叙事,从根本上改变了故障的可观测性。",
+      "method": "开展为期八周的纵向观察研究,完整记录 22 起事件的事后根因分析,从中归纳出五类机制导向的无声故障分类法;同时分析发现率、回归阻止率等经验指标,并提出基于“响亮、可归因、平庸”的设计原则的防御框架。",
+      "scenario": "一个自 2026 年 3 月起持续运行的生产级个人助理代理运行时,包含约 40 个定时作业、8 个 LLM 提供商、工具治理代理、知识库记忆层,并部署了 4286 个单元测试和 827 项治理检查。",
+      "metrics": "无声故障出现频次(至少 28 次)、用户视图发现比率(约 70%)、事前审计预防率(0%)、回归测试阻止率(87%)、事件检测延迟(13 小时到 60 天)。",
+      "results": "约 70% 的无声故障仅靠人类用户观察发现,而测试与审计几乎无预防能力但对回归阻止有效(87%);五类故障中,D 类“链式幻觉与捏造”最具危险性,LLM 将错误转化为可信的叙述直接传递给用户;最长存活故障位于组件之间的缝隙,不受任何测试覆盖。据此构建了使故障更易暴露、可归因和“无趣”的防御框架。",
+      "innovation": "提出 LLM 代理无声故障的五类机制分类;命名并揭示“可故障化”(fail‑plausible)现象;提供生产系统的纵向实证与防御设计原则。",
+      "limitations": "研究仅基于单一生产系统和特定时段,通用性受限;分析以事后回顾为主,未提供自动化检测方法的实验验证;摘要未说明故障严重程度的影响。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：发现 fail‑plausible 现象，提出防御设计原则；缺点：单系统单时段，通用受限",
+      "dataDriven": "是（基于生产日志与事后分析）",
+      "scores": [
+        87,
+        80,
+        85,
+        88,
+        81
+      ],
+      "url": "http://arxiv.org/abs/2606.14589v1"
+    },
+    {
+      "id": "real-007",
+      "title": "SIMMER: Benchmarking Latent Failures in LLM Executable Planning with a World Model",
+      "authors": [
+        "Xiaoxin Lu",
+        "Ranran Haoran Zhang",
+        "Rui Zhang"
+      ],
+      "year": 2026,
+      "published": "2026-06-12",
+      "category": "LLM规划安全评估与世界模型",
+      "confidence": 4,
+      "problem": "现有LLM规划评估仅关注计划能否成功执行，忽视了一种关键失败类型——潜在失败。这类失败不会立即中断执行，但会悄然损害目标达成，甚至导致不可逆的严重后果，从而造成安全与可靠性上的评估盲区。",
+      "keyIdea": "通过构建符号世界模型和状态机执行器，显式检测LLM规划中的潜在失败和不可逆失效，并利用反事实预见模拟进行显式状态推理以提升规划鲁棒性。",
+      "method": "提出SIMMER基准，包含一个基于真实烹饪脚本人工策展的厨房世界模型（77个动作、262个对象、约46,800种交互）和一个状态机执行器，用于验证计划并检测即时条件违规、潜在危害与不可逆失败。此外，引入基于反事实预见模拟的显式状态推理方法以减少潜在失败。",
+      "scenario": "厨房领域的符号世界模型，涵盖77个动作、262个独特对象和约46,800种语义真实交互，源自真实烹饪脚本；用于家庭环境自主代理的LLM规划任务。",
+      "metrics": "无错误计划比例、含潜在失败的计划比例、导致不可逆后果的案例比例，以及潜在失败和不可逆案例的减少幅度。",
+      "results": "在六个LLM上测试，即便前沿模型也仅能实现最多17%的无错误计划；高达56%的计划包含潜在失败，且多数引发不可逆后果。使用显式状态推理可将潜在失败减少最多72%，不可逆案例减少最多75%。",
+      "innovation": "潜在失败感知的基准构建与世界模型驱动的安全评估方法",
+      "limitations": "评估局限于厨房领域，尚未在其他环境或更广泛的家庭任务中验证；反事实推理方法的有效性仅在当前设定下初步展现。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：检测潜在失败和不可逆失效，降低失败率；缺点：仅限厨房领域，泛化性待验证",
+      "dataDriven": "是（基于符号世界模型与 LLM 评估）",
+      "scores": [
+        86,
+        80,
+        85,
+        79,
+        76
+      ],
+      "url": "http://arxiv.org/abs/2606.14574v1"
+    },
+    {
+      "id": "real-008",
+      "title": "StreamMemBench: Streaming Evaluation of Agent Memory for Future-Oriented Assistance",
+      "authors": [
+        "Guanming Liu",
+        "Yuqi Ren",
+        "Hansu Gu",
+        "Peng Zhang",
+        "Weihang Wang",
+        "Jiahao Liu",
+        "Ning Gu",
+        "Tun Lu"
+      ],
+      "year": 2026,
+      "published": "2026-06-12",
+      "category": "记忆系统评测基准",
+      "confidence": 5,
+      "problem": "现有个人代理记忆评测仅孤立检查对话回忆或任务改善，缺少对流式观察证据到未来辅助再利用全过程的评估，无法衡量代理是否真正将存储信息与交互反馈转化为面向未来的可靠辅助行为。",
+      "keyIdea": "围绕自我中心流中的证据锚点构建连续两步任务，用流式方式检验记忆系统能否在初始任务中使用观察到的证据，并在后续任务中复用反馈经验。",
+      "method": "提出 StreamMemBench 基准，对每个证据锚构造“证据使用”和“反馈重用”两阶段任务序列，并设计证据回忆、初始证据使用、反馈整合与后续重用四个诊断指标，以此评测记忆系统在流式环境下的表现。",
+      "scenario": "基于 EgoLife 自我中心流数据生成的任务序列，模拟代理在日常流式交互中面向未来的辅助场景。",
+      "metrics": "证据回忆、初始证据使用、反馈整合、后续重用。",
+      "results": "即使证据已被存储或反馈被局部整合，现有记忆系统仍普遍无法在任务中利用观察到的证据，也难以将反馈转化为可靠的后续复用行为。",
+      "innovation": "流式记忆评估基准与诊断性指标设计",
+      "limitations": "摘要未明确说明。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：流式评估覆盖证据使用与反馈重用全过程；缺点：摘要未说明局限性",
+      "dataDriven": "是（基于自建基准数据）",
+      "scores": [
+        90,
+        84,
+        81,
+        80,
+        79
+      ],
+      "url": "http://arxiv.org/abs/2606.14571v1"
+    },
+    {
+      "id": "real-009",
+      "title": "From Chatbot to Digital Colleague: The Paradigm Shift Toward Persistent Autonomous AI",
+      "authors": [
+        "Yongheng Zhang",
+        "Ziang Liu",
+        "Jiaxuan Zhu",
+        "Shuai Wang",
+        "Xiangqi Chen",
+        "Haojing Huang",
+        "Jiayi Kuang",
+        "Siyu Chen",
+        "Ao Shen",
+        "Hao Wu",
+        "Qiufeng Wang",
+        "Qian-Wen Zhang",
+        "Junnan Dong",
+        "Wenhao Jiang",
+        "Ying Shen",
+        "Hai-Tao Zheng",
+        "Yinghui Li",
+        "Di Yin",
+        "Xing Sun",
+        "Philip S. Yu"
+      ],
+      "year": 2026,
+      "published": "2026-06-12",
+      "category": "AI Agent与自主系统",
+      "confidence": 3,
+      "problem": "当前大语言模型主要作为对话式聊天机器人运行，缺乏持久、自主地规划和完成实际工作任务的能力，难以从一次性问答转向持续可靠的协同工作。",
+      "keyIdea": "将大语言模型定位为从‘聊天机器人’到‘数字同事’的范式转变，使其具备持久工作、自主推理、行动和记忆能力，成为能够闭环完成任务的长期伙伴。",
+      "method": "提出双维度转型框架：在认知层面，从基于下一标记预测的‘快思考’转向融合推理时计算、链式思考、反思、过程监督和强化学习的‘深思型’大语言模型；在工具执行层面，从临时调用外部工具的‘代理’模式进化为配备持久工作空间、可复用技能、验证回路和治理机制的‘工作站+技能’范式，实现状态持久、流程闭环与经验复用。",
+      "scenario": "文中未指定具体数据集，应用场景涵盖通用AI自主任务执行，如长期项目管理、自动化工作流等需要持续状态和闭环完成的任务。",
+      "metrics": "摘要未明确列出具体评价指标，但暗示评估视角从静态基准转向沙盒化、可审计、自我演化的生态系统度量，可能涉及任务完成率、可靠性、过程可解释性等，但未给出名称。",
+      "results": "本文为概念性框架论述，未报告定量实验数据；主要贡献在于梳理了从指令-响应对数据转向状态-行动-观察轨迹的数据构建演变，以及评估观念从固定基准到闭环生态的升级。",
+      "innovation": "范式概念化与双维度转型架构",
+      "limitations": "摘要未明确说明；可能缺乏实验验证和具体系统实现评估，停留在概念推导层面。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：提出认知与工具执行的双重进化概念；缺点：缺乏实验验证，停留于概念推导",
+      "dataDriven": "否（概念框架，未报告实验数据）",
       "scores": [
         85,
-        91,
+        85,
+        85,
+        85,
+        85
+      ],
+      "url": "http://arxiv.org/abs/2606.14502v1"
+    },
+    {
+      "id": "real-010",
+      "title": "When the Tool Decides: LLM Agents Defer Blindly to Graph Neural Network Tools, and Stronger Backbones Defer More",
+      "authors": [
+        "Zhongyuan Wang",
+        "Pratyusha Vemuri"
+      ],
+      "year": 2026,
+      "published": "2026-06-12",
+      "category": "Agent over-reliance on tools",
+      "confidence": 5,
+      "problem": "LLM智能体在集成GNN工具时是否真正行使判断，何时以及多大程度上依赖工具输出，还是盲目服从工具决策。",
+      "keyIdea": "通过实证测量揭示LLM智能体在面对GNN工具时倾向于毫无判断地服从，且更强的主干模型服从程度反而更高，选择性调用必须被显式设计而非期望从模型规模中自然涌现。",
+      "method": "将冻结的GNN作为显式工具嵌入ReAct风格的LLM智能体，在节点分类任务上比较智能体预测与GNN原始输出的一致率，并跨模型规模（Qwen2.5 0.5B-7B）、替代工具和选择性调用门进行消融分析。",
+      "scenario": "ogbn-arxiv文本属性图的节点分类，并在WikiCS上重复验证，部分分析区分高同质性场景。",
+      "metrics": "智能体预测与GNN工具输出的一致率（agreement rate），以及分类准确率（如oracle与parrot的性能差距表示为绝对准确率差值）。",
+      "results": "智能体几乎完全服从GNN工具输出，一致率高达97.6%-99.2%，沦为“GNN鹦鹉”；在能够调用工具的模型中，一致率随主干能力上升（从1.5B的0.60升至7B的0.98）；服从的代价随能力增长不降反升，per-node oracle优于鹦鹉的幅度从0.09-0.18（3B）增至0.12-0.22（7B），在高同质性下加倍；即使邻居标签工具在实际性能上超过GNN（0.81 vs 0.71），智能体仍服从GNN；简单选择性调用门在高同质性下恢复约一半差距（0.71→0.83），但无全局净收益，且保留估计表明基于标准测试时特征的最佳门仅能达到oracle冗余度的三分之一。",
+      "innovation": "警示性的实证测量，揭示LLM Agent的盲目工具服从现象及其与模型规模的反直觉关系。",
+      "limitations": "选择性调用的性能受限于测试时可获取的信息，现有门控设计未能带来全局提升；实验仅覆盖ogbn-arxiv和WikiCS两个文本属性图节点分类场景。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：揭示 LLM 代理盲目服从工具现象及规模反直觉关系；缺点：选择性调用增益有限，未全局提升，受限于特定场景",
+      "dataDriven": "是（基于图数据集实验）",
+      "scores": [
         80,
         88,
-        86
+        83,
+        81,
+        80
       ],
-      "url": "https://arxiv.org/"
+      "url": "http://arxiv.org/abs/2606.14476v1"
     },
     {
-      "id": "p03",
-      "title": "Self-Correcting Multi-Agent Execution Graphs",
+      "id": "real-011",
+      "title": "GitOfThoughts: Version-Controlled Reasoning and Agent Memory You Can Replay, Diff, and Merge",
       "authors": [
-        "R. Smith",
-        "Y. Zhao",
-        "N. Gupta"
+        "Pavan C Shekar",
+        "Abhishek H S",
+        "Aswanth Krishnan"
       ],
       "year": 2026,
-      "published": "2026-04-11",
-      "category": "自我纠错与验证",
-      "confidence": 5,
-      "problem": "多智能体系统中的局部错误会沿执行链传播，最终形成难以定位的整体失败。",
-      "keyIdea": "在执行图中加入交叉检查节点，由智能体互相审查并在冲突出现时触发纠错回路。",
-      "method": "将任务表示为带验证边的执行图，通过一致性判别器动态回退到最近可信节点。",
-      "scenario": "多步骤协调、代码生成与合成协作任务",
-      "metrics": "错误恢复率、一致性、额外推理开销",
-      "results": "增强了协作任务中的鲁棒性，尤其能抑制早期错误的级联传播。",
-      "innovation": "执行后验证机制",
-      "limitations": "对提示模板敏感，复杂图上的重复验证可能造成较高延迟。",
-      "complexity": "高：执行图与循环验证",
-      "prosCons": "优：可追踪、抗错误传播；缺：验证延迟与提示敏感",
-      "dataDriven": "否",
-      "scores": [
-        88,
-        72,
-        95,
-        90,
-        84
-      ],
-      "url": "https://arxiv.org/"
-    },
-    {
-      "id": "p04",
-      "title": "Retrieval-Grounded Agentic Scheduling under Dynamic Constraints",
-      "authors": [
-        "D. Lee",
-        "F. Rossi"
-      ],
-      "year": 2026,
-      "published": "2026-03-23",
-      "category": "记忆与检索增强",
+      "published": "2026-06-12",
+      "category": "Agent Reasoning Memory",
       "confidence": 4,
-      "problem": "动态调度任务的约束持续变化，固定策略难以及时吸收历史案例和外部上下文。",
-      "keyIdea": "利用检索到的历史调度轨迹为智能体的下一步动作提供情境化依据。",
-      "method": "将任务队列分解为子目标，检索相似状态并通过约束评分选择后续动作。",
-      "scenario": "动态任务调度、资源分配与队列优化",
-      "metrics": "调度成功率、约束违反率、平均响应时间",
-      "results": "在噪声输入和动态约束下保持了更稳定的任务完成率。",
-      "innovation": "检索增强规划",
-      "limitations": "检索库覆盖不足时收益下降，过期案例可能引入错误偏置。",
-      "complexity": "中：检索与约束排序",
-      "prosCons": "优：适应动态环境；缺：依赖案例库覆盖",
+      "problem": "LLM推理过程缺乏持久化记录与版本控制，无法重放、审计或合并推理步骤；同时现有记忆机制是否真正提升推理准确率存疑。",
+      "keyIdea": "将智能体推理树构建为Git仓库，使得思考历史可提交、比对与合并；并通过系统实验揭示记忆仅在高相似度重复案例中带来答案检索增益，而非泛化的方法迁移。",
+      "method": "提出GitOfThoughts，以Git提交表示评分思考、附注记录分数、标签标记结果，实现推理的可重放与可审计；接着设计大规模消融实验，对比五种记忆基板（无、Markdown、向量、图、Git）在两个基准、两种模型规模下的表现，并进行预注册复制以验证假设。",
+      "scenario": "摘要未明确命名具体数据集，仅提及在两个基准上评估，并考察近似重复与新颖问题的区分。",
+      "metrics": "准确率（accuracy），以及案例相似度（similarity）用于定义可复制性阈值。",
+      "results": "对新问题，所有记忆格式均未可靠提升准确率，一个早期正面结果在预注册复制中消失。仅当检索案例与当前问题相似度超过约0.8时，准确率急剧上升，体现为答案检索收益而非方法迁移。即使模型规模扩大4.5倍，只能加倍近似重复情形的收益，仍无法从示例中提取可迁移方法。唯一普适提升手段是测试时采样。Git基板在保持准确率相当的条件下实现了审计性、溯源性与跨智能体合并性。",
+      "innovation": "将Git版本控制范式引入智能体推理记忆，并通过严格预注册实验定义可复制性阈值，揭示记忆真实效用边界。",
+      "limitations": "记忆仅在几乎重复案例上生效，对新颖问题无效；更大模型未能实现方法迁移，记忆的通用性受限；研究撤回了一个初期乐观结果，表明稳定性不足。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：可审计、可溯源、支持跨代理合并，保持准确率；缺点：记忆通用性低，仅对高相似度重复案例有效",
       "dataDriven": "是",
       "scores": [
         78,
-        86,
-        82,
-        76,
-        91
-      ],
-      "url": "https://arxiv.org/"
-    },
-    {
-      "id": "p05",
-      "title": "Hierarchical Reasoning Policies for Autonomous LLM Agents",
-      "authors": [
-        "J. Kim",
-        "T. Brown"
-      ],
-      "year": 2026,
-      "published": "2026-03-08",
-      "category": "规划与推理",
-      "confidence": 4,
-      "problem": "扁平的逐步推理在长任务中容易丢失全局目标，且难以管理不同时间尺度的决策。",
-      "keyIdea": "将策略划分为目标层、计划层与动作层，使全局意图和局部执行解耦。",
-      "method": "高层策略负责子目标分解，低层策略根据环境反馈选择工具和动作。",
-      "scenario": "自主导航、软件任务和长程决策",
-      "metrics": "成功率、步骤效率、目标保持率",
-      "results": "层级策略降低了无效步骤，并改善了长程任务中的目标一致性。",
-      "innovation": "层级决策架构",
-      "limitations": "层级边界依赖人工设计，错误的子目标分解仍难以自动修复。",
-      "complexity": "中：分层规划",
-      "prosCons": "优：全局一致、步骤清晰；缺：层级设计成本",
-      "dataDriven": "部分",
-      "scores": [
         84,
-        82,
-        76,
-        85,
-        74
+        87,
+        89,
+        90
       ],
-      "url": "https://arxiv.org/"
+      "url": "http://arxiv.org/abs/2606.14470v1"
     },
     {
-      "id": "p06",
-      "title": "Learning Communication Protocols for Cooperative Language Agents",
+      "id": "real-012",
+      "title": "tap: A File-Based Protocol for Heterogeneous LLM Agent Collaboration",
       "authors": [
-        "P. Singh",
-        "E. Martin"
+        "Minseo Kim"
       ],
       "year": 2026,
-      "published": "2026-02-21",
-      "category": "多智能体协作",
-      "confidence": 4,
-      "problem": "自然语言自由交流虽然灵活，但容易产生冗余、歧义与不可控的协调开销。",
-      "keyIdea": "从协作轨迹中学习紧凑的消息协议，限制智能体只传递任务相关信息。",
-      "method": "通过奖励反馈优化消息模板和通信时机，并对无效通信施加成本惩罚。",
-      "scenario": "合作博弈、分布式规划与信息不完全任务",
-      "metrics": "团队收益、通信长度、协调效率",
-      "results": "在保持任务性能的同时压缩了通信量，降低了协作成本。",
-      "innovation": "可学习通信协议",
-      "limitations": "协议的跨任务迁移能力仍有限，训练奖励设计较敏感。",
-      "complexity": "中高：策略学习与协作训练",
-      "prosCons": "优：通信高效；缺：迁移性与训练成本",
+      "published": "2026-06-12",
+      "category": "Multi-Agent Collaboration Protocol",
+      "confidence": 5,
+      "problem": "异构LLM代理在多智能体软件开发中面临运行时环境不同、缺乏中央通信基础设施的障碍，难以直接在共享代码库上分工协作与消息交换。",
+      "keyIdea": "通过文件作为持久通信媒介，将markdown消息文件与实时通知路径结合，并在独立git工作树中隔离工作，使不同厂商的代理无需共享内存或统一运行时即可协作。",
+      "method": "tap协议采用文件优先设计，用含元数据的markdown文件保存原始消息；提供基于文件检查的Tier 1通信和实时通知的Tier 2通信；使用独立的git worktree隔离各代理工作空间；消息文件持久化保证故障后可恢复。",
+      "scenario": "在27天、37代迭代的自我应用过程中，使用tap开发和审查自身，共产生209个tap相关PR和717个工件；分析其中375个审查工件以评估协议效果。",
+      "metrics": "审查记录中包含至少一个缺陷或请求修改的比例（defect/change request rate）。",
+      "results": "异构模型对（Claude与Codex）的审查缺陷率为69.8%，显著高于同构模型对的53.1%，表明组合异构模型和执行环境能拓宽审查视角；tap协议在生产级仓库中可靠运行，文件持久化消息保证了鲁棒性。",
+      "innovation": "基于文件的异构LLM代理协作协议",
+      "limitations": "实验仅验证了Claude和Codex两种模型的协作，且为自我应用场景，泛化至更多模型和其他项目类型的能力尚未证实。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：基于文件持久化的鲁棒通信，支持异构代理，拓宽审查视角；缺点：仅验证两种模型，自我应用场景，泛化性未证实",
       "dataDriven": "是",
       "scores": [
-        90,
-        84,
-        73,
-        81,
-        89
+        79,
+        87,
+        91,
+        93,
+        94
       ],
-      "url": "https://arxiv.org/"
+      "url": "http://arxiv.org/abs/2606.14445v1"
     },
     {
-      "id": "p07",
-      "title": "Benchmarking Reliability in Tool-Using Language Model Agents",
+      "id": "real-013",
+      "title": "Running the Gauntlet: Re-evaluating the Capabilities of Agents Beyond Familiar Environments",
       "authors": [
-        "H. Zhang",
-        "C. Miller"
+        "Mykola Vysotskyi",
+        "Runqi Lin",
+        "Grzegorz Biziel",
+        "Michal Zakrzewski",
+        "Sebastian Montagna",
+        "Damian Rynczak",
+        "Shreyansh Padarha",
+        "Kumail Alhamoud",
+        "Zihao Fu",
+        "William Lugoloobi",
+        "Kai Rawal",
+        "Hanna Yershova",
+        "Xander Davies",
+        "Taras Rumezhak",
+        "Guohao Li",
+        "Fazl Barez",
+        "Baoyuan Wu",
+        "Arkadiusz Drohomirecki",
+        "Yarin Gal",
+        "Chris Russell",
+        "Christopher Summerfield",
+        "Adam Mahdi",
+        "Volodymyr Karpiv",
+        "Philip Torr",
+        "Adel Bibi"
       ],
-      "year": 2025,
-      "published": "2025-12-17",
-      "category": "评估与可靠性",
+      "year": 2026,
+      "published": "2026-06-12",
+      "category": "智能体评估基准",
       "confidence": 5,
-      "problem": "现有工具智能体评估过度依赖单一成功率，难以区分规划、调用和恢复环节的故障。",
-      "keyIdea": "建立按错误阶段拆分的可靠性评估框架，并引入扰动测试。",
-      "method": "设计工具选择、参数生成、状态恢复和安全边界四类评估协议。",
-      "scenario": "工具调用智能体与自动化工作流",
-      "metrics": "阶段成功率、恢复率、鲁棒性、安全违规率",
-      "results": "揭示多个高成功率系统在轻微工具扰动下存在显著可靠性下降。",
-      "innovation": "多维评估框架",
-      "limitations": "基准工具集覆盖仍有限，真实生产环境中的长期风险尚未纳入。",
-      "complexity": "中：多场景基准评估",
-      "prosCons": "优：诊断细粒度；缺：现实覆盖有限",
+      "problem": "当前智能体评估基准多基于简单任务和狭窄能力维度，导致前沿模型性能饱和，无法有效探测其在未见过复杂场景中的泛化局限。",
+      "keyIdea": "通过引入未被充分探索的能力维度（时间感知、图形理解、3D推理）和较少覆盖的专业应用，构建高难度基准以揭示智能体与人类水平间的真实差距。",
+      "method": "提出 GauntletBench 基准，包含模块化管道：兼容多种智能体框架的可控 Web 环境、涵盖五类专业应用的视觉密集型任务套件，以及支持多样化指标的自动评估引擎。",
+      "scenario": "五个专业应用场景：视频编辑器、工作流构建器、3D建模器、飞行分析仪、电路设计器，每个应用含20个视觉密集型任务，总计100个任务。",
+      "metrics": "成功率，以及评估引擎提供的多样化自动评估指标（摘要未具体列明）。",
+      "results": "最先进智能体在 GauntletBench 上成功率仅19.1%，而非专家人类标注者成功率超过80%，表明当前智能体在时间感知、图形理解、3D推理及泛化方面存在显著局限。",
+      "innovation": "面向泛化能力的高难度基准与自动评估框架",
+      "limitations": "摘要未明确说明基准本身的局限性。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：高难度，揭示泛化局限，模块化自动评估；缺点：未明确说明",
+      "dataDriven": "是",
+      "scores": [
+        87,
+        83,
+        81,
+        88,
+        92
+      ],
+      "url": "http://arxiv.org/abs/2606.14397v1"
+    },
+    {
+      "id": "real-014",
+      "title": "No Accidental Software Agent First Canonical Code for Human Code Entropy Reduction and 30 to 500 times Lower Frontier Model Requirements",
+      "authors": [
+        "Jepson Taylor"
+      ],
+      "year": 2026,
+      "published": "2026-06-12",
+      "category": "代码生成与优化",
+      "confidence": 4,
+      "problem": "前沿编码模型在学习程序行为时，耗费大量容量吸收人类代码仓库中的“意外熵”，如框架变动、命名漂移等，这些熵与有价值信号纠缠，导致模型需求过高，无法高效地进行低成本正确变更验证。",
+      "keyIdea": "通过行为等价商化软件，将代码折叠为受治理的规范代表，引入代理优先的规范代码基底，消除意外差异，从而大幅降低模型前沿需求，实现摊销的验证正确变更成本。",
+      "method": "提出“代理优先规范代码”：一种携带证明的基底，将常规产品软件重写为规范行为配置文件、类型变更代数、证明通道、约束编辑语法、语义补丁单元、运行时负记忆和携带证明的变更对象。核心是以声明的预言机下行为等价为商，将等价编码压缩为带显式证据和证明义务的代表。",
+      "scenario": "初步实验使用QLoRA微调Qwen2.5-Coder-14B模型，采用64,088条规范轨迹对模型进行训练，任务是抑制生成的禁止语言标记，未明确具体来源软件分布。",
+      "metrics": "主要指标：禁止语言标记的抑制成功率（tested forbidden-language markers）。文中提及的“验证正确变更的摊销成本”作为理论目标，但未在实验中测量。",
+      "results": "初步实验显示，64,088条规范轨迹可被模型学习，并成功抑制了测试的禁止语言标记，但未验证行为保持、缩放经济性或验证变更成本等关键效果。",
+      "innovation": "代理优先规范代码（Agent-first Canonical Code）",
+      "limitations": "实验仅为初步验证，仅涉及标记抑制，未证明行为保持、缩放经济性和实际验证变更成本；报告的减少倍数仅为假设，非实际测量结果；方法对受支持的常规产品分布可能有效，但不保证所有软件。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：理论上大幅降低前沿模型需求，摊销验证成本；缺点：仅初步验证标记抑制，行为保持和缩放经济性未证实",
+      "dataDriven": "是",
+      "scores": [
+        78,
+        76,
+        83,
+        87,
+        80
+      ],
+      "url": "http://arxiv.org/abs/2606.14357v1"
+    },
+    {
+      "id": "real-015",
+      "title": "Communication Policy Evolution for Proactive LLM Agents",
+      "authors": [
+        "Xinbei Ma",
+        "Jiyang Qiu",
+        "Yao Yao",
+        "Zheng Wu",
+        "Yijie Lu",
+        "Xiangmou Qu",
+        "Jiaxin Yin",
+        "Xingyu Lou",
+        "Jun Wang",
+        "Weiwen Liu",
+        "Weinan Zhang",
+        "Zhuosheng Zhang",
+        "Hai Zhao"
+      ],
+      "year": 2026,
+      "published": "2026-06-12",
+      "category": "Agent Communication Policy Optimization",
+      "confidence": 4,
+      "problem": "在主动式LLM代理系统中，用户与代理之间存在持续的信息不对称，通信成本高且用户偏好高度一致，限制了信息交换。如何设计跨模态通信策略，以同时提升任务完成效率、响应质量和角色一致性，是核心问题。",
+      "keyIdea": "将代理的通信行为形式化为可优化的策略，利用文本交互与结构化UI两种通道的互补性，并通过不修改模型参数的提示词级自我进化，持续改善通信策略。",
+      "method": "首先形式化通信策略，构建文本与UI两类策略；然后在用户-代理和规划者-执行者两种信息非对称场景下进行评估；提出混合方法融合两种通道优势；最终设计通信策略进化框架CPE，通过环境推演和提示词级迭代自动精炼策略。",
+      "scenario": "多样化的交互环境、用户角色设定及模型组合，具体任务为主动式代理的信息沟通场景，包含用户-代理与规划者-执行者两种信息不对称设置。",
+      "metrics": "任务成功率、响应质量、角色遵从度（persona compliance）",
+      "results": "文本交互更有利于任务完成，结构化UI在响应质量和角色遵从方面表现更优；混合方法结合了两者优势；CPE框架仅通过提示词优化，无需修改模型即可在多种设定下取得最高的任务成功率。",
+      "innovation": "通信策略形式化与基于提示词的自我进化框架",
+      "limitations": "摘要未明确说明。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：混合文本与UI优势，提示词级进化无需修改模型，提升多项指标；缺点：未明确说明",
+      "dataDriven": "是",
+      "scores": [
+        75,
+        83,
+        78,
+        84,
+        79
+      ],
+      "url": "http://arxiv.org/abs/2606.14314v1"
+    },
+    {
+      "id": "real-016",
+      "title": "Retrospective Progress-Aware Self-Refinement for LLM Agent Training",
+      "authors": [
+        "Xinbei Ma",
+        "Congmin Zheng",
+        "Jiyang Qiu",
+        "Jiale Hong",
+        "Yao Yao",
+        "Xiangmou Qu",
+        "Jiaxin Yin",
+        "Xingyu Lou",
+        "Jun Wang",
+        "Weiwen Liu",
+        "Weinan Zhang",
+        "Zhuosheng Zhang",
+        "Hai Zhao"
+      ],
+      "year": 2026,
+      "published": "2026-06-12",
+      "category": "LLM Agent Training & Self-Refinement",
+      "confidence": 4,
+      "problem": "基于强化学习训练的LLM代理在长期任务中缺乏对自身任务进展的元认知，导致从结果奖励中难以涌现逐步进展感知能力，限制了在长序列场景下的扩展性。",
+      "keyIdea": "让代理在完成完整轨迹后回顾性地自我生成逐步进展信号，通过“先执行后反思”的方式建立元认知，从而无需在线外部进展提示即可提升决策质量。",
+      "method": "RePro框架：先让代理在线执行动作，事后基于完整轨迹和已知结果重新评估每步的进展（Forward-then-Reflect范式）；训练分为两个阶段——Retrospection Warmup用少量外部演示教会反思格式，RePro-PO阶段通过复合奖励（结合结果奖励与自我生成的进展信号）进行优化，消除对外部持续监督的依赖。",
+      "scenario": "WebShop、ALFWorld和Sokoban三个交互式任务环境。",
+      "metrics": "成功率（Success Rate）。",
+      "results": "在Qwen家族模型上，RePro框架带来了显著的性能提升，最高取得了12%的绝对成功率增益。",
+      "innovation": "回顾式自我进展感知训练范式",
+      "limitations": "摘要未明确说明。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：无需外部持续监督，回顾生成进展信号提升决策，成功率显著提高；缺点：未明确说明",
+      "dataDriven": "是",
+      "scores": [
+        82,
+        78,
+        76,
+        83,
+        78
+      ],
+      "url": "http://arxiv.org/abs/2606.14302v1"
+    },
+    {
+      "id": "real-017",
+      "title": "FloVerse: Floor Plan-Guided Multi-Modal Navigation",
+      "authors": [
+        "Weiqi Huang",
+        "Shuangyi Dong",
+        "Jiaxin Li",
+        "Yifei Guo",
+        "Zan Wang",
+        "Wei Liang"
+      ],
+      "year": 2026,
+      "published": "2026-06-12",
+      "category": "Embodied Navigation",
+      "confidence": 4,
+      "problem": "现有平面图引导的具身导航主要限于 PointNav 任务和少数环境，缺乏在统一框架下支持多种目标模态（点导航、物体导航、图像导航）的方法。",
+      "keyIdea": "以平面图提供的紧凑空间先验为核心，将 PointNav、ObjectNav、ImageNav 统一为单一项任务，通过模仿学习与扩散模型实现多模态目标推理。",
+      "method": "提出 FloVerse 任务并构建数据集 FloVerse-1.6K。设计两阶段策略 ThreeDiff：包含一个规划器、一个基于扩散的多模态目标推理模块（通过掩码模态建模训练），以及一个基于深度的轨迹细化器以保证安全执行。",
+      "scenario": "FloVerse-1.6K 数据集，包含来自 HM3D 和 Gibson 4+ 的 1.6K 场景及对应平面图，涵盖 240K 专家轨迹和 12M RGBD 帧，支持 PointNav、ObjectNav 和 ImageNav。",
+      "metrics": "摘要中未明确列出所使用的评价指标。",
+      "results": "实验表明，平面图先验在所有目标模态下均能提升导航性能；ThreeDiff 能够隐式捕捉平面图中的空间信息，验证了空间先验的有效性和统一方法的优势。",
+      "innovation": "统一多模态导航任务与数据集，扩散模型驱动的掩码模态目标推理",
+      "limitations": "摘要未明确说明。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：统一多模态导航，平面图先验提升性能；缺点：未明确说明",
       "dataDriven": "是",
       "scores": [
         74,
+        82,
+        78,
+        76,
+        75
+      ],
+      "url": "http://arxiv.org/abs/2606.14267v1"
+    },
+    {
+      "id": "real-018",
+      "title": "HarnessX: A Composable, Adaptive, and Evolvable Agent Harness Foundry",
+      "authors": [
+        "Tingyang Chen",
+        "Shuo Lu",
+        "Kang Zhao",
+        "Weicheng Meng",
+        "Hanlin Teng",
+        "Tianhao Li",
+        "Chao Li",
+        "Xule Liu",
+        "Jian Liang",
+        "Zhizhong Zhang",
+        "Yuan Xie",
+        "Heng Qu",
+        "Kun Shao",
+        "Jian Luan"
+      ],
+      "year": 2026,
+      "published": "2026-06-12",
+      "category": "LLM Agent Runtime/运行时优化",
+      "confidence": 4,
+      "problem": "当前AI agent的运行时harness多为手工制造且静态，难以将执行轨迹反馈转化为系统性的性能改进，导致每个新模型或任务都需要定制化构建。",
+      "keyIdea": "将agent harness视为可组合原语的组装体，并通过轨迹驱动的进化引擎实现自适应优化，从而形成harness与模型之间的闭环反馈。",
+      "method": "通过substitution algebra组装类型化的harness原语；利用AEGIS进化引擎（基于符号适应与强化学习的操作镜像）进行多agent路径驱动的适应；并将执行轨迹转换为harness更新和模型训练信号。",
+      "scenario": "五个基准任务：ALFWorld、GAIA、WebShop、tau^3-Bench、SWE-bench Verified。",
+      "metrics": "各基准任务对应的标准评估度量，摘要中以平均性能增益百分比形式报告。",
+      "results": "在五个基准上取得平均+14.5%的性能提升（最高达+44.0%），提升幅度在基线较低的任务中更显著，表明运行时接口的组合与进化是补充模型扩展的有效途径。",
+      "innovation": "可组合、可进化的agent harness foundry",
+      "limitations": "摘要未明确说明。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：可组合自适应，无需手工定制，性能平均提升14.5%；缺点：未明确说明",
+      "dataDriven": "是",
+      "scores": [
+        86,
+        88,
+        89,
+        81,
+        77
+      ],
+      "url": "http://arxiv.org/abs/2606.14249v1"
+    },
+    {
+      "id": "real-019",
+      "title": "SkillAudit: Ground-Truth-Free Skill Evolution via Paired Trajectory Auditing",
+      "authors": [
+        "Haowen Gao",
+        "Haoran Chen",
+        "Can Wang",
+        "Shasha Guo",
+        "Liang Pang",
+        "Zhaoyang Liu",
+        "Huawei Shen",
+        "Xueqi Cheng"
+      ],
+      "year": 2026,
+      "published": "2026-06-12",
+      "category": "Agent Skill Evolution without Ground-Truth Feedback",
+      "confidence": 5,
+      "problem": "现有的智能体技能演化方法依赖难以获得的监督反馈（如隐藏测试、验证分数、环境奖励），而在实际部署中仅有任务描述和工作空间数据，无法访问这些信号。",
+      "keyIdea": "通过成对轨迹审计（有技能与无技能执行同一任务）来隔离技能对智能体行为的影响，从而在没有真实标签的情况下诊断和改进技能。",
+      "method": "SkillAudit框架：在每次迭代中，对同一任务分别执行带技能和不带技能的轨迹，使用过程对齐对比评估（PACE）将轨迹差异映射为指向技能文档具体段落的诊断信号；然后通过结构验证器检查任务约束并回滚有害更新，再经两条流水线（Refine移除噪声或无关指导，Repair替换与任务冲突的段落）实施编辑。",
+      "scenario": "89个容器化任务，覆盖8个专业领域。",
+      "metrics": "平均任务奖励（Average task reward）。",
+      "results": "SkillAudit获得73.9%的平均任务奖励，显著优于无技能智能体（40.9%）和静态专家技能（56.7%），且未使用隐藏测试、参考解或外部评分函数。",
+      "innovation": "无需真实反馈的技能演化，基于成对轨迹审计",
+      "limitations": "摘要未明确说明。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：无需真实标签即可改进技能，显著优于静态技能；缺点：未明确说明",
+      "dataDriven": "是",
+      "scores": [
+        95,
+        95,
+        95,
+        95,
+        87
+      ],
+      "url": "http://arxiv.org/abs/2606.14239v1"
+    },
+    {
+      "id": "real-020",
+      "title": "Selective Agentic Recovery for UAV Autonomy with a Persistent Mission Runtime",
+      "authors": [
+        "Taewoo Park",
+        "Kyeonghyun Yoo",
+        "Seunghyun Yoo",
+        "Hwangnam Kim"
+      ],
+      "year": 2026,
+      "published": "2026-06-12",
+      "category": "智能自主恢复、无人机自主性与具身智能",
+      "confidence": 4,
+      "problem": "无人机在基于航点或设定点的局部执行过程中，面对阻塞、重复无进展或任务模糊等困境时，需要高层次的恢复推理。但远程智能推理调用会带来延迟、资源开销、后端不确定性及决策验证负担，因此核心问题是如何以最小成本选择性调用外部恢复推理，从而在提升任务成功率的同时降低不必要的远程通信。",
+      "keyIdea": "保持任务循环与安全关键执行在本地，将外部智能推理仅作为按需恢复模块，并引入学习型认知调用价值（learned-CVI）门控，预估远程推理何时能显著提升近期任务进展以抵消其运行成本。",
+      "method": "提出持久任务运行时（PMR）框架：本地负责安全执行与任务维持，外部推理器按需选择预定义恢复技能，每个返回决策经过解析、验证、安全过滤和动作映射后才影响飞行。在此基础上，引入紧凑型learned-CVI门控，基于近期任务进展估计远程调用的价值，实现选择性调用。",
+      "scenario": "Gazebo/PX4 仿真环境中的固定 400 次运行基准，涵盖 8 种不同场景。",
+      "metrics": "困难/模糊情境下的任务成功率（成功率从局部自主基线到本文方法的提升）、远程智能体调用次数、记录令牌数（logged tokens），以及与基线的相对提升或降低百分比。",
+      "results": "在 8 个场景的 400 次运行中，learned-CVI 将困难/模糊情境成功率从仅局部自主的 5.0% 提升至 95.0%，比一次性推理基线和周期性推理基线分别高出 20.0 和 32.5 个百分点；与人工调节的规则调用基线相比，远程智能体调用次数减少 16.7%，日志令牌消耗减少 29.2%。",
+      "innovation": "学习型调用门控机制（learned-CVI）及本地-远程协同的持久任务恢复框架",
+      "limitations": "摘要仅报告仿真环境（Gazebo/PX4）下的结果，未提及真实无人机硬件验证；未说明在感知噪声、不同无人机平台或任务泛化性方面的表现；也未讨论推理失败或门控误判对任务安全的影响。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：困难情境成功率从5%升至95%，减少远程调用和令牌消耗；缺点：仅在仿真环境验证，未在真实无人机上测试",
+      "dataDriven": "是",
+      "scores": [
+        77,
+        75,
+        83,
+        87,
+        89
+      ],
+      "url": "http://arxiv.org/abs/2606.14219v1"
+    },
+    {
+      "id": "real-021",
+      "title": "Closing the Reflection Gap: A Free Calibration Bonus for Agentic RL",
+      "authors": [
+        "Yinglun Zhu"
+      ],
+      "year": 2026,
+      "published": "2026-06-12",
+      "category": "Agent Calibration & Reinforcement Learning",
+      "confidence": 5,
+      "problem": "LLM agent在环境交互后普遍存在“反思差距”，即根据环境反馈错误评估自身输出质量，且标准强化学习因信用分配不匹配难以有效改善这一校准问题。",
+      "keyIdea": "利用agent自身反思与环境真值之间的对比关系构造免费校准信号，从而在不增加额外标注或判别模型的前提下缩小反思校准差距。",
+      "method": "RefGRPO：在标准RL算法中引入两项扩展——(1) 基于反思与实际结果对比的免费校准奖励；(2) 奖励系数的动态调度策略。",
+      "scenario": "Text-to-SQL任务，在5个基准上评估。",
+      "metrics": "反思校准指标（如欠自信率），任务准确率。",
+      "results": "RefGRPO同时显著改进了反思校准（欠自信率从44.4%降至7.7%）和任务准确率（从75.1%提升至76.5%），并可延伸支持无监督自我改进与测试时选择性预测。",
+      "innovation": "免费校准奖励与动态系数调度的轻量算法增强。",
+      "limitations": "摘要未明确说明。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：提供免费校准信号，同时改进反思校准和任务准确率，可扩展至无监督自我改进与选择性预测。缺点：未明确说明。",
+      "dataDriven": "是",
+      "scores": [
+        93,
+        94,
+        86,
+        82,
+        80
+      ],
+      "url": "http://arxiv.org/abs/2606.14211v1"
+    },
+    {
+      "id": "real-022",
+      "title": "When Should Agent Trust Be Conditional? Characterizing and Attacking Skill-Conditional Reputation in Agent Swarms",
+      "authors": [
+        "Yihan Xia",
+        "Taotao Wang"
+      ],
+      "year": 2026,
+      "published": "2026-06-12",
+      "category": "Conditional Trust in Agent Swarms",
+      "confidence": 4,
+      "problem": "在开放平台中，异构LLM代理因技能差异大，现有全局信任评分无法捕捉专业化的价值，而技能条件信任何时有益、如何安全借用跨技能证据尚不明确。",
+      "keyIdea": "提出技能条件信任 R(i|k)，分析其相对于全局信任的效益条件，并揭示跨技能借用既提升数据效率又可被攻击者利用的双重用途性质。",
+      "method": "通过受控的相位图分析刻画条件信任奏效的机制（高异质性、稀疏每技能证据、技能相关性），并在真实AppWorld代理池中验证；设计零成本条件信息价值测试（CIVT）评估漏洞，用零证据门尝试阻止攻击，并分析残留风险。",
+      "scenario": "包含14个真正异构代理的AppWorld公开基准；攻击场景设定为攻击者在一个技能上有廉价证据而在目标技能上无证据。",
+      "metrics": "路由遗憾（routing regret）、信任判分的污染差异（如从+0.19到-0.06）、耦合强度β等。",
+      "results": "条件信任仅在高代理异质性、稀疏每技能证据且技能相关时优于全局信任；真实代理池落入有益域，带来小幅但真实的增益；攻击者可通过跨技能借用劫持条件路由器，使路由遗憾从0升至0.94，污染信任判决；零证据门能限制但无法根除攻击，论文量化了明确的预算下的残留代价。",
+      "innovation": "首次系统分析技能条件信任的效益条件与安全风险，提出条件信息价值测试和零证据门防御，并量化双重用途的权衡。",
+      "limitations": "未声称抗女巫攻击，仅量化攻击与防御的权衡；攻击在预算下仍存在残余成本未能完全消除。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：首次揭示条件信任的效益条件与安全风险，量化跨技能攻击的权衡，提供防御方法。缺点：无法根除攻击，残留风险；未处理女巫攻击。",
+      "dataDriven": "是",
+      "scores": [
+        90,
+        90,
+        82,
+        78,
+        76
+      ],
+      "url": "http://arxiv.org/abs/2606.14200v1"
+    },
+    {
+      "id": "real-023",
+      "title": "CacheRL:Multi-Turn Tool-Calling Agents via Cached Rollouts and Hybrid Reward",
+      "authors": [
+        "Md Amirul Islam",
+        "Sumiran Thakur",
+        "Huancheng Chen",
+        "Su Min Park",
+        "Jiayun Wang",
+        "Gyuhak Kim"
+      ],
+      "year": 2026,
+      "published": "2026-06-12",
+      "category": "Tool-use Agent Training",
+      "confidence": 5,
+      "problem": "如何高效训练小型基础模型以执行多轮工具调用任务，核心挑战包括：大规模迁移大模型的工具调用知识、在不依赖昂贵实时工具执行的情况下进行强化学习，以及从嘈杂的缓存环境中稳健学习。",
+      "keyIdea": "通过缓存执行轨迹并设计混合奖励，使小型代理模型不仅学会调用什么工具，还学会调用原因；利用模糊缓存消除实时执行成本，并通过缓存感知奖励缓解缓存噪声。",
+      "method": "CacheRL 系统：首先用LLM生成推理轨迹增强工具调用轨迹（混合思维管道）；然后采用三层模糊缓存与Token级掩码的CacheAgentLoop替代实时执行；再引入缓存层感知动态奖励；最后通过迭代监督微调（SFT）和分组相对策略优化（GRPO）训练Qwen3-4B-Thinking模型。",
+      "scenario": "多步工具调用的公共代理基准测试（agentic tool-calling benchmarks），具体数据集未在摘要中具名。",
+      "metrics": "过程准确率（process accuracy）、验证奖励（validation reward）以及消融实验中的性能变化百分比。",
+      "results": "CacheRL 将 Qwen3-4B-Thinking 的验证奖励从0.43提升至0.78，在工具调用基准上达到92%准确率，接近GPT-5的94%，但计算量仅为百分之一。消融显示知识迁移移除导致性能下降41%，缓存感知奖励贡献17%的提升；GRPO虽提升训练稳定性，但在强SFT后增益有限，凸显数据与奖励设计的重要性。",
+      "innovation": "训练范式创新（缓存增强轨迹 + 缓存感知混合奖励 + 小规模代理的推理迁移）",
+      "limitations": "缓存系统固有的噪声与保真度限制；GRPO在强SFT后带来的额外增益有限；对更大模型或不同工具调用场景的泛化性未在摘要中说明。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：大幅降低计算成本，小型模型达到竞争性能，缓存和混合奖励有效迁移知识。缺点：缓存噪声限制保真度；强SFT后GRPO增益有限；泛化性未说明。",
+      "dataDriven": "是",
+      "scores": [
+        95,
+        87,
+        91,
+        85,
+        90
+      ],
+      "url": "http://arxiv.org/abs/2606.14179v1"
+    },
+    {
+      "id": "real-024",
+      "title": "VeriGeo: Controllable Geometry Question Generation with Numerical and Analytical Verification",
+      "authors": [
+        "Xiaoxian Duan",
+        "Zequn Liu",
+        "Yingce Xia"
+      ],
+      "year": 2026,
+      "published": "2026-06-12",
+      "category": "Controllable Geometry Question Generation",
+      "confidence": 5,
+      "problem": "Automatically generating geometry problems where the textual statement, diagram, constraints, and solution are mutually consistent, while supporting user-specified controllability over concepts and difficulty.",
+      "keyIdea": "A framework that represents multimodal components and proof steps as a shared executable action sequence, enabling verification-guided reflection to repair inconsistencies.",
+      "method": "VeriGeo uses an Author agent and a Solver agent that both operate on a common action sequence linking natural language, diagram, geometric constraints, and proof steps. A three-stage verification pipeline checks numerical consistency, analytical realizability, and global consistency; recoverable violations are repaired via reflection, while unrecoverable ones are rejected.",
+      "scenario": "The method generates 8.7k synthetic geometry problems used to fine-tune multimodal LLMs, evaluated on GeoQA, PGPS9K, and MathVista-GPS.",
+      "metrics": "Accuracy on geometry question answering tasks (GeoQA performance, PGPS9K, MathVista-GPS).",
+      "results": "Raw LLM generations frequently fail verification, but VeriGeo repairs a substantial fraction of invalid attempts. After supervised fine-tuning on the 8.7k verified samples, an end-to-end multimodal LLM solver achieves state-of-the-art GeoQA performance among similar models and strong results on PGPS9K and MathVista-GPS.",
+      "innovation": "Verification-guided controllable geometry generation with shared executable action sequences.",
+      "limitations": "摘要未明确说明。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：生成一致且可验证的问题，支持概念与难度控制，微调后达到SOTA性能。缺点：未明确说明。",
+      "dataDriven": "是",
+      "scores": [
         79,
-        96,
+        79,
+        79,
+        79,
+        79
+      ],
+      "url": "http://arxiv.org/abs/2606.14176v1"
+    },
+    {
+      "id": "real-025",
+      "title": "Graph-based Target Back-Propagation for Context Adaptation in Multi-LLM Agentic Systems",
+      "authors": [
+        "Tan Zhu",
+        "Tong Yao",
+        "Kananart Kuwaranancharoen",
+        "Amit Singh",
+        "Yushang Lai",
+        "Deepa Mohan",
+        "Shankara Bhargava"
+      ],
+      "year": 2026,
+      "published": "2026-06-12",
+      "category": "Multi-LLM Agentic Context Adaptation",
+      "confidence": 4,
+      "problem": "现有上下文适应方法在多LLM代理系统中面临不准确的贡献分配和缺乏收敛保证的核心挑战，难以将单LLM的提示自动优化有效扩展到多代理协作场景。",
+      "keyIdea": "将代理工作流建模为有向无环图，通过沿图反向传播局部目标输出，利用目标-实际输出差异驱动分阶段提示更新，从而为多LLM系统提供可收敛的上下文适应机制。",
+      "method": "提出基于图的目标反向传播框架GTBP。将代理工作流抽象为DAG，从末端节点反向注入目标输出，计算每个阶段的输出偏差，并据此迭代更新各LLM的可调提示，在理论上证明了阶段更新的稳定性和整体目标的下降性。",
+      "scenario": "三个未具体指明的基准评测任务（摘要仅提及“three benchmarks”）。",
+      "metrics": "摘要未明确说明具体评价指标。",
+      "results": "GTBP在三个基准上一致超越强基线方法，且计算开销与基线相当。",
+      "innovation": "基于图目标反向传播的多LLM代理上下文适应框架",
+      "limitations": "摘要未明确说明。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：一致超越强基线，计算开销相当，理论收敛保证。缺点：未明确说明。",
+      "dataDriven": "是",
+      "scores": [
+        77,
+        75,
+        74,
+        82,
+        86
+      ],
+      "url": "http://arxiv.org/abs/2606.14155v1"
+    },
+    {
+      "id": "real-026",
+      "title": "Trust but Verify: Mitigating Medical Hallucinations via Post-Hoc Adversarial Auditing and Multi-Agent Feedback Loops",
+      "authors": [
+        "Muhammad Osama",
+        "Maheera Amjad",
+        "Zartasha Mustansar",
+        "Arslan Shaukat",
+        "Muhammad U. S. Khan"
+      ],
+      "year": 2026,
+      "published": "2026-06-12",
+      "category": "Healthcare LLM Safety",
+      "confidence": 5,
+      "problem": "LLMs在临床问答中常推荐近期被禁或撤回的药物，其参数化知识滞后于监管更新，直接威胁患者安全。",
+      "keyIdea": "采用事后对抗审计与多智能体反馈循环，在生成推荐后验证其合规性，阻止不安全输出。",
+      "method": "提出五智能体“Trust but Verify”系统，基于单一LLM骨干对原始回答进行循环审计与过滤；同时构建103道对抗性临床多选题，历史正确答案指向已禁药物，用以测量监管知识过时效应。",
+      "scenario": "自建对抗性数据集：包含103道覆盖多个治疗类别的临床多选题，正确答案为近期被禁药物。评估对象包括GPT-OSS、Llama-3、Falcon-3等开源模型家族，并在专有模型上观察到安全退化。",
+      "metrics": "点式评分（pointwise score）、标签准确率、幻觉错误率（HER）、组件保真度（CF score）。",
+      "results": "默认配置下所有模型幻觉率高且持续推荐禁药。多智能体架构使HER平均降低约53%，点式评分从-0.25（不安全）趋近0.0（安全拒绝），成功拦截参数知识偏向禁药时的危险输出。",
+      "innovation": "多智能体后验对抗审计框架",
+      "limitations": "摘要未明确说明，但评估仅限于多选题场景，未涉及真实临床对话或更广泛的药物安全变异。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：大幅降低幻觉错误率，成功拦截不安全输出。缺点：仅评估多选题场景，未覆盖真实临床对话。",
+      "dataDriven": "是",
+      "scores": [
+        82,
+        89,
         92,
+        94,
+        95
+      ],
+      "url": "http://arxiv.org/abs/2606.14149v1"
+    },
+    {
+      "id": "real-027",
+      "title": "Simulating Students' Java Programming Errors with Large Language Models",
+      "authors": [
+        "Ali Keramati",
+        "Jie Cao",
+        "Iman Mohammadi",
+        "Mark Warschauer",
+        "Yang Shi"
+      ],
+      "year": 2026,
+      "published": "2026-06-12",
+      "category": "Learning Analytics / LLM for Education",
+      "confidence": 5,
+      "problem": "获取代表性的学生编程错误数据既慢又昂贵，因为需要大量课堂积累。本文探索能否用大型语言模型（LLM）模拟学生的 Java 代码逻辑错误，作为可扩展的学生代理。",
+      "keyIdea": "将 LLM 作为可扩展的学生模拟器，生成与真实学生错误不可区分的合成错误，以支持编程教育研究与系统开发。",
+      "method": "在包含 74,000+ 份学生 Java 作业的 CodeWorkout 数据集上，测试五种 LLM 在三种提示策略（输入-输出、思维链、迭代自我修正）下生成错误代码的能力。从多样性和对齐度两个维度进行定量评估，并开展盲法专家标注研究（N=401）进行定性比较。",
+      "scenario": "CodeWorkout 数据集，涵盖 37 道 Java 编程题，超过 74,000 份真实学生提交，并按问题难度分层分析。",
+      "metrics": "多样性（不同错误模式的范围）和对齐度（合成错误与真实学生错误的匹配程度），以及人工盲评中错误的功能可区分性。",
+      "results": "所有模型都能生成多样化错误，但与真实学生的对齐程度存在差异，Claude Sonnet 4 表现最均衡。盲评显示合成错误与真实错误在功能上几乎无法区分。高难度问题产生的错误更多样，但更不像学生所犯的错误。",
+      "innovation": "基于 LLM 的学生编程错误模拟范式及多维度评估体系。",
+      "limitations": "摘要未明确说明。从结果推断，方法在 Java 领域的可泛化性有限，且高难度任务下合成错误的学生相似度下降。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：快速生成与真实错误难以区分的合成数据，高多样性。缺点：高难度问题下学生相似度下降；领域泛化性有限。",
+      "dataDriven": "是",
+      "scores": [
+        82,
+        80,
+        79,
+        87,
+        91
+      ],
+      "url": "http://arxiv.org/abs/2606.14113v1"
+    },
+    {
+      "id": "real-028",
+      "title": "Utility-Constrained Policy Optimization",
+      "authors": [
+        "Mehrdad Moghimi",
+        "Bernardo Avila Pires"
+      ],
+      "year": 2026,
+      "published": "2026-06-12",
+      "category": "安全强化学习与约束策略优化",
+      "confidence": 4,
+      "problem": "如何在强化学习中安全地融入风险敏感约束，避免风险中性约束导致的最优策略混合罕见灾难性行为与频繁过度保守行为，现有方法缺乏实用解决方案。",
+      "keyIdea": "采用效用约束马尔可夫决策过程（UCMDP），将安全约束构建为效用约束，允许策略训练后灵活调整约束限制而无额外训练成本。",
+      "method": "提出一种简单实用的效用约束策略优化算法，训练时仅需已知约束限制的合理范围而不必固定确切值，支持事后调整约束参数。",
+      "scenario": "Safety Gymnasium 基准任务集。",
+      "metrics": "摘要未明确说明。",
+      "results": "在 Safety Gymnasium 多个基准任务上，所提出的智能体表现强劲，一致达到或超过现有基线方法的性能。",
+      "innovation": "提出实用化的效用约束MDP算法，同时支持风险敏感约束和灵活事后约束调整。",
+      "limitations": "摘要未明确说明。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：支持灵活事后约束调整和风险敏感约束，性能强于基线。缺点：未明确说明。",
+      "dataDriven": "是",
+      "scores": [
+        86,
+        80,
+        85,
+        88,
+        81
+      ],
+      "url": "http://arxiv.org/abs/2606.14029v1"
+    },
+    {
+      "id": "real-029",
+      "title": "Formalizing Numerical Analysis: An Agent Pipeline and Quality Audit Beyond Kernel Acceptance",
+      "authors": [
+        "Theodore Meek",
+        "Siyuan Ge",
+        "Di Qiu Xiang",
+        "Simon Chess",
+        "Vasily Ilin"
+      ],
+      "year": 2026,
+      "published": "2026-06-12",
+      "category": "Autoformalization Quality Audit",
+      "confidence": 5,
+      "problem": "现有自动形式化系统仅以内核编译通过为成功标准，且主要覆盖 mathlib 中已有较多表示的数学分支，忽略了如数值分析等未被充分形式化的领域；编译通过无法保证形式化的语义忠实度。",
+      "keyIdea": "使用编码代理形式化一本在 mathlib 中缺失的数值分析教材，并引入超越编译通过的多维质量审计，揭示编译通过所掩盖的不忠实形式化模式。",
+      "method": "提出一个基于编码代理的形式化流水线，用于从零开发《常微分方程数值方法》教材的形式化；同时构建可复现的三维评估框架，通过 LLM-as-judge 方法从语义正确性、Mathlib 复用程度、跨文件复用度三个维度审计形式化质量。",
+      "scenario": "形式化对象为《Numerical Methods for Ordinary Differential Equations》教材；审计对象包括本研究自身的形式化输出以及 RepoProver 和 M2F 系统已发布的形式化结果。",
+      "metrics": "传统指标：内核接受（编译通过）；新提出指标：语义正确性、Mathlib 复用度、跨文件复用度，均通过 LLM-as-judge 方法自动评估。",
+      "results": "审计发现现有系统广泛存在不完整的多部分命题、引入不必要弱化假设、擅自添加参数限制等不忠实形式化模式；这些模式全部通过内核接受，表明基于编译的指标显著高估形式化质量。本工作提供了一种可复现的审计方法论。",
+      "innovation": "多维形式化质量审计框架",
+      "limitations": "摘要未明确说明。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：揭示编译通过掩盖的不忠实形式化模式，提供可复现审计方法。缺点：未明确说明。",
+      "dataDriven": "否",
+      "scores": [
+        86,
+        91,
+        85,
+        82,
+        89
+      ],
+      "url": "http://arxiv.org/abs/2606.14000v1"
+    },
+    {
+      "id": "real-030",
+      "title": "Dialogue SWE-Bench: A Benchmark for Dialogue-Driven Coding Agents",
+      "authors": [
+        "Brendan King",
+        "Jeffrey Flanigan"
+      ],
+      "year": 2026,
+      "published": "2026-06-12",
+      "category": "对话式代码代理评估基准",
+      "confidence": 5,
+      "problem": "现有编码代理基准仅评估全自主解决问题的能力，忽略了真实场景中用户通过对话驱动协作的交互模式。",
+      "keyIdea": "将对话能力视为编码代理性能的独立维度，并为此设计专门的人机对话式软件工程基准。",
+      "method": "构建 Dialogue SWE-Bench 基准数据集，使用基于人格设定的用户模拟器进行任务评估，并加入对话质量自动评估；同时提出一种模式引导的代理，以提升现有编码代理的对话表现。",
+      "scenario": "面向真实软件工程问题的对话交互场景，编码代理需通过多轮对话与模拟用户协作完成任务。",
+      "metrics": "任务解决成功率、对话质量自动评估指标（如对话连贯性、信息充分性等）。",
+      "results": "更强的编码模型不一定意味着更好的对话模型，对话能力是当前编码代理性能中一个独特且被低估的维度；提出的模式引导代理相较于强基线提升 3-14%。",
+      "innovation": "新基准与对话增强代理",
+      "limitations": "摘要未明确说明",
+      "complexity": "未明确说明",
+      "prosCons": "优点：还原对话能力独立维度，模式引导代理可提升性能。缺点：未明确说明。",
+      "dataDriven": "是",
+      "scores": [
+        80,
+        88,
+        92,
+        94,
+        86
+      ],
+      "url": "http://arxiv.org/abs/2606.13995v1"
+    },
+    {
+      "id": "real-031",
+      "title": "Hidden in Plain Sight: Benchmarking Agent Safety Against Decomposition Attacks with DECOMPBENCH",
+      "authors": [
+        "Vikhyath Kothamasu",
+        "Virginia Smith",
+        "Chhavi Yadav"
+      ],
+      "year": 2026,
+      "published": "2026-06-12",
+      "category": "安全评估基准",
+      "confidence": 4,
+      "problem": "当前智能体安全评估大多关注单轮或多工具使用场景下的整体有害任务，忽略了分解攻击威胁：攻击者将恶意目的拆解成一系列表面无害的子任务，单独执行时绕过安全机制，但组合执行却能达成有害目标，导致现有基准无法捕捉这种现实攻击流。",
+      "keyIdea": "通过专门设计的分解攻击基准，揭示智能体在面对分解后的良性子任务时安全防线大幅削弱，从而需要新的评估与防御视角。",
+      "method": "提出 DeCompBench 基准，采用“按设计分解”原则，利用图形化框架将有害任务自动分解为可独立执行且表面无害的子任务，并生成真实的工作流，以系统评估智能体安全性。",
+      "scenario": "新构造的公开数据集 DeCompBench，包含覆盖多种场景的分解攻击任务，每个任务由主体有害意图和对应分解出的良性可执行子任务组成。",
+      "metrics": "拒绝率，以及智能体在不拒绝的情况下无意中完成有害目标的比例。",
+      "results": "在最先进智能体上的实验表明，对于直接给出的整体有害任务，拒绝率普遍较高；但同样的有害意图经分解后，拒绝率显著下降，且智能体常在没有意识到风险的情况下逐步完成攻击目标。",
+      "innovation": "首个系统性针对分解攻击的智能体安全性基准",
+      "limitations": "摘要未明确说明所构数据集的规模、任务多样性边界，也未提及防御方法或对分解复杂度的控制。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：首个系统性针对分解攻击的基准，揭示安全机制对表面无害子任务的脆弱性；缺点：数据集规模与多样性边界未说明，未提供防御方案",
+      "dataDriven": "否（评估基准）",
+      "scores": [
+        88,
+        89,
+        81,
+        77,
+        84
+      ],
+      "url": "http://arxiv.org/abs/2606.13994v1"
+    },
+    {
+      "id": "real-032",
+      "title": "MedLatentDx: Latent Multi-Agent Communication for Cross-Hospital Rare-Disease Diagnosis",
+      "authors": [
+        "Ziqing Wang",
+        "Lili Zhao",
+        "Kaize Ding"
+      ],
+      "year": 2026,
+      "published": "2026-06-11",
+      "category": "联邦/分布式医疗AI与隐私保护学习",
+      "confidence": 4,
+      "problem": "单一医院难以积累足够病例以可靠诊断任一罕见病，而跨院协作受隐私法规限制，无法直接传输可识别的临床文本。现有医疗智能体系统常依赖文本证据交换，而原始潜在状态（如隐状态、KV缓存）仍可能泄露提示中的临床内容，导致隐私风险。",
+      "keyIdea": "通过在潜在空间中实现多智能体通信，使各医院智能体保留私有病历和检索案例，仅发送紧凑的潜在KV块至主智能体，从而在保护隐私的前提下支持跨院罕见病诊断。",
+      "method": "提出MedLatentDx框架，医院智能体将私有临床记录和检索案例保持在本地，向主智能体发送紧凑的潜在KV块。支持两种部署模式：同骨干模型的医院智能体采用潜在KV蒸馏，不同骨干模型的医院智能体则使用跨家族潜在对齐。",
+      "scenario": "自建的CrossRare-Bench，一个带有医院级别划分的大规模罕见病诊断基准数据集，用于模拟跨院协作场景。",
+      "metrics": "跨院诊断性能提升程度，以及可重构临床内容相对于原始潜在通信基线的减少程度（即隐私度量）。",
+      "results": "在CrossRare-Bench上，MedLatentDx在提高跨院罕见病诊断性能的同时，相较于原始潜在通信基线，降低了可重构临床内容的泄露风险。",
+      "innovation": "基于潜在KV块的多智能体通信与跨骨架对齐，兼顾隐私保护与诊断协作。",
+      "limitations": "摘要未明确说明具体极限条件，如对不同疾病类型的泛化性、潜在块大小与隐私-性能权衡的细粒度分析，以及真实医院部署的可行性。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：在保护隐私的同时提升跨院诊断性能，减少可重构内容泄露；缺点：对疾病类型泛化性、潜在块大小－隐私性能权衡及真实部署可行性未详细分析",
+      "dataDriven": "是（基于自建CrossRare-Bench训练与评估）",
+      "scores": [
+        89,
+        81,
+        86,
+        80,
+        77
+      ],
+      "url": "http://arxiv.org/abs/2606.13945v1"
+    },
+    {
+      "id": "real-033",
+      "title": "Can Post-Training Turn LLMs into Good Medical Coders? An Empirical Study of Generative ICD Coding",
+      "authors": [
+        "Ziqing Wang",
+        "Weihao Li",
+        "Shijie Chen",
+        "Yuan Luo",
+        "Kaize Ding"
+      ],
+      "year": 2026,
+      "published": "2026-06-11",
+      "category": "医学自然语言处理：ICD编码与生成式LLM微调",
+      "confidence": 5,
+      "problem": "生成式大语言模型在ICD编码任务中常被视为弱编码器，但现有评估主要基于推理时方法（如提示、检索），其对任务特定微调（post-training）的潜力尚不清楚。",
+      "keyIdea": "通过对比提示、监督微调和强化学习等不同适应范式的受控实验，揭示post-training在释放LLM医学编码能力中的关键作用，并提出改进遗漏代码的诊断式课程学习方法。",
+      "method": "在统一协议和指标下，比较判别式基线模型与LLM编码器在提示、监督微调（SFT）和强化学习（GRPO）设置下的性能；进一步引入PHI诊断课程，通过扩展GRPO来优化遗漏代码案例。",
+      "scenario": "ICD编码数据集（摘要未明确具体名称），面向诊断代码的全分类法召回任务。",
+      "metrics": "未明确列出具体指标，但提及采用通用协议和指标集，并关注宏级别性能及代码集预测能力。",
+      "results": "仅基于提示的评估严重低估了LLM的编码潜力；SFT带来主要能力跃升，GRPO在此基础上进一步提升代码集预测，PHI在宏级别性能上实现针对性增益；瓶颈在于模型如何针对全分类法召回进行适配与优化，而非生成式框架本身。",
+      "innovation": "首次在ICD编码中评估基于强化学习的生成式LLM后训练；提出针对遗漏代码的诊断式课程PHI。",
+      "limitations": "摘要未明确说明。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：揭示后训练（尤其SFT/GRPO）大幅释放LLM编码潜力，PHI提升宏级别性能；缺点：瓶颈在于全分类法召回适配，具体局限性未说明",
+      "dataDriven": "是（监督微调与强化学习依赖标注数据集）",
+      "scores": [
+        86,
+        91,
+        85,
+        90,
+        93
+      ],
+      "url": "http://arxiv.org/abs/2606.13940v1"
+    },
+    {
+      "id": "real-034",
+      "title": "Self-Evolving Visual Questioner",
+      "authors": [
+        "Yijun Liang",
+        "Hengguang Zhou",
+        "Ming Li",
+        "Lichen Li",
+        "Cho-Jui Hsieh",
+        "Tianyi Zhou"
+      ],
+      "year": 2026,
+      "published": "2026-06-11",
+      "category": "Self-evolving Visual Questioner",
+      "confidence": 5,
+      "problem": "视觉语言模型通常仅作为被动回答者，主动提出多样化、高难度、以视觉为基础的问题的能力发展不足，且高质量训练数据的获取与标注成本高昂。",
+      "keyIdea": "让视觉语言模型扮演提问者和筛选者双重角色，通过自我生成并筛选问题来实现自主进化，摆脱对外部标注数据的依赖。",
+      "method": "提出一种自进化框架，利用同一视觉语言模型依次作为提议者生成问题、作为过滤器筛选出更难且视觉中心化的问题，同时保持问题多样性以防止训练崩塌，再将筛选后的问题用于训练模型本身的提问与回答能力。",
+      "scenario": "摘要未明确说明具体数据集，实验在多种骨干视觉语言模型上展开，面向通用视觉问答场景。",
+      "metrics": "基于代理评估协议，从感知、推理和多样性三个维度综合评价提问质量。",
+      "results": "所提方法大幅提升了问题质量，显著扩展了自主生成问题的难度边界；在相同资源下，自监督训练效果优于使用静态源数据，且进化后的提问者仍保持甚至提升了作为回答者的性能。",
+      "innovation": "自监督的自进化提问者框架，无需外部标注即可持续提升视觉提问能力。",
+      "limitations": "摘要未明确说明。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：自监督自进化，无需外部标注，提升提问质量与难度并保持回答性能；缺点：局限性未明确说明",
+      "dataDriven": "是（基于自生成问题训练模型）",
+      "scores": [
+        80,
+        88,
+        92,
+        85,
+        82
+      ],
+      "url": "http://arxiv.org/abs/2606.13929v1"
+    },
+    {
+      "id": "real-035",
+      "title": "Sorries Are Not the Hard Part: An Expert-Review Case Study of a Semi-Autonomous Formalization",
+      "authors": [
+        "Vasily Ilin",
+        "Brian Nugent"
+      ],
+      "year": 2026,
+      "published": "2026-06-11",
+      "category": "Automatic Formalization Evaluation",
+      "confidence": 4,
+      "problem": "当前自动形式化（autoformalization）常以关闭所有sorry（无未完成证明）作为成功指标，但忽视了形式化成果作为可重用库的工程质量，如定义合理性、API设计和文件组织等。",
+      "keyIdea": "形式化结果不应仅以机械验证通过为评判标准，而应像软件一样接受专家审查，评估其在定义、通用性、接口设计等方面的可维护性和可重用性。",
+      "method": "以Grothendieck消没定理的半自动形式化为案例，首先生成无sorries的初始版本，邀请专家进行代码审查并标记问题；随后基于审查意见进行重构与压缩，再经第二次专家审查；通过前后对比分析智能体在不同类型反馈下的表现差异。",
+      "scenario": "Grothendieck消没定理的交互式定理证明形式化任务。",
+      "metrics": "专家审查中发现的严重问题类型（定义不当、定理通用性不足、文件组织混乱、API不合理），属于定性评估，未使用数值指标。",
+      "results": "对比实验表明：智能体对局部、可机械检查的反馈适应良好，但在需要全局判断的定义选择和API设计上表现薄弱。因此，仅凭关闭sorries无法可靠衡量形式化质量，通过专家审查才是更严格的标准。",
+      "innovation": "提出以专家审查为核心的评估范式，替代单一的“无sorry”指标。",
+      "limitations": "摘要未明确说明；但案例限于单一定理，结论的泛化性需更多场景验证。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：以专家审查替代单一无sorry指标，揭示定义与API设计弱点；缺点：案例限于单一定理，泛化性需更多验证",
+      "dataDriven": "否（案例研究、定性评估）",
+      "scores": [
+        75,
+        83,
+        78,
+        84,
+        79
+      ],
+      "url": "http://arxiv.org/abs/2606.13925v1"
+    },
+    {
+      "id": "real-036",
+      "title": "A Multi-Agent AI System for Automated High School Transcript Processing: Collaborative Document Analysis at Scale",
+      "authors": [
+        "Ben Torkian",
+        "Jun Zhou"
+      ],
+      "year": 2026,
+      "published": "2026-06-11",
+      "category": "Multi-Agent Document Processing",
+      "confidence": 5,
+      "problem": "高校招生办面临手动处理海量格式各异、评分系统不同的高中成绩单的瓶颈，导致决策延迟和资源浪费。",
+      "keyIdea": "通过多个专业化智能体协同工作，以分布式智能实现复杂文档的自动化解析与校验。",
+      "method": "构建一个多智能体系统，包含模式识别智能体（格式解析）、语义分析智能体（自然语言理解）、视觉智能体（多模态分析），并由编排智能体管理通信和结果校对；创新性地以GPA提取作为协同质量控制信号，防止关键信息丢失。",
+      "scenario": "40份来自美国13个州高中的真实成绩单文档。",
+      "metrics": "准确率（与专家人工审核对比），处理速度（每份成绩单秒数）。",
+      "results": "系统成功处理全部40份成绩单，准确率达到96.7%，平均处理速度为45秒/份，在保持高精度的同时显著缩短处理时间。",
+      "innovation": "Agent-based Quality Control with GPA Coordination Signal",
+      "limitations": "摘要未明确说明。",
+      "complexity": "未明确说明（处理速度45秒/份）",
+      "prosCons": "优点：准确率96.7%，高速处理，GPA信号防信息丢失；缺点：局限性未明确说明",
+      "dataDriven": "是（依赖模式识别、语义与视觉模型）",
+      "scores": [
+        87,
+        83,
+        89,
+        84,
+        90
+      ],
+      "url": "http://arxiv.org/abs/2606.13916v1"
+    },
+    {
+      "id": "real-037",
+      "title": "SANA: What Matters for QA Agents over Massive Data Lakes?",
+      "authors": [
+        "Austin Senna Wijaya",
+        "Jiaxiang Liu",
+        "Haonan Wang",
+        "Eugene Wu"
+      ],
+      "year": 2026,
+      "published": "2026-06-11",
+      "category": "Evaluation and Diagnosis",
+      "confidence": 4,
+      "problem": "现有端到端准确率无法区分数据湖问答代理在搜索、规划、数据分析和行动策略等不同环节的失败原因。",
+      "keyIdea": "将EQA任务转换为包含金标准源序列、净化子问题和执行记录的运行时档案，通过消融理想组件来诊断策略层面的残余差距。",
+      "method": "提出SANA诊断消融框架，构建理想化的搜索、规划与数据分析工具，逐一替换实际组件，将端到端准确率分解为各模块的能力瓶颈和策略失败证据。",
+      "scenario": "基于LakeQA和KramaBench两个EQA基准改编，在固定提示、预算、数据湖和运行时的条件下评估轻量级和中规模代理。",
+      "metrics": "端到端任务准确率，以及通过消融分析得到的残余差距作为策略失败的诊断证据。",
+      "results": "在两个基准上，数据分析是一致瓶颈，规划问题相对较小；搜索在LakeQA的大规模数据湖场景下是主要限制，但在小规模KramaBench中限制较弱。SANA成功将端到端准确率解构成各环节的诊断信号。",
+      "innovation": "诊断性消融评估框架",
+      "limitations": "摘要未明确说明。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：将端到端准确率解构为各模块瓶颈与策略失败证据；缺点：局限性未明确说明",
+      "dataDriven": "否（分析诊断框架，不依赖学习，利用现有基准）",
+      "scores": [
+        79,
+        76,
+        75,
+        83,
+        78
+      ],
+      "url": "http://arxiv.org/abs/2606.13904v1"
+    },
+    {
+      "id": "real-038",
+      "title": "Capability Minimization as a Safety Primitive: Risk-Aware Causal Gating for Least-Privilege LLM Agents",
+      "authors": [
+        "Laxmipriya Ganesh Iyer",
+        "Rahul Suresh Babu"
+      ],
+      "year": 2026,
+      "published": "2026-06-11",
+      "category": "Causal Risk Gating for Safe LLM Agents",
+      "confidence": 5,
+      "problem": "现代决策系统中学习组件输出的错误高置信度预测会导致高风险动作并产生高昂代价，亟需一种在保留效用的同时确保安全的最低权限行动机制。",
+      "keyIdea": "将能力最小化作为安全基元，通过分离因果风险与预测不确定性，用反事实风险估计代替原始置信度来决定执行、推迟或放弃模型预测，从而实现可信的自动化决策。",
+      "method": "提出风险感知因果门控框架（RACG），建模从候选动作到结果的因果路径并估计反事实风险；推导不依赖分布的行动概率上界，将其转换为满足用户指定安全约束的决策阈值；设计自适应门控策略，通过监测预测与实际结果的差异来收紧门控以应对分布偏移。",
+      "scenario": "模拟干预任务和真实世界决策基准，面向高风险自动化场景（如医疗、金融等需要安全控制的环境）。",
+      "metrics": "高成本错误率、效用保留率、安全约束违反概率，以及相同弃权率下的性能对比。",
+      "results": "RACG 显著减少了高成本错误，同时保留了无门控策略的大部分效用；在相同弃权率下，其错误控制效果优于基于置信度和选择性预测的基线方法。",
+      "innovation": "因果风险感知的最小化能力门控；反事实风险驱动的安全决策与无分布边际保障。",
+      "limitations": "摘要未明确说明，但指出当因果假设被违反时门控会收紧，隐式依赖因果模型准确性，极端分布偏移下的性能保障未充分讨论。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：显著减少高成本错误，保留效用，错误控制优于置信度方法；缺点：依赖因果模型准确性，极端分布偏移下保障不足",
+      "dataDriven": "无法确定（未明确说明是否依赖数据学习反事实估计）",
+      "scores": [
+        87,
+        83,
+        89,
+        84,
+        90
+      ],
+      "url": "http://arxiv.org/abs/2606.13884v1"
+    },
+    {
+      "id": "real-039",
+      "title": "SpheriCity: Designing Trustworthy Conversational AI for Sustainability Decision Support",
+      "authors": [
+        "Ahmed Qayyum",
+        "Madison Werner",
+        "Kathryn Youngblood",
+        "Jenna R. Jambeck",
+        "Tahiya Chowdhury"
+      ],
+      "year": 2026,
+      "published": "2026-06-11",
+      "category": "人机交互与AI可信性",
+      "confidence": 5,
+      "problem": "在循环经济决策支持中，大语言模型虽能加速知识提取，但其推理不透明、幻觉及来源缺失问题，在高风险的可持续领域引发了信任与可解释性危机。",
+      "keyIdea": "采用“溯源优先”（provenance-first）的设计视角，将证据可追溯性、结构化综合与交互支架作为赢得专家信任的核心机制。",
+      "method": "论文提出了一个专家导向的对话原型SpheriCity，其核心方法包括：构建溯源优先的对话智能体以突显证据来源，设计结构化的综合与交互支架以支撑探索式查询和跨文档综合。通过形成性专家评审，让六位可持续专家基于跨城市比较、政策摘要等代表性任务从多维度评价并反馈。",
+      "scenario": "任务场景为城市级循环度评估报告的知识感知与综合利用，支持跨文档、跨城市的综合、对比与政策推荐。",
+      "metrics": "评价指标为专家对系统有用性的定性判断，具体包括透明溯源、语境解释、可解释性以及与专家工作流的契合度等维度。",
+      "results": "结果表明，透明的信息溯源、语境化的解释、可解释性以及与专家工作流的高度契合，是塑造专家信任和系统有用性评价的关键因素。",
+      "innovation": "提出并验证了一种以溯源与交互设计为核心的、面向高信任度可持续决策的对话式AI构建范式。",
+      "limitations": "摘要未明确说明原型的技术性能基准测试结果，当前专家评估样本规模较小（六人），结论的一般性有待更大范围验证。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：透明溯源、语境解释与工作流契合度塑造专家信任；缺点：专家样本量小（六人），缺乏技术性能基准",
+      "dataDriven": "无法确定（依赖LLM但未说明是否额外训练）",
+      "scores": [
+        89,
+        84,
+        81,
+        88,
         83
       ],
-      "url": "https://arxiv.org/"
+      "url": "http://arxiv.org/abs/2606.13854v1"
     },
     {
-      "id": "p08",
-      "title": "Episodic Memory Compression for Long-Horizon Agents",
+      "id": "real-040",
+      "title": "Multi-Agent Embodied Autonomous Driving: From V2X Information Exchange to Shared World Models",
       "authors": [
-        "M. Silva",
-        "A. Johnson"
+        "Senkang Hu",
+        "Zhengru Fang",
+        "Yihang Tao",
+        "Zihan Fang",
+        "Sam Tak Wu Kwong",
+        "Yuguang Fang"
       ],
-      "year": 2025,
-      "published": "2025-11-04",
-      "category": "记忆与检索增强",
+      "year": 2026,
+      "published": "2026-06-11",
+      "category": "多智能体协同驾驶综述",
       "confidence": 4,
-      "problem": "长程智能体积累的轨迹快速膨胀，直接检索全部历史会造成上下文与延迟压力。",
-      "keyIdea": "把细粒度轨迹压缩成可检索的情节单元，同时保留关键决策与失败信号。",
-      "method": "使用事件边界检测切分轨迹，并根据未来任务效用进行层级摘要。",
-      "scenario": "持续交互、个人助理与长期任务执行",
-      "metrics": "记忆压缩率、检索命中率、长期任务成功率",
-      "results": "在明显减少上下文占用的同时保持了关键历史信息的可用性。",
-      "innovation": "层级情节记忆",
-      "limitations": "压缩过程可能丢失低频但关键的异常事件。",
-      "complexity": "中：事件切分与摘要",
-      "prosCons": "优：节省上下文；缺：存在信息损失",
-      "dataDriven": "是",
+      "problem": "如何从单车的独立智能过渡到多智能体共享世界模型驱动的协同驾驶，解决感知对齐、意图推断与安全协同行动中的不确定性和实时性挑战。",
+      "keyIdea": "以共享世界模型为统一视角，将 V2X 交换的观测转化为跨智能体的对齐状态、意图感知交互与协调的规划动作，从而构建多智能体具身驾驶系统。",
+      "method": "系统性综述超过 380 篇文献，覆盖 V2X 通信、协作感知、跨智能体认知、协同规划、端到端协同驾驶及闭环仿真验证等维度，以组织交换观测如何形成对齐状态和协调行动为主线。",
+      "scenario": "多围绕自动驾驶协同任务展开，评估广泛依赖仿真环境、策展式基准和离线协议，缺乏开放交通中的真实场景验证。",
+      "metrics": "综述中涉及的评价指标多样化，涵盖协同感知精度、轨迹预测误差、规划成功率等，但多为仿真或离线协议下的标定指标，缺乏实时安全相关的标准。",
+      "results": "当前方法普遍将评估限制在仿真和策展基准中，基于基础模型的协同机制缺乏可验证的实时安全保证；研究重心正移向可验证的共享状态维护、鲁棒的意图与规划对齐，以及通信、延迟和部署约束下的安全协同行动。",
+      "innovation": "以共享世界模型为统一框架的综述，提出多智能体具身自动驾驶的研究优先级。",
+      "limitations": "现有工作评估主要集中在仿真与离线协议，基于基础模型的协同方案缺乏开放交通中的实时安全验证，且未充分解决通信、延迟和部署约束下的安全协同问题。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：以统一框架系统梳理研究前沿，提出可验证安全协同优先级；缺点：现有评估多停留仿真与离线基准，缺乏实时安全验证与通信约束考量",
+      "dataDriven": "是（现有方法普遍依赖数据驱动训练，综述归纳于此）",
       "scores": [
-        76,
-        91,
+        90,
+        82,
+        86,
         80,
-        78,
+        85
+      ],
+      "url": "http://arxiv.org/abs/2606.13840v1"
+    },
+    {
+      "id": "real-041",
+      "title": "When Plausible Is Not Realistic: Evaluating Human Mobility in LLM-Based Urban Simulation",
+      "authors": [
+        "Gustavo H. Santos",
+        "Aline Carneiro Viana",
+        "Thiago H. Silva"
+      ],
+      "year": 2026,
+      "published": "2026-06-11",
+      "category": "LLM-Based Urban Simulation Validation",
+      "confidence": 5,
+      "problem": "基于LLM的生成式代理广泛应用于城市模拟，但尚不明确其生成的人类移动模式是仅仅呈现叙事层面的合理性，还是能够复现经验上真实的人类移动规律。",
+      "keyIdea": "构建一个多维度验证框架，从移动定律、时间节奏、网络模体、活动转换和行为画像等角度，将LLM生成代理的移动模式与真实世界移动数据进行系统对比，以揭示表面可信性与经验现实之间的差距。",
+      "method": "提出一个评估生成代理移动现实性的框架，利用巴黎与上海的真实移动数据，在出行距离、OD流、停留时间、活动转换等空间和时间约束上，对AgentSociety和CitySim进行多维度定量对比；同时贡献可扩展的开源基础架构，用于地图生成、观测增强模拟、移动指标计算和交通仿真。",
+      "scenario": "大巴黎地区与上海的真实人类移动数据集，评估对象为AgentSociety和CitySim两个基于LLM的城市模拟器。",
+      "metrics": "移动定律一致性、时间节律、网络模体、语义活动转换、行为移动画像、出行距离分布、起讫点流量、停留时间以及活动转换动态等。",
+      "results": "模拟器虽能捕捉部分高层语义活动分布，但在出行距离分布、OD流、停留时间和转换动态等核心时空约束上与现实存在显著差距；默认提示配置下移动多样性表现不稳定，需要显式的用户画像初始化；所提供的基础设施有助于可复现的真实性评估与模拟系统构建。",
+      "innovation": "首次提出面向LLM城市模拟器移动真实性的多维验证框架，并开源可复现的评估与模拟工具链。",
+      "limitations": "评估仅限于两个特定模拟器和两个城市数据集，结论泛化性有待进一步验证；未充分解决默认提示配置导致的移动多样性不稳定问题。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：首次提出面向LLM城市模拟器移动真实性的多维验证框架，并开源可复现工具链；缺点：评估仅局限于两个特定模拟器和两个城市数据集，结论泛化性有待验证，且未充分解决默认提示配置导致的移动多样性不稳定问题",
+      "dataDriven": "是（使用巴黎与上海真实移动数据集进行定量对比）",
+      "scores": [
+        85,
+        90,
+        93,
+        86,
+        91
+      ],
+      "url": "http://arxiv.org/abs/2606.13835v1"
+    },
+    {
+      "id": "real-042",
+      "title": "Safety-Contract Graph Multi-Agent Reinforcement Learning for Autonomous Network Security Response",
+      "authors": [
+        "Jose Luis Lima de Jesus Silva"
+      ],
+      "year": 2026,
+      "published": "2026-06-11",
+      "category": "Constrained Multi-Agent Reinforcement Learning for Cyber Defense",
+      "confidence": 4,
+      "problem": "仅基于奖励的多智能体强化学习在自主网络安全响应中虽可提升安全得分，但缺乏对运维预算（如系统停机、误报、变更管理干扰）的约束遵守，导致策略不可实际部署。",
+      "keyIdea": "通过安全契约图将可复用运维预算显式建模到多智能体决策中，分离仿真观测与约束优化、状态编码和反事实动作筛选，使策略在追求防御效果的同时遵守操作纪律。",
+      "method": "提出安全契约图多智能体强化学习框架，具体化为 ACD³-GAT 架构，引入预算上下文、CVaR 尾部风险估计、对手信念状态和图反事实风险传播。对比方法包括约束版 MAPPO-GAT（C-MAPPO-GAT）以及无约束的 MAPPO-GAT 和 IPPO。",
+      "scenario": "CAGE Challenge 4 网络防御仿真环境，任务中智能体需在 MTTR、误报响应和防火墙变更管理中断三项预算约束下协同防御。",
+      "metrics": "主要评价指标为停机预算违反率和平均停机代理成本，亦涉及安全奖励和应力测试下的性能退化程度。",
+      "results": "所有无约束方法在100%的评估回合中违反停机预算，平均停机成本达311–430（预算为50）。C-MAPPO-GAT 将违反率降至0.3%、平均成本降至15.5；ACD³-GAT 平均成本为48.2、违反率13.8%，位于安全-契约前沿而非最保守合规点。在拓扑种子和自适应红队压力测试下，受约束策略的退化程度始终低于纯奖励驱动的 MAPPO-GAT。",
+      "innovation": "安全契约图多智能体约束强化学习与 CVaR 的整合，结合反事实风险传播和对手信念建模。",
+      "limitations": "ACD³-GAT 仍存在13.8%的约束违反率，未能完全满足停机预算；评估局限于 CAGE Challenge 4 单一场景，泛化性未经验证。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：首次将安全契约图与多智能体约束强化学习、CVaR风险估计以及反事实传播相结合，将停机预算违反率从无约束方法的100%降至13.8%（或0.3%对比方法），受约束策略在压力测试下退化更小；缺点：ACD³-GAT仍存在13.8%的约束违反率，未能完全满足停机预算，且仅评估于CAGE Challenge 4单一场景，泛化性未经验证",
+      "dataDriven": "是（基于CAGE Challenge 4网络防御仿真环境和相关预算约束数据）",
+      "scores": [
+        86,
+        88,
+        89,
+        90,
+        82
+      ],
+      "url": "http://arxiv.org/abs/2606.13832v1"
+    },
+    {
+      "id": "real-043",
+      "title": "FlowMo-WM: A World Model with Object Momentum and Hidden Ambient Drift",
+      "authors": [
+        "Yitao Jiang",
+        "Luyang Zhao",
+        "Muhao Chen",
+        "Devin Balkcom"
+      ],
+      "year": 2026,
+      "published": "2026-06-11",
+      "category": "World Model with Context-Aware Dynamics",
+      "confidence": 5,
+      "problem": "现有动作条件世界模型主要在由即时控制主导的运动场景下评估, 难以处理水面航行器等对象因惯性和隐藏环境漂移(如水流/风)引起的持续运动。如何使世界模型能够预测存在未知外源漂移和对象动量的复杂动力学是核心问题。",
+      "keyIdea": "将图像-动作历史分解为短期潜在状态(捕捉对象中心运动)与长期历史上下文(总结缓慢变化的隐藏漂移), 并通过零上下文残差转移将动作驱动的基础动力学与上下文相关的漂移效应解耦, 从而不依赖显式流场监督。",
+      "method": "FlowMo-WM, 一种端到端可训练的视觉世界模型。它从图像-动作历史中联合推断对象中心运动状态和与隐藏漂移相关的长期预测性上下文; 使用短期潜在状态编码短期运动, 长期上下文编码外源影响; 在潜在序列生成中应用零上下文残差转移来分离基础动力学和漂移。",
+      "scenario": "模拟水面航行器环境, 包含多种隐藏水流、扰动和随机化的车辆动力学参数。",
+      "metrics": "长时域 rollout 准确度; 预测阶段上下文消融(清零或打乱)导致的变化; 冻结线性探针对所学因素的信息表征分析。",
+      "results": "FlowMo-WM 在具有隐藏漂移的模拟场景下, 相比代表性动作条件潜在世界模型显著提升了长时域 rollout 准确性。上下文消融实验表明环境上下文对隐藏漂移下的稳定预测至关重要; 线性探针分析揭示所学短期状态和长期上下文分别编码了对象运动和漂移相关特征。",
+      "innovation": "引入对象动量和隐藏环境漂移建模, 通过因子化历史与残差转移解耦内外动态。",
+      "limitations": "摘要未明确说明。仅在模拟水面航行器环境中验证, 未涉及真实世界场景。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：端到端学习，不依赖显式流场监督，通过在潜空间分解短期运动与长期历史上下文，并利用零上下文残差转移解耦基础动力学与漂移，在隐藏漂移场景下显著提升长时域预测准确性；缺点：仅在模拟水面航行器环境验证，未涉及真实世界场景，泛化性未经验证",
+      "dataDriven": "是（基于模拟水面航行器环境生成的多变动力学与隐藏漂移数据）",
+      "scores": [
+        85,
+        82,
+        80,
+        79,
+        79
+      ],
+      "url": "http://arxiv.org/abs/2606.13817v1"
+    },
+    {
+      "id": "real-044",
+      "title": "EvoArena: Tracking Memory Evolution for Robust LLM Agents in Dynamic Environments",
+      "authors": [
+        "Jundong Xu",
+        "Qingchuan Li",
+        "Jiaying Wu",
+        "Yihuai Lan",
+        "Shuyue Stella Li",
+        "Huichi Zhou",
+        "Bowen Jiang",
+        "Lei Wang",
+        "Jun Wang",
+        "Anh Tuan Luu",
+        "Caiming Xiong",
+        "Hae Won Park",
+        "Bryan Hooi",
+        "Zhiyuan Hu"
+      ],
+      "year": 2026,
+      "published": "2026-06-11",
+      "category": "LLM Agent，动态环境，记忆演化",
+      "confidence": 5,
+      "problem": "现有LLM代理评估大多假设静态环境，忽略了现实部署中环境持续变化的要求，导致代理在动态环境中难以保持知识和行为的对齐。",
+      "keyIdea": "将环境变化建模为渐进更新序列，并通过记录记忆的演化历史让代理从记忆变化中推断环境演变，从而提升动态适应性。",
+      "method": "提出EvoArena基准，在终端、软件和社交域中构造环境渐进更新序列；设计EvoMem记忆范式，以补丁方式结构化记录更新历史，使代理能够基于记忆演变进行推理。",
+      "scenario": "EvoArena基准（含终端、软件和社交偏好三个演化域），以及GAIA和LoCoMo标准基准。",
+      "metrics": "准确率（accuracy）和链级准确率（chain-level accuracy）。",
+      "results": "现有代理在EvoArena上的平均准确率仅为39.6%；EvoMem在EvoArena上带来平均1.5%的增益，并将GAIA和LoCoMo上的性能分别提升6.1%和4.8%；链级准确率提升3.7%。机制分析显示EvoMem能更好地保留环境演化证据。",
+      "innovation": "动态环境演化基准与基于补丁的记忆演化方法",
+      "limitations": "摘要未明确说明具体局限，但当前代理在EvoArena上整体准确率仍偏低，且EvoMem在演化基准上的绝对提升幅度较小。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：提出首个将环境变化建模为渐进更新序列的动态演化基准，并设计补丁式记忆演化范式，使代理能从记忆变化中推断环境演变，在动态基准和静态基准上均有提升；缺点：现有代理在EvoArena上整体准确率仅39.6%，EvoMem带来的绝对提升幅度较小（平均1.5%），整体能力仍偏低",
+      "dataDriven": "是（基于EvoArena基准生成的渐进更新序列及GAIA、LoCoMo标准基准数据）",
+      "scores": [
+        94,
+        86,
+        91,
+        93,
         94
       ],
-      "url": "https://arxiv.org/"
+      "url": "http://arxiv.org/abs/2606.13681v1"
     },
     {
-      "id": "p09",
-      "title": "Adaptive Tool Routing with Uncertainty-Aware Planning",
+      "id": "real-045",
+      "title": "Mana: Dexterous Manipulation of Articulated Tools",
       "authors": [
-        "Q. Liu",
-        "V. Novak"
+        "Zhao-Heng Yin",
+        "Guanya Shi",
+        "Pieter Abbeel",
+        "C. Karen Liu"
       ],
-      "year": 2025,
-      "published": "2025-10-16",
-      "category": "工具增强工作流",
+      "year": 2026,
+      "published": "2026-06-11",
+      "category": "灵巧操作与sim-to-real迁移学习",
       "confidence": 4,
-      "problem": "智能体在多个相似工具间选择时缺乏不确定性估计，容易做出高代价错误调用。",
-      "keyIdea": "显式估计工具选择置信度，在低置信场景先请求信息或执行低成本探测。",
-      "method": "路由器输出工具概率分布，并通过风险阈值决定调用、澄清或回退。",
-      "scenario": "企业 API、数据查询和混合工具环境",
-      "metrics": "路由准确率、调用成本、风险调整成功率",
-      "results": "降低了错误工具调用比例，并改善高风险任务中的稳定性。",
-      "innovation": "不确定性感知工具路由",
-      "limitations": "概率校准依赖训练分布，对新工具的冷启动支持不足。",
-      "complexity": "中：概率路由与风险判断",
-      "prosCons": "优：风险可控；缺：校准与冷启动问题",
-      "dataDriven": "是",
+      "problem": "关节工具的灵巧操作仍存在巨大挑战，现有方法多聚焦刚性物体，难以处理工具内部自由度与接触丰富交互的协调，缺乏可扩展的功能性抓取与操作策略。",
+      "keyIdea": "将灵巧操作重新构想为计算机动画问题，通过粗到细的流程自动将功能抓取关键帧转化为可执行的操作轨迹。",
+      "method": "提出Manan框架，采用从粗到细的管线：先用少量点击标注生成程序化抓取关键帧，再结合运动规划与强化学习将其优化为完整的操作轨迹，实现全自动数据生成与零样本sim-to-real迁移。",
+      "scenario": "在四种不同尺度与关节类型的关节工具上进行验证，具体工具未列出名称。",
+      "metrics": "摘要未明确说明量化指标。",
+      "results": "在四种关节工具上均实现零样本sim-to-real迁移，覆盖抓取与手内操作任务，验证了方法的可扩展性。",
+      "innovation": "视角创新（将操作建模为动画生成问题）与自动化流程创新。",
+      "limitations": "摘要未明确说明。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：将操作重新构想为动画生成问题，通过粗到细的流程实现全自动数据生成与零样本sim-to-real迁移，在四种关节工具上验证了可扩展性；缺点：摘要未明确说明局限",
+      "dataDriven": "是（通过程序化生成关键帧和强化学习生成操作轨迹，自动产生训练数据）",
       "scores": [
-        81,
-        90,
-        87,
         89,
-        88
+        81,
+        77,
+        84,
+        79
       ],
-      "url": "https://arxiv.org/"
+      "url": "http://arxiv.org/abs/2606.13677v1"
     },
     {
-      "id": "p10",
-      "title": "Reflective Planning for Language Agents with Sparse Feedback",
+      "id": "real-046",
+      "title": "Improving Robotic Generalist Policies via Flow Reversal Steering",
       "authors": [
-        "S. Ahmed",
-        "B. Green"
+        "Andy Tang",
+        "William Chen",
+        "Andrew Wagenmaker",
+        "Chelsea Finn",
+        "Sergey Levine"
       ],
-      "year": 2025,
-      "published": "2025-09-09",
-      "category": "规划与推理",
+      "year": 2026,
+      "published": "2026-06-11",
+      "category": "机器人操作、通用策略、流匹配与动作引导",
       "confidence": 4,
-      "problem": "稀疏反馈环境中，智能体难以及时判断失败原因并调整后续计划。",
-      "keyIdea": "在关键里程碑进行结构化反思，将失败归因转化为下一轮计划约束。",
-      "method": "结合里程碑检测、失败归因和约束重写形成反思式规划循环。",
-      "scenario": "稀疏奖励推理任务与长链交互",
-      "metrics": "成功率、重试次数、反思有效率",
-      "results": "减少了重复错误，并提高低反馈任务中的计划修正效率。",
-      "innovation": "反思式规划",
-      "limitations": "错误归因本身可能不准确，频繁反思会增加上下文成本。",
-      "complexity": "中高：周期反思与重规划",
-      "prosCons": "优：可从失败修正；缺：归因误差与上下文开销",
-      "dataDriven": "否",
+      "problem": "当直接命令通用策略无法完成具有挑战性的新任务时，如何从策略丰富的先验行为中有效推断并调用合适的动作，以利用或提升通用策略的能力。",
+      "keyIdea": "利用流匹配模型的可逆性，通过反转流方向将次优但合理的候选动作映射回潜在噪声空间，再将其引导至策略的高质量动作模式附近，从而间接控制通用策略。",
+      "method": "提出流反转引导（Flow Reversal Steering, FRS），将来自人类或视觉语言模型的粗略语义动作通过流匹配策略反向传播得到潜在噪声，进而将噪声重新映射到更优的动作模式上，实现零样本任务求解、行为蒸馏与强化学习引导。",
+      "scenario": "多个模拟和真实世界的机器人操作场景，包括零样本控制、由人类或视觉语言模型提供稀疏语义引导的任务，以及需要在强化学习中融入语义知识的操作任务。",
+      "metrics": "任务成功率（task success rate），零样本控制性能提升幅度，训练时间（分钟级），绝对成功率提升百分比。",
+      "results": "FRS 可将粗略语义引导转化为高质量动作，提升零样本控制表现；通过行为克隆训练辅助策略，可在不到一分钟的训练内实现高达 95% 的绝对任务成功率提升；FRS 还能通过引导强化学习利用语义知识，使原本标准 RL 无法改善的任务获得性能提升。",
+      "innovation": "基于流匹配可逆性的反向引导与动作模式映射方法",
+      "limitations": "摘要未明确说明，但方法依赖“次优但合理”的初始动作，可能对完全错误的语义引导敏感。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：利用流匹配的可逆性将粗略语义引导映射到高质量动作模式，能显著提升零样本控制性能，并通过极短训练（不到一分钟）实现高达95%的绝对任务成功率提升；缺点：方法依赖于“次优但合理”的初始动作候选，可能对完全错误的语义引导敏感",
+      "dataDriven": "是（基于模拟与真实世界的机器人操作数据训练的通用流匹配策略）",
       "scores": [
         80,
         77,
-        85,
-        87,
-        70
+        84,
+        79,
+        85
       ],
-      "url": "https://arxiv.org/"
+      "url": "http://arxiv.org/abs/2606.13675v2"
     },
     {
-      "id": "p11",
-      "title": "Guarded Agent Workflows for High-Stakes Automation",
+      "id": "real-047",
+      "title": "Agents-K1: Towards Agent-native Knowledge Orchestration",
       "authors": [
-        "T. Nguyen",
-        "I. Cohen"
+        "Zongsheng Cao",
+        "Bihao Zhan",
+        "Jinxin Shi",
+        "Jiong Wang",
+        "Fangchen Yu",
+        "Zhijie Zhong",
+        "Zijie Guo",
+        "Tianshuo Peng",
+        "Zhuo Liu",
+        "Yi Xie",
+        "Xiang Zhuang",
+        "Yue Fan",
+        "Runmin Ma",
+        "Shiyang Feng",
+        "Xiangchao Yan",
+        "Anran Liu",
+        "Peng Ye",
+        "Wenlong Zhang",
+        "Shufei Zhang",
+        "Chunfeng Song",
+        "Fenghua Ling",
+        "Jie Zhou",
+        "Liang He",
+        "Bo Zhang",
+        "Lei Bai"
       ],
-      "year": 2025,
-      "published": "2025-08-28",
-      "category": "安全与治理",
-      "confidence": 5,
-      "problem": "高风险自动化任务需要限制智能体的权限与行动范围，同时保留足够任务能力。",
-      "keyIdea": "将安全策略编译为工作流守卫，在每个工具调用前后执行权限与结果检查。",
-      "method": "采用声明式策略、风险分级和人工升级通道约束智能体执行。",
-      "scenario": "金融、医疗与企业自动化",
-      "metrics": "违规率、任务完成率、人工介入次数",
-      "results": "在轻微降低自动完成率的情况下显著减少越权和高风险操作。",
-      "innovation": "策略驱动安全工作流",
-      "limitations": "策略维护成本高，过于保守的规则会降低系统可用性。",
-      "complexity": "中：策略检查与人工升级",
-      "prosCons": "优：安全可审计；缺：规则维护和性能折损",
-      "dataDriven": "部分",
-      "scores": [
-        72,
-        68,
-        98,
-        94,
-        66
-      ],
-      "url": "https://arxiv.org/"
-    },
-    {
-      "id": "p12",
-      "title": "Graph-of-Agents: Composable Roles for Complex Task Solving",
-      "authors": [
-        "X. Zhou",
-        "R. Evans"
-      ],
-      "year": 2025,
-      "published": "2025-07-13",
-      "category": "多智能体协作",
+      "year": 2026,
+      "published": "2026-06-11",
+      "category": "科学知识图谱构建与代理系统",
       "confidence": 4,
-      "problem": "固定多智能体团队难以适应任务结构变化，角色复用与组合能力不足。",
-      "keyIdea": "把角色能力表示为可组合节点，根据任务动态构建智能体协作图。",
-      "method": "任务分析器选择角色节点与通信边，执行期间可根据反馈调整拓扑。",
-      "scenario": "复杂问答、软件工程与开放式任务",
-      "metrics": "成功率、角色复用率、拓扑调整次数",
-      "results": "动态角色图在多类型任务上表现出更好的适应性和模块复用能力。",
-      "innovation": "可组合智能体拓扑",
-      "limitations": "图搜索空间较大，角色描述不一致会影响组合质量。",
-      "complexity": "高：动态图搜索",
-      "prosCons": "优：模块化、适应性强；缺：搜索与协调成本",
-      "dataDriven": "部分",
+      "problem": "当前LLM研究代理缺乏对科学知识的系统协调，仅利用论文摘要、表面提及和扁平引用，遗漏了实体、主张、证据、机制及方法谱系等关键元素，阻碍科学推理。",
+      "keyIdea": "将原始文档转化为代理原生的科学知识图谱，实现从全文解析到跨文档推理的端到端知识协调。",
+      "method": "提出Agents-K1管道：1)多模态全文解析器，用五模块模式捕获实体、多模态证据、引用及类型化关系；2)基于GRPO和规则奖励训练的4B参数信息抽取骨干模型；3)graphanything CLI，提供网络搜索、多模态图检索和跨文档遍历的三源统一代理接口。",
+      "scenario": "处理246万篇跨六大学科的科学论文，构建Scholar-KG并发布100万篇子集；管道可扩展至通用领域语料。",
+      "metrics": "摘要未明确列出具体指标，实验围绕科学信息抽取、知识图谱构建和多跳科学推理任务进行评估。",
+      "results": "Agents-K1在科学信息抽取、知识图谱构建和多跳科学推理上均取得最优性能。",
+      "innovation": "代理原生知识协调管道，整合多模态全文解析、GRPO训练的高效信息抽取模型与三源代理接口。",
+      "limitations": "摘要未明确说明。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：整合多模态全文解析、GRPO训练的4B高效信息抽取模型和统一的三源代理接口，在科学信息抽取、知识图谱构建和多跳推理上取得最优性能；缺点：摘要未明确说明局限",
+      "dataDriven": "是（基于246万篇科学论文构建图谱，并利用上述数据训练与评估）",
       "scores": [
-        94,
-        78,
-        76,
+        90,
+        90,
         82,
-        81
+        78,
+        76
       ],
-      "url": "https://arxiv.org/"
+      "url": "http://arxiv.org/abs/2606.13669v1"
+    },
+    {
+      "id": "real-048",
+      "title": "EurekAgent: Agent Environment Engineering is All You Need For Autonomous Scientific Discovery",
+      "authors": [
+        "Amy Xin",
+        "Jiening Siow",
+        "Junjie Wang",
+        "Zijun Yao",
+        "Fanjin Zhang",
+        "Jian Song",
+        "Lei Hou",
+        "Juanzi Li"
+      ],
+      "year": 2026,
+      "published": "2026-06-11",
+      "category": "Agent Environment Design for Scientific Discovery",
+      "confidence": 4,
+      "problem": "LLM驱动的自主科学发现中，瓶颈正从设计代理工作流转向构建代理环境，不良行为（如奖励黑客、高摩擦人工监督）阻碍了可靠自主研究。",
+      "keyIdea": "通过环境工程替代工作流工程，构建能够自然激发有效探索、系统化制品管理和多智能体协作，同时抑制有害行为的代理环境。",
+      "method": "提出EurekAgent系统，沿四个维度对环境进行工程化：权限工程（限定执行边界与隔离评估）、制品工程（基于文件系统与Git的协作）、预算工程（预算感知的探索）、人在回路的工程（便捷的人工监督与干预）。",
+      "scenario": "数学问题（如圆形堆放）、核工程任务、机器学习任务等多类指标驱动的科学发现场景。",
+      "metrics": "任务相关可优化指标（如圆形堆放中的密度等），以及总体API成本。",
+      "results": "在多个数学、核工程和机器学习任务上取得新最优结果，尤其以低于11美元的总API成本发现了26圆堆放的新最优布局。",
+      "innovation": "视角创新：将自主代理研究重心从工作流设计转移到环境工程，并提出四维环境工程框架。",
+      "limitations": "摘要未明确说明方法的适用边界、对复杂多步推理任务的泛化能力及潜在环境设计本身的工程成本。",
+      "complexity": "未明确说明",
+      "prosCons": "优点：将重心从工作流设计转移到环境工程，通过权限、制品、预算和人机协同四维工程自然抑制奖励黑客和摩擦，以极低的API成本（低于11美元）在26圆堆放等任务上取得新最优结果；缺点：摘要未说明方法适用边界、对复杂多步推理的泛化能力，以及环境设计本身的工程成本",
+      "dataDriven": "是（在多个指标驱动的科学发现任务上，通过实验获得优化指标和成本数据）",
+      "scores": [
+        83,
+        87,
+        89,
+        81,
+        77
+      ],
+      "url": "http://arxiv.org/abs/2606.13662v2"
+    },
+    {
+      "id": "real-049",
+      "title": "Recursive Agent Harnesses",
+      "authors": [
+        "Elias Lumer",
+        "Sahil Sen",
+        "Kevin Paul",
+        "Vamse Kumar Subbiah"
+      ],
+      "year": 2026,
+      "published": "2026-06-11",
+      "category": "Recursive agent systems / long-context reasoning / code-generation agents",
+      "confidence": 5,
+      "problem": "How to extend recursion over language model calls to full agent harnesses equipped with filesystem tools, code execution, and planning for improved long-context reasoning.",
+      "keyIdea": "Treat the recursive unit as a complete agent harness (code-first) rather than a bare model call, enabling parallel subagent spawning via executable scripts.",
+      "method": "Proposes the Recursive Agent Harness (RAH): a parent agent generates and executes a script that launches subagent harnesses in parallel; structured function calls are used for small subtasks.",
+      "scenario": "Long-context reasoning benchmark Oolong-Synthetic (199 samples, 13 context-length buckets up to 4M tokens).",
+      "metrics": "Accuracy.",
+      "results": "With a GPT-5 backbone, RAH improves the Codex agent baseline accuracy from 71.75% to 81.36%; with Claude Sonnet 4.5, accuracy reaches 89.77%. Gains are attributed to the harness design rather than the backbone model.",
+      "innovation": "Harness recursion replacing model recursion with executable, tool-equipped agent scripts.",
+      "limitations": "Not explicitly stated in the abstract.",
+      "complexity": "未明确说明",
+      "prosCons": "优点：将递归单元定义为具备文件系统、代码执行和规划工具的完整代理脚本，而非裸模型调用，显著提升长上下文推理准确率，且增益主要源于框架设计而非基座模型；缺点：摘要未明确说明局限",
+      "dataDriven": "是（使用Oolong-Synthetic长上下文推理基准的199个样本进行评估）",
+      "scores": [
+        82,
+        80,
+        79,
+        79,
+        79
+      ],
+      "url": "http://arxiv.org/abs/2606.13643v1"
     }
   ],
   "taxonomy": {
@@ -518,99 +1825,34 @@
     "description": "面向自主任务执行的大语言模型智能体技术体系",
     "children": [
       {
-        "name": "多智能体协作",
-        "description": "通过角色分工、通信与集体决策提升复杂任务能力。",
-        "count": 17,
-        "children": [
-          {
-            "name": "辩论与共识",
-            "count": 6
-          },
-          {
-            "name": "角色与拓扑",
-            "count": 6
-          },
-          {
-            "name": "通信协议",
-            "count": 5
-          }
-        ]
+        "name": "具身智能体的模块化与可组合性",
+        "description": "由 1 张结构化论文卡片归纳形成。",
+        "count": 1,
+        "children": []
       },
       {
-        "name": "工具增强工作流",
-        "description": "围绕工具选择、调用编排与失败恢复构建执行流程。",
-        "count": 13,
-        "children": [
-          {
-            "name": "工具路由",
-            "count": 5
-          },
-          {
-            "name": "工作流编排",
-            "count": 5
-          },
-          {
-            "name": "状态恢复",
-            "count": 3
-          }
-        ]
+        "name": "潜空间合成与代理工作流优化",
+        "description": "由 1 张结构化论文卡片归纳形成。",
+        "count": 1,
+        "children": []
       },
       {
-        "name": "规划与推理",
-        "description": "关注长程目标分解、层级决策与反馈驱动的计划修正。",
-        "count": 11,
-        "children": [
-          {
-            "name": "层级规划",
-            "count": 4
-          },
-          {
-            "name": "反思推理",
-            "count": 4
-          },
-          {
-            "name": "动态调度",
-            "count": 3
-          }
-        ]
+        "name": "氢能多能系统分析与智能控制",
+        "description": "由 1 张结构化论文卡片归纳形成。",
+        "count": 1,
+        "children": []
       },
       {
-        "name": "可靠性与治理",
-        "description": "覆盖执行验证、安全约束、评估基准与错误恢复。",
-        "count": 10,
-        "children": [
-          {
-            "name": "自我纠错",
-            "count": 4
-          },
-          {
-            "name": "安全守卫",
-            "count": 3
-          },
-          {
-            "name": "可靠性评估",
-            "count": 3
-          }
-        ]
+        "name": "Social Norm Reasoning in Multi-party Chat",
+        "description": "由 1 张结构化论文卡片归纳形成。",
+        "count": 1,
+        "children": []
       },
       {
-        "name": "记忆与检索",
-        "description": "利用长期记忆与外部案例增强跨步骤决策。",
-        "count": 9,
-        "children": [
-          {
-            "name": "情节记忆",
-            "count": 4
-          },
-          {
-            "name": "检索增强",
-            "count": 3
-          },
-          {
-            "name": "轨迹压缩",
-            "count": 2
-          }
-        ]
+        "name": "AI治理与开源政策",
+        "description": "由 1 张结构化论文卡片归纳形成。",
+        "count": 1,
+        "children": []
       }
     ]
   },
@@ -664,61 +1906,30 @@
   ],
   "weeklyDigests": [
     {
-      "index": 3,
-      "date": "2026-06-01",
-      "newPapers": 12,
-      "title": "从多智能体协作走向可验证执行",
-      "overview": "本周新增工作集中于交叉验证、动态拓扑和不确定性感知工具路由。研究关注点从单纯提升协作收益，转向控制协作过程中的错误传播与额外成本。",
-      "technicalEvolution": [
-        "多智能体协作从固定角色配置转向可根据任务和风险动态重构的执行图。",
-        "工具路由开始显式建模不确定性，在低置信场景采用澄清、探测或回退策略。",
-        "验证机制由最终结果检查前移到执行过程，在关键节点插入一致性判断。"
-      ],
-      "taxonomyImpact": [
-        "“多智能体协作”与“可靠性”两个一级类别出现明显融合，需要增加“可验证协同”子类。",
-        "工具增强工作流内部应区分固定编排与风险自适应编排。"
-      ],
-      "gaps": [
-        "动态验证策略仍缺乏统一的成本—风险权衡指标。",
-        "大多数实验集中于合成任务，长期真实运行中的状态漂移仍未充分研究。"
-      ]
-    },
-    {
-      "index": 2,
-      "date": "2026-05-25",
-      "newPapers": 9,
-      "title": "记忆压缩与长程任务稳定性",
-      "overview": "本周论文强化了长期记忆在智能体系统中的基础地位。研究不再只是扩大记忆容量，而是关注何时保存、如何压缩以及哪些失败信号必须保留。",
-      "technicalEvolution": [
-        "记忆组织从扁平向量库转向事件化、层级化的情节结构。",
-        "检索目标从语义相似度扩展到对未来决策效用的估计。"
-      ],
-      "taxonomyImpact": [
-        "记忆与检索类别新增“轨迹压缩”和“失败经验保留”两个子方向。",
-        "记忆机制与规划模块的边界正在弱化。"
-      ],
-      "gaps": [
-        "压缩算法对低频关键事件的保真性缺乏标准评估。",
-        "记忆污染和过期经验造成的长期偏置仍缺少系统解决方案。"
-      ]
-    },
-    {
       "index": 1,
-      "date": "2026-05-18",
-      "newPapers": 20,
-      "title": "Agent 工作流的结构化演进",
-      "overview": "首期语料显示，Agent 研究已形成规划、工具、协作、记忆与可靠性五条主要技术路线。系统设计开始取代单一提示技巧，成为性能差异的关键来源。",
+      "date": "2026-06-15",
+      "newPapers": 0,
+      "title": "LLM Agent 研究周报：架构凝练、可靠性反思与分类边界拓展",
+      "overview": "本周新增 49 篇论文，集中在四个主题：(1) **可靠性深层诊断**——`When Errors Become Narratives` 揭示生产环境“可故障化”无声失效，`SIMMER` 用符号世界模型检测规划不可逆失败，`DeCompBench` 暴露分解攻击下安全防线的溃缩；(2) **技能进化与自改进**——`SkillAudit` 通过成对轨迹审计实现无标签技能诊断，`RePro` 与 `RefGRPO` 分别从反思校准与回顾性进展信号拓宽自改进路径；(3) **通信与运行时工程**——`tap` 协议以文件介质实现异构代理无共享记忆协作，`HarnessX` 将 harness 视为可组合原语并配合进化引擎，`Recursive Agent Harnesses` 则将递归视为全栈代码代理单元；(4) **垂直领域深化**——医疗隐私（`MedLatentDx`）、科学知识协调（`Agents-K1`）、自动驾驶协同（综述）等方向持续渗透。",
       "technicalEvolution": [
-        "工作流从线性 ReAct 循环扩展为支持并行、分支和回退的执行图。",
-        "多智能体方法通过角色分工扩大任务覆盖，但协调成本尚未统一建模。"
+        "*工具调用与运行时降本**：`CacheRL` 引入缓存的执行轨迹和混合奖励，使小型模型学会工具调用的“原因”，但同时受限于缓存保真度；`Parallel-Synthesis` 直接在潜在空间合成并行分支，首 token 加速达 11 倍，却需下游微调，数据驱动属性明显。两极化趋势显示：效率优化仍依赖任务特定数据，通用性受限。",
+        "*记忆与推理架构**：`GitOfThoughts` 用版本控制管理推理树，却仅在高相似度案例上奏效，暴露记忆迁移的根本瓶颈；`EvoArena` 采用补丁记忆追踪环境演变，但绝对提升仅 1.5%，表明演化感知的推理提升远未充分。",
+        "*多智能体协作**：`tap` 的文件协议提供了故障可恢复的松耦合方案，但实验仅限双模型自应用；`GTBP` 利用 DAG 反向传播实现提示级收敛，其理论保证颇具吸引力，却缺乏开放动态环境的验证。总体而言，数据驱动的细粒度适配成为主流，但泛化性与计算开销的权衡依然尖锐。"
       ],
       "taxonomyImpact": [
-        "初步形成五类两级 Taxonomy。",
-        "可靠性与安全治理作为独立类别出现。"
+        "新论文对既有 taxonomy 产生如下深化或交融：",
+        "**1.1 运行时与基础架构**：`HarnessX` 的“组合 harness”和 `Recursive Agent Harnesses` 的递归代码单元将运行时抽象推向程序合成级，建议自此类可扩展运行时原语进一步细化。",
+        "**1.2 记忆系统**：`StreamMemBench` 的流式记忆评测与 `EvoArena` 的记忆演化补丁推动记忆评估从静态转向动态连续，可形成新子类“演化记忆验证”。",
+        "**1.3 通信协议**：`tap` 与 `MedLatentDx` 的潜在通信形成两极——前者是文件存储的显式协议，后者是隐私保护下的向量交换，二者可共同拓展为“异构安全通信”子类。",
+        "**2.2 与 2.3 安全与可靠性**：`When Errors Become Narratives` 的五类无声故障分类法精准填补了 2.3 的空白；`Causal Risk Gating` 与 `DeCompBench` 分别引入因果决策与分解攻击视角，推动 2.2 向更有理论深度的防御范式演化。",
+        "**4.4 医疗交叉**：`MedLatentDx` 的跨院诊断与 `Can Post-Training Turn LLMs into Good Medical Coders?` 的后训练编码实验为该类提供了“隐私-性能权衡”和“领域后训练”两个细粒度维度。",
+        "**跨类融合**：`EurekAgent` 将环境工程设计替代工作流工程，实质上把代理治理与科学发现杂糅，提示未来的分类需包含“代理-环境共设计”的元层级。"
       ],
       "gaps": [
-        "缺少跨任务、跨工具的统一评估协议。",
-        "复杂工作流的可解释性和故障定位能力不足。"
+        "*（一）记忆迁移与抽象鸿沟**",
+        "`GitOfThoughts` 证实记忆仅在近乎重复的实例上产生增益，更大模型也未能实现方法迁移。这暴露了以示例为单位的记忆存储缺乏结构化抽象，导致知识重用脆弱。未来必须探索如何将推理切片编译为可组合、可索引的抽象技能基元，而非依赖向量相似性。批判性在于：如果记忆体系仅在训练分布内有效，那么“自主学习”的承诺便大打折扣。",
+        "*（二）开放式安全验证与因果依赖的局限性**",
+        "尽管 `SIMMER` 和 `Causal Risk Gating` 提供了局部安全保障，但前者限于可枚举的世界模型，后者依赖因果图的准确性；`DeCompBench` 揭示表面无害子任务可轻松瓦解安全壁垒，而当前防御多集中于事后审计或硬约束规划。研究空白是：自适应的安全形式化验证框架，能够应对分解粒度未知的攻击，且不捆绑特定因果假设。批判性在于：现有安全方案多假设已知威胁模型，而真实开放世界中威胁的进化速度远超防御的设计周期。"
       ]
     }
   ],
