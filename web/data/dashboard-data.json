@@ -2,7 +2,7 @@
   "meta": {
     "projectName": "SurveyMind",
     "topic": "LLM Agent 与多智能体系统",
-    "lastUpdated": "2026-06-22T05:12:29.034684+00:00",
+    "lastUpdated": "2026-06-29T04:20:07.623974+00:00",
     "dataMode": "live",
     "members": [
       "方正",
@@ -3665,7 +3665,7 @@
   "weeklyDigests": [
     {
       "index": 1,
-      "date": "2026-06-22",
+      "date": "2026-06-29",
       "newPapers": 0,
       "title": "LLM Agent 研究周报：架构凝练、可靠性反思与分类边界拓展",
       "overview": "本周新增 49 篇论文，集中在四个主题：(1) **可靠性深层诊断**——`When Errors Become Narratives` 揭示生产环境“可故障化”无声失效，`SIMMER` 用符号世界模型检测规划不可逆失败，`DeCompBench` 暴露分解攻击下安全防线的溃缩；(2) **技能进化与自改进**——`SkillAudit` 通过成对轨迹审计实现无标签技能诊断，`RePro` 与 `RefGRPO` 分别从反思校准与回顾性进展信号拓宽自改进路径；(3) **通信与运行时工程**——`tap` 协议以文件介质实现异构代理无共享记忆协作，`HarnessX` 将 harness 视为可组合原语并配合进化引擎，`Recursive Agent Harnesses` 则将递归视为全栈代码代理单元；(4) **垂直领域深化**——医疗隐私（`MedLatentDx`）、科学知识协调（`Agents-K1`）、自动驾驶协同（综述）等方向持续渗透。",
